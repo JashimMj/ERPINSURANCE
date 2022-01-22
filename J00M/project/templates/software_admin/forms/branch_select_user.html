@@ -1,0 +1,80 @@
+{%if branchs%}
+{%for z in branchs%}
+<div class="col-md-10 branch_select">
+    <div class="form-group">
+        <label>Branch Select</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <i class="far fa-building"></i>
+                </div>
+            </div>
+            <select class="form-control form-control-sm" name="branch_select">
+                <option value="{{z.Branch.id}}">{{z.Branch}}</option>
+                {%for x in branch_select%}
+                <option value="{{x.id}}">{{x.Branch_Name}}</option>
+                {%endfor%}
+
+            </select>
+            <div>
+    <div class="form-group">
+        <div class="input-group">
+            &nbsp;&nbsp;
+            <button type="button" class=" btn btn-info" hx-post="{%url 'software_admin_user_create_branch'%}"
+                    hx-target=".branch_select" hx-swap="beforebegin" style="height:40px;">
+                +
+            </button>
+             &nbsp;&nbsp;
+            <button hx-get="{%url 'software_admin_user_create_branch_delete' z.id %}" class=" btn btn-danger"
+                      style="height:40px;">
+                -
+            </button>
+        </div>
+    </div>
+</div>
+        </div>
+
+    </div>
+
+</div>
+
+{%endfor%}
+{%else%}
+<div class="col-md-10 branch_select">
+    <div class="form-group">
+        <label>Branch Select</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <i class="far fa-building"></i>
+                </div>
+            </div>
+            <select class="form-control form-control-sm" name="branch_select">
+                <option> Select Branch</option>
+                {%for x in branch_select%}
+                <option value="{{x.id}}">{{x.Branch_Name}}</option>
+                {%endfor%}
+
+            </select>
+            <div>
+
+    <div class="form-group">
+        <div class="input-group" >
+             &nbsp;&nbsp;
+            <button type="button" class=" btn btn-info" hx-post="{%url 'software_admin_user_create_branch'%}"
+                    hx-target=".branch_select" hx-swap="beforebegin" style="height:40px;">
+                +
+            </button>
+
+        </div>
+    </div>
+
+</div>
+        </div>
+    </div>
+</div>
+
+{%endif%}
+
+
+

@@ -1,0 +1,71 @@
+{%if permission%}
+{%for m in permission%}
+<div class="col-md-10 module_select">
+    <div class="form-group">
+        <label>Main Module Select</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <i class="far fa-building"></i>
+                </div>
+            </div>
+            <select class="form-control form-control-sm"  name="module_select">
+                <option value="{{m.Software_Permition.id}}">{{m.Software_Permition.Sub_Name}}</option>
+                {%for x in permittion_select_all%}
+                <option value="{{x.id}}">{{x.Sub_Name}}</option>
+                {%endfor%}
+
+            </select>
+            <div class="form-group">
+        <div class="input-group">
+            &nbsp;&nbsp;
+            <button type="button" class=" btn btn-info"
+                    hx-post="{%url 'software_admin_user_create_module'%}" hx-target=".module_select" hx-swap="afterend" style="height:40px;">
+                +
+            </button>
+            &nbsp;&nbsp;
+            <button hx-get="{%url 'software_admin_user_create_module_delete' m.id %}" class=" btn btn-danger"
+                      style="height:40px;">
+                -
+            </button>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+{%endfor%}
+{%else%}
+<div class="col-md-10 module_select">
+    <div class="form-group">
+        <label>Main Module Select</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <i class="far fa-building"></i>
+                </div>
+            </div>
+            <select class="form-control form-control-sm" name="module_select">
+                <option> Select Module</option>
+                {%for x in permittion_select_all%}
+                <option value="{{x.id}}">{{x.Sub_Name}}</option>
+                {%endfor%}
+
+            </select>
+            <div class="form-group">
+        <div class="input-group">
+              &nbsp;&nbsp;
+            <button type="button" class=" btn btn-info"
+                    hx-post="{%url 'software_admin_user_create_module'%}" hx-target=".module_select" hx-swap="afterend" style="height:40px;">
+                +
+            </button>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+{%endif%}
+<script>
+$(document).ready(function() {
+$('.mdb-select').materialSelect();
+});
+    </script>

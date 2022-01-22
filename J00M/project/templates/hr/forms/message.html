@@ -1,0 +1,22 @@
+{%for message in messages%}
+<div class="alert alert-warning" role="alert" id="#search-results">
+
+    {{message}}
+
+</div>
+{%endfor%}
+{%for x in datas%}
+<div class="col-md-12">
+    <div class="form-group">
+        <label>Bill Number</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <i class="far fa-building"></i>
+                </div>
+            </div>
+            <input type="text" class="form-control phone-number" name="Bnumber" value="{{x.id}}" readonly>
+        </div>
+    </div>
+</div>
+{%endfor%}

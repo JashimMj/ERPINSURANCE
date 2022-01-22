@@ -1,0 +1,598 @@
+{%extends 'index.html'%}
+{%load static%}
+{%block contant%}
+
+<style>
+    .collapsible {
+  background-color: #FFF;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .collapsible:hover {
+  background-color: #becdd2;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+  padding: 18px 10px;
+  display: none;
+  overflow: hidden;
+  background-color: #FFF;
+}
+
+
+</style>
+<div class="row ">
+    <div class="col-md-12" style="margin-bottom:10px;">
+        <form class="form-inline" action="{%url 'hr_employees_info'%}" method="POST">
+            {%csrf_token%}
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                   name="search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+            >Search Bill
+            </button>
+        </form>
+    </div>
+</div>
+{%if datasall%}
+{%for a in datasall%}
+<form method="POST">
+    <button type="button" class="collapsible">Employees General Information</button>
+
+    <section class="section content">
+        <div class="row">
+            <div class="col-12 col-md-12 col-lg-12">
+                {%csrf_token%}
+                <div class="card">
+                    <div class="card-header">
+
+
+                    </div>
+                    <div><h4 style="text-align:right; padding-right:10px;">Employees ID:{{bill}}</h4></div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="search-results col-md-6">
+                                {%include 'software_admin/forms/message.html'%}
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Employees Name</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="Ename" value="{{a.Employees_Name}}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Designation</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="form-control select2" name="designation">
+                                        <option value="{{a.Designation.id}}">{{a.Designation}}</option>
+                                            {%for x in designationlist%}
+                                        <option value="{{x.id}}">{{x.Name}}</option>
+                                        {%endfor%}
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label>Employees Department</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="form-control select2" name="department">
+                                        <option value="{{a.Department.id}}">{{a.Department}}</option>
+                                             {%for x in depertmentlist%}
+                                        <option value="{{x.id}}">{{x.Name}}</option>
+                                        {%endfor%}
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Present Address</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="paddress" value="{{a.Present_Address}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Permanent Address</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="paraddress" value="{{a.Permanent_Address}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Phone</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="ephone" value="{{a.Phone}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Father Name</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="efather" value="{{a.Employees_Father_name}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Mother Name</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="emother" value="{{a.Employees_Mother_name}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Blood Group</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="eblood" value="{{a.Employees_Blood}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Voter id Card No.</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="nid" value="{{a.Employees_NID}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Date of Birth</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="date" class="form-control phone-number" name="ebarth" value="{{a.Employees_Date_of_Birth|date:'Y-m-d'}}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <button type="button" class="collapsible" style="margin-top:10px;">Open Collapsible</button>
+    <section class="section content">
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Appointment Date</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="far fa-building"></i>
+                                </div>
+                            </div>
+                            <input type="date" class="form-control phone-number" name="adate" value="{{a.Appointment_Date|date:'Y-m-d'}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Joining Date</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="far fa-building"></i>
+                                </div>
+                            </div>
+                            <input type="date" class="form-control phone-number" name="jdate" value="{{a.Joining_Date|date:'Y-m-d'}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Last Education Qualification</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="far fa-building"></i>
+                                </div>
+                            </div>
+                            <input type="text" class="form-control phone-number" name="edu" value="{{a.Last_Education_Qualification}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Last Education CGPA</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="far fa-building"></i>
+                                </div>
+                            </div>
+                            <input type="text" class="form-control phone-number" name="cgp" value="{{a.Last_Education_CGPA}}">
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <section class="section">
+        <div class="card-footer text-right" style="background:#FFF; margin-top:20px;">
+            <button class="btn btn-primary mr-1" type="button" hx-encoding="multipart/form-data"
+                    hx-post="{%url 'hr_employees_info_save'%}" hx-target=".search-results"><i
+                    class="far fa-save"> Edit</i>
+            </button>
+
+
+            <a class="btn btn-danger mr-1" href="{%url 'hr_employees_info'%}"><i
+                    class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
+            </a>
+
+        </div>
+    </section>
+
+</form>
+{%endfor%}
+{%else%}
+<form method="POST">
+    <button type="button" class="collapsible">Employees General Information</button>
+
+    <section class="section content">
+        <div class="row">
+            <div class="col-12 col-md-12 col-lg-12">
+                {%csrf_token%}
+                <div class="card">
+                    <div class="card-header">
+
+
+                    </div>
+                    <div><h4 style="text-align:right; padding-right:10px;">Employees ID:{{bill}}</h4></div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="search-results col-md-6">
+                                {%include 'software_admin/forms/message.html'%}
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Employees Name</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="Ename" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Designation</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="form-control select2" name="designation">
+                                        <option >Select Designation  </option>
+                                            {%for x in designationlist%}
+                                        <option value="{{x.id}}">{{x.Name}}</option>
+                                        {%endfor%}
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label>Employees Department</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="form-control select2" name="department">
+                                        <option>Select Department</option>
+                                             {%for x in depertmentlist%}
+                                        <option value="{{x.id}}">{{x.Name}}</option>
+                                        {%endfor%}
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Present Address</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="paddress">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Permanent Address</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="paraddress">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Phone</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="ephone">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Father Name</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="efather">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Mother Name</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="emother">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Blood Group</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="eblood">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Voter id Card No.</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="nid">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Employees Date of Birth</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="date" class="form-control phone-number" name="ebarth">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <button type="button" class="collapsible" style="margin-top:10px;">Open Collapsible</button>
+    <section class="section content">
+        <div class="card-body">
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Appointment Date</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="far fa-building"></i>
+                                </div>
+                            </div>
+                            <input type="date" class="form-control phone-number" name="adate" >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Joining Date</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="far fa-building"></i>
+                                </div>
+                            </div>
+                            <input type="date" class="form-control phone-number" name="jdate">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Last Education Qualification</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="far fa-building"></i>
+                                </div>
+                            </div>
+                            <input type="text" class="form-control phone-number" name="edu">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Last Education CGPA</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="far fa-building"></i>
+                                </div>
+                            </div>
+                            <input type="text" class="form-control phone-number" name="cgp">
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <section class="section">
+        <div class="card-footer text-right" style="background:#FFF; margin-top:20px;">
+            <button class="btn btn-primary mr-1" type="button" hx-encoding="multipart/form-data"
+                    hx-post="{%url 'hr_employees_info_save'%}" hx-target=".search-results"><i
+                    class="far fa-save"> Save</i>
+            </button>
+
+
+            <a class="btn btn-danger mr-1" href="{%url 'hr_employees_info'%}"><i
+                    class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
+            </a>
+
+        </div>
+    </section>
+
+</form>
+{%endif%}
+
+
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+
+
+</script>
+{%endblock%}

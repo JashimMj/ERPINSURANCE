@@ -1,0 +1,84 @@
+
+{%load static%}
+
+<style>
+    #calendar{
+    width: 80%;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+
+}
+
+</style>
+<link rel="stylesheet" href="{%static 'cal/evo-calendar.midnight-blue.min.css'%}">
+<link rel="stylesheet" href="{%static 'cal/evo-calendar.min.css'%}">
+<!-- Add the evo-calendar.css for styling -->
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/evo-calendar@1.1.2/evo-calendar/css/evo-calendar.min.css"/>-->
+<div class="hero" >
+<div id="calendar"></div>
+</div>
+
+<script src="{%static 'cal/evo-calendar.js'%}"></script>
+<script src="{%static 'cal/evo-calendar.min.js'%}"></script>
+
+
+<script>
+$(document).ready(function() {
+    $('#calendar').evoCalendar({
+        calendarEvents: [
+      {
+        id: '1', // Event's ID (required)
+        name: "New Year", // Event name (required)
+        date: "January/1/2021", // Event date (required)
+        type: "holiday", // Event type (required)
+        everyYear: true // Same event every year (optional)
+      },
+      {
+        name: "Vacation Leave",
+        badge: "02/13 - 02/15", // Event badge (optional)
+        date: ["February/13/2020", "February/15/2020"], // Date range
+        description: "Vacation leave for 3 days.", // Event description (optional)
+        type: "event",
+        color: "#63d867" // Event custom color (optional)
+      }
+    ]
+    })
+})
+</script>
+
+
+<!-- Dropdown -->
+<select id='selUser' style='width: 200px;'>
+  <option value='0'>Select User</option>
+  <option value='1'>Yogesh singh</option>
+  <option value='2'>Sonarika Bhadoria</option>
+  <option value='3'>Anil Singh</option>
+  <option value='4'>Vishal Sahu</option>
+  <option value='5'>Mayank Patidar</option>
+  <option value='6'>Vijay Mourya</option>
+  <option value='7'>Rakesh sahu</option>
+</select>
+
+<input type='button' value='Seleted option' id='but_read'>
+
+<br/>
+<div id='result'></div>
+
+<script>
+    $(document).ready(function(){
+
+  // Initialize select2
+  $("#selUser").select2();
+
+  // Read selected option
+  $('#but_read').click(function(){
+    var username = $('#selUser option:selected').text();
+    var userid = $('#selUser').val();
+
+    $('#result').html("id : " + userid + ", name : " + username);
+
+  });
+});
+</script>

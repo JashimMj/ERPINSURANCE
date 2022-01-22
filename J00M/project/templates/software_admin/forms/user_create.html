@@ -1,0 +1,275 @@
+{%extends 'index.html'%}
+{%load static%}
+{%block contant%}
+{%if user_ss%}
+{%for a in user_ss%}
+<section class="section">
+
+    <div class="row ">
+        <div class="col-md-12" style="margin-bottom:10px;">
+            <form class="form-inline" action="{%url 'software_admin_user_create'%}" method="POST">
+                {%csrf_token%}
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                       name="search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+                >Search Bill
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <form method="POST">
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-8">
+                {%csrf_token%}
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Create User</h4>
+
+
+                    </div>
+                    <div><h4 style="text-align:right; padding-right:10px;">User ID:{{users}}</h4></div>
+                      <div class="col-md-12" hidden>
+                                <div class="form-group">
+                                    <label>User ID</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="u_id" value="{{a.id}}" required >
+                                    </div>
+                                </div>
+                            </div>
+                      <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>User Name</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="u_name" value="{{a.username}}" required readonly>
+                                    </div>
+                                </div>
+                            </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="search-results col-md-6">
+                                {%include 'software_admin/forms/message.html'%}
+                            </div>
+
+                                {%include 'software_admin/forms/branch_select_user.html'%}
+
+
+                            {%include 'software_admin/forms/module_select_user.html'%}
+
+
+
+
+
+
+
+                        </div>
+                        <div class="card-footer text-right">
+                            <button class="btn btn-primary mr-1" type="button" hx-encoding="multipart/form-data"
+                                    hx-post="{%url 'software_admin_user_create_save'%}" hx-target=".search-results"><i
+                                    class="far fa-save"> Edit</i>
+                            </button>
+
+
+                            <a class="btn btn-danger mr-1" href="{%url 'software_admin_user_create'%}"><i
+                                    class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+</section>
+{%endfor%}
+{%else%}
+<section class="section">
+
+    <div class="row ">
+        <div class="col-md-12" style="margin-bottom:10px;">
+            <form class="form-inline" action="{%url 'software_admin_user_create'%}" method="POST">
+                {%csrf_token%}
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                       name="search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+                >Search Bill
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <form method="POST">
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-8">
+                {%csrf_token%}
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Create User</h4>
+
+
+                    </div>
+                    <div><h4 style="text-align:right; padding-right:10px;">User ID:{{users}}</h4></div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="search-results col-md-6">
+                                {%include 'software_admin/forms/message.html'%}
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>User Name</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="u_name" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>User Present Address</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="u_address" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>User Permanent Address</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="u_peraddress" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>User Phone</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="u_phone" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>User E-Mail</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="u_email" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="password" class="form-control phone-number" name="password" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Repeat Password</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="password" class="form-control phone-number" name="re_password" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Image</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="file" class="form-control phone-number" name="images" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                                {%include 'software_admin/forms/branch_select_user.html'%}
+
+
+                            {%include 'software_admin/forms/module_select_user.html'%}
+
+
+
+
+
+
+                        </div>
+                        <div class="card-footer text-right">
+                            <a class="btn btn-danger mr-1" href="{%url 'software_admin_user_create_PDF'%}" target="_blank"><i
+                                    class="fas fa-print" style="text-decoration:none;"> User list</i>
+                            </a>
+                            <button class="btn btn-primary mr-1" type="button" hx-encoding="multipart/form-data"
+                                    hx-post="{%url 'software_admin_user_create_save'%}" hx-target=".search-results"><i
+                                    class="far fa-save"> Save</i>
+                            </button>
+
+
+                            <a class="btn btn-danger mr-1" href="{%url 'software_admin_user_create'%}"><i
+                                    class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
+                            </a>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+</section>
+{%endif%}
+{%endblock%}

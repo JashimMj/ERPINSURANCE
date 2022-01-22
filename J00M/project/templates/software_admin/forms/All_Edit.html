@@ -1,0 +1,169 @@
+{%extends 'index.html'%}
+{%load static%}
+{%block contant%}
+
+{%for message in messages%}
+<div class="alert alert-warning" role="alert" id="#search-results">
+
+    {{message}}
+
+</div>
+{%endfor%}
+
+<section>
+    <form action="">
+    <div class="row">
+    <div class="col-12 col-md-12 col-lg-12">
+        {%csrf_token%}
+        <div class="card">
+            <div class="card-header">
+                <h4>Edit Information</h4>
+
+
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+
+                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Company Information</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="far fa-building"></i>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control phone-number" name="company"
+                                                   hx-post="{%url 'software_admin_Edit'%}" hx-target=".edit_mess"
+                                                   hx-trigger="blur delay:400ms">
+                                        </div>
+                                    </div>
+                                </div>
+                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Branch Information</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="far fa-building"></i>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control phone-number" name="branch"
+                                                   hx-post="{%url 'software_admin_Edit'%}" hx-target=".edit_mess"
+                                                   hx-trigger="blur delay:400ms">
+                                        </div>
+                                    </div>
+                                </div>
+                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Department Information</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="far fa-building"></i>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control phone-number" name="depertment_info"
+                                                   hx-post="{%url 'software_admin_Edit'%}" hx-target=".edit_mess"
+                                                   hx-trigger="blur delay:400ms">
+                                        </div>
+                                    </div>
+                                </div>
+                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Designation Information</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="far fa-building"></i>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control phone-number" name="designation_info"
+                                                   hx-post="{%url 'software_admin_Edit'%}" hx-target=".edit_mess"
+                                                   hx-trigger="blur delay:400ms">
+                                        </div>
+                                    </div>
+                                </div>
+                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Bank Information</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="far fa-building"></i>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control phone-number" name="bank_info"
+                                                   hx-post="{%url 'software_admin_Edit'%}" hx-target=".edit_mess"
+                                                   hx-trigger="blur delay:400ms">
+                                        </div>
+                                    </div>
+                                </div>
+                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Bank Branch Information</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="far fa-building"></i>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control phone-number" name="bank_branch_info"
+                                                   hx-post="{%url 'software_admin_Edit'%}" hx-target=".edit_mess"
+                                                   hx-trigger="blur delay:400ms">
+                                        </div>
+                                    </div>
+                                </div>
+                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Product Information</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="far fa-building"></i>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control phone-number" name="product_info"
+                                                   hx-post="{%url 'software_admin_Edit'%}" hx-target=".edit_mess"
+                                                   hx-trigger="blur delay:400ms">
+                                        </div>
+                                    </div>
+                                </div>
+                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Supplier Information</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="far fa-building"></i>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control phone-number" name="supplier_info"
+                                                   hx-post="{%url 'software_admin_Edit'%}" hx-target=".edit_mess"
+                                                   hx-trigger="blur delay:400ms">
+                                        </div>
+                                    </div>
+                                </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+        </form>
+</section>
+
+<section class="section">
+
+
+    <form method="POST" class="edit_mess" action="{%url 'software_admin_Edit_save'%}">
+        {%include 'software_admin/forms/Edit_message.html'%}
+    </form>
+
+
+</section>
+
+{%endblock%}
