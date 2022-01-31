@@ -188,6 +188,8 @@ class Product_PurchaseM(models.Model):
     Product_Supplier_Name=models.ForeignKey(Inventory_Supplier_Entry, on_delete=models.CASCADE, null=True, blank=True)
     Quantity=models.DecimalField (max_digits=20,decimal_places=2)
     Price=models.DecimalField(max_digits=20,decimal_places=2)
+    Oranty_year=models.CharField(max_length=50,null=True,blank=True)
+    Oranty_start_date=models.DateField(null=True,blank=True,default='')
     userc = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     Edits = models.CharField(max_length=10, null=True, blank=True)

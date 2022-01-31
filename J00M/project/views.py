@@ -14,6 +14,7 @@ from django.http import HttpResponse
 from pathlib import Path
 import os
 from num2words import num2words
+import datetime
 
 from django.db.models import F, Sum
 
@@ -1286,6 +1287,9 @@ def invontory_product_purchase_saveV(request):
         s_name = request.POST.getlist('s_name')
         qtt = request.POST.getlist('qtt')
         price = request.POST.getlist('price')
+        orantyy = request.POST.getlist('orantyy')
+        orantysdate = request.POST.getlist('orantysdate')
+
         id = request.POST.getlist('id')
         invoice = request.POST.get('invoice')
         if Product_PurchaseM.objects.filter(Invoice_no=invoice).exists():
@@ -1296,12 +1300,20 @@ def invontory_product_purchase_saveV(request):
         else:
 
             if bnumber is None:
-                c = min([len(p_name),len(s_name),len(qtt),len(price)])
+                c = min([len(p_name),len(s_name),len(qtt),len(price),len(orantyy),len(orantysdate)])
                 for i in range(c):
+
                     pr_name=Inventory_Product_Entry.objects.get(id=p_name[i])
                     su_name=Inventory_Supplier_Entry.objects.get(id=s_name[i])
-                    date=Product_PurchaseM(Product_Name=pr_name,Product_Supplier_Name=su_name,Quantity=qtt[i],Price=price[i],User_Branch=branchs,userc=createuser,Invoice_no=invoice)
-                    date.save()
+                    if orantysdate[i] != None:
+                        date=Product_PurchaseM(Product_Name=pr_name,Product_Supplier_Name=su_name,Quantity=qtt[i],Price=price[i],User_Branch=branchs,userc=createuser,Invoice_no=invoice,Oranty_year=orantyy[i],Oranty_start_date=orantysdate[i])
+                        date.save()
+                    else:
+                        date = Product_PurchaseM(Product_Name=pr_name, Product_Supplier_Name=su_name, Quantity=qtt[i],
+                                                 Price=price[i], User_Branch=branchs, userc=createuser,
+                                                 Invoice_no=invoice, Oranty_year=orantyy[i],
+                                                 Oranty_start_date='0001-01-01')
+                        date.save()
                     bill = Product_PurchaseM.objects.raw('select id,count( DISTINCT invoice_no) as invoice_no from project_product_purchasem ppp ')
                 messages.info(request, 'Data Save')
                 return render(request, 'inventory/message.html', {'bill':bill,'company':company,'user_current_branch':user_current_branch,'user_branch':user_branch})
@@ -1312,21 +1324,37 @@ def invontory_product_purchase_saveV(request):
                 data=Product_PurchaseM.objects.filter(Invoice_no=bnumber)
                 # for x in data
 
-                c = min([len(p_name), len(s_name), len(qtt), len(price),len(id)])
+                c = min([len(p_name), len(s_name), len(qtt), len(price),len(id),len(orantyy),len(orantysdate)])
                 for i in range(c):
+
                     pr_name = Inventory_Product_Entry.objects.get(id=p_name[i])
                     su_name = Inventory_Supplier_Entry.objects.get(id=s_name[i])
                     # date = Product_PurchaseM.objects.filter(Invoice_no=a).update(Product_Name=pr_name, Product_Supplier_Name=su_name, Quantity=qtt[i],
                     #                          Price=price[i], User_Branch=branchs, userc=createuser, Invoice_no=bnumber)
-                    data = Product_PurchaseM.objects.get(id=id[i])
-                    data.Product_Name=pr_name
-                    data.Product_Supplier_Name=su_name
-                    data.Quantity=qtt[i]
-                    data.Price=price[i]
-                    data.userc = createuser
-                    data.User_Branch=branchs
-                    data.Invoice_no=bnumber
-                    data.save()
+                    if orantysdate[i] != "":
+                        data = Product_PurchaseM.objects.get(id=id[i])
+                        data.Product_Name=pr_name
+                        data.Product_Supplier_Name=su_name
+                        data.Quantity=qtt[i]
+                        data.Price=price[i]
+                        data.userc = createuser
+                        data.User_Branch=branchs
+                        data.Invoice_no=bnumber
+                        data.Oranty_year=orantyy[i]
+                        data.Oranty_start_date=orantysdate[i]
+                        data.save()
+                    else:
+                        data = Product_PurchaseM.objects.get(id=id[i])
+                        data.Product_Name = pr_name
+                        data.Product_Supplier_Name = su_name
+                        data.Quantity = qtt[i]
+                        data.Price = price[i]
+                        data.userc = createuser
+                        data.User_Branch = branchs
+                        data.Invoice_no = bnumber
+                        data.Oranty_year = orantyy[i]
+                        data.Oranty_start_date = '0001-01-01'
+                        data.save()
                 messages.info(request, 'Data Update')
                 return render(request,'inventory/message.html',{'producets_pp': producets_pp,'bill':bill,'company':company,'user_current_branch':user_current_branch,'user_branch':user_branch})
 
