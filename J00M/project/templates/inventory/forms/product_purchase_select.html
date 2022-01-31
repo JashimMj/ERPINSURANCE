@@ -1,0 +1,156 @@
+{%if datasall%}
+<div class="col-md-3">
+    <div class="form-group">
+        <label>Product Name</label>
+        <div class="input-group">
+
+            <select class="form-control select2" name="p_name" >
+                <option value="{{a.Product_Name.id}}">{{a.Product_Name}}</option>
+                {%for x in products%}
+                <option value="{{x.id}}">{{x.Product_Name}}</option>
+                {%endfor%}
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3">
+    <div class="form-group">
+        <label>Supplier Name</label>
+        <div class="input-group">
+
+            <select class="form-control select2" name="s_name">
+                <option value="{{a.Product_Supplier_Name.id}}">{{a.Product_Supplier_Name.Supplier_Name}}</option>
+                {%for p in suppliers%}
+                <option value="{{p.id}}">{{p.Supplier_Name}}</option>
+                {%endfor%}
+            </select>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-md-2">
+    <div class="form-group">
+        <label>Quantity</label>
+        <div class="input-group">
+
+            <input type="text" class="form-control phone-number" name="qtt" value="{{a.Quantity}}">
+        </div>
+    </div>
+</div>
+
+<div class="col-md-2">
+    <div class="form-group">
+        <label>@Price</label>
+        <div class="input-group">
+
+            <input type="text" class="form-control phone-number" name="price" value="{{a.Price}}">
+        </div>
+    </div>
+</div>
+
+<div class="col-md-2">
+    <div class="form-group">
+        <label>Add</label>
+        <div class="input-group">
+
+            <button type="button" class=" btn btn-info"
+                    hx-post="{%url 'invontory_product_purchase_select'%}"
+                    hx-target=".enterss" hx-swap="afterbegin"
+                    style="height:40px;">
+                +
+            </button>
+        </div>
+    </div>
+</div>
+{%else%}
+<div class="col-md-2">
+    <div class="form-group">
+        <label>Product Name</label>
+        <div class="input-group">
+
+            <select class="form-control select2" name="p_name" >
+                <option>Select Designation</option>
+                {%for x in products%}
+                <option value="{{x.id}}">{{x.Product_Name}}</option>
+                {%endfor%}
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-2">
+    <div class="form-group">
+        <label>Supplier Name</label>
+        <div class="input-group">
+
+            <select class="form-control select2" name="s_name">
+                <option>Select Designation</option>
+                {%for a in suppliers%}
+                <option value="{{a.id}}">{{a.Supplier_Name}}</option>
+                {%endfor%}
+            </select>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-md-2">
+    <div class="form-group">
+        <label>Quantity</label>
+        <div class="input-group">
+
+            <input type="text" class="form-control phone-number" name="qtt">
+        </div>
+    </div>
+</div>
+
+<div class="col-md-2">
+    <div class="form-group">
+        <label>@Price</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <i class="far fa-building"></i>
+                </div>
+            </div>
+            <input type="text" class="form-control phone-number" name="price">
+        </div>
+    </div>
+</div>
+<div class="col-md-1">
+    <div class="form-group">
+        <label>year</label>
+        <div class="input-group">
+
+            <input type="text" class="form-control phone-number" name="orantyy">
+        </div>
+    </div>
+</div>
+<div class="col-md-2">
+    <div class="form-group">
+        <label>Date</label>
+        <div class="input-group">
+
+            <input type="date" class="form-control phone-number" name="orantysdate">
+        </div>
+    </div>
+</div>
+
+<div class="col-md-1">
+    <div class="form-group">
+        <label>Add</label>
+        <div class="input-group">
+
+            <button type="button" class=" btn btn-info"
+                    hx-post="{%url 'invontory_product_purchase_select'%}"
+                    hx-target=".enterss" hx-swap="afterbegin"
+                    style="height:40px;">
+                +
+            </button>
+        </div>
+    </div>
+</div>
+{%endif%}
+

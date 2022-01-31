@@ -75,6 +75,16 @@ urlpatterns = [
     path('inventory/supplier/entry/save/', views.inventory_supplier_entry_saveV, name="inventory_supplier_entry_save"),
     path('inventory/supplier/demo/pdf/', views.inventory_supplier_demo_pdfV, name="inventory_supplier_demo_pdf"),
     path('inventory/supplier/pdf/', views.inventory_supplier_pdfV, name="inventory_supplier_pdf"),
+    # ----------------------Inventory Product Purchase Info---------------------------
+    path('inventory/product/purchase/', views.invontory_product_purchase_infoV, name="inventory_product_purchase"),
+    path('inventory/product/purchase/save/', views.invontory_product_purchase_saveV, name="inventory_product_purchase_save"),
+    path('inventory/product/purchase/select/', views.invontory_product_purchase_select_infoV, name="invontory_product_purchase_select"),
+    path('inventory/purchase/demo/pdf/<int:Invoice_no>', views.purchage_info_pdf_demoV, name="purchase_info_pdf_demo"),
+    path('inventory/purchase/pdf/<int:Invoice_no>', views.purchage_info_pdfV, name="purchage_info_pdf"),
+    path('inventory/purchase/adjustment/', views.purchage_info_adjustmentV, name="purchage_info_adjustment"),
+    path('inventory/purchase/adjustment/save', views.purchage_info_adjustment_saveV, name="purchage_info_adjustment_save"),
+
+
 
 
 

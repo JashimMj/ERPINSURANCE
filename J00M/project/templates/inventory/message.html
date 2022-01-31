@@ -1,3 +1,42 @@
+{%if producets_pp%}
+{%for message in messages%}
+<div class="alert alert-warning" role="alert" id="#search-results">
+
+    {{message}}
+
+</div>
+{%endfor%}
+{%for w in producets_pp%}
+<div class="col-md-12">
+    <div class="form-group">
+        <label>Invoice Number</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <i class="far fa-building"></i>
+                </div>
+            </div>
+            <input type="text" class="form-control phone-number" name="Bnumber" value="{{w.Invoice_no}}" readonly>
+        </div>
+    </div>
+</div>
+{%for x in datasall%}
+<div class="col-md-12" hidden>
+    <div class="form-group">
+        <label>Invoice Number</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <i class="far fa-building"></i>
+                </div>
+            </div>
+            <input type="text" class="form-control phone-number" name="id" value="{{x.id}}" readonly>
+        </div>
+    </div>
+</div>
+{%endfor%}
+{%endfor%}
+{%else%}
 {%for message in messages%}
 <div class="alert alert-warning" role="alert" id="#search-results">
 
@@ -20,3 +59,4 @@
     </div>
 </div>
 {%endfor%}
+{%endif%}
