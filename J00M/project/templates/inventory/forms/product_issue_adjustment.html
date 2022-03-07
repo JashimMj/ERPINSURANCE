@@ -1,0 +1,168 @@
+{%extends 'index.html'%}
+{%load static%}
+{%block contant%}
+{%if datasall%}
+
+<section class="section">
+
+    <div class="row ">
+        <div class="col-md-12" style="margin-bottom:10px;">
+            <form class="form-inline" action="{%url 'inventory_product_purchase'%}" method="POST" enctype="multipart/form-data">
+                {%csrf_token%}
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                       name="search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+                >Search Bill
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <form method="POST" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-12 col-md-12 col-lg-12">
+                {%csrf_token%}
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Product Issue Information</h4>
+
+
+                    </div>
+                    {%for x in bill%}
+                    <div><h4 style="text-align:right; padding-right:10px;">Last Entry:{{x.invoice_no}}</h4></div>
+                    {%endfor%}
+
+                    <div class="card-body" >
+                        <div class="row">
+                            <div class="search-results col-md-12">
+                                {%include 'inventory/message.html'%}
+                            </div>
+
+
+                            <div class="search-results col-md-12" >
+
+                                <div class="row enterss">
+                                {%for a in datasall%}
+                                {%include 'inventory/forms/product_issue_select.html'%}
+                                    {%endfor%}
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="card-footer text-right" >
+                            <button class="btn btn-primary mr-1" type="button"
+                                    hx-post="{%url 'inventory_product_purchase_save'%}" hx-target=".search-results"
+                            hx-encoding="multipart/form-data"><i
+                                    class="far fa-save"> Edit</i>
+                            </button>
+                            {%for w in producets_pp%}
+                            <a href="{%url 'purchase_info_pdf_demo' w.Invoice_no%}" class="btn btn-primary"
+                               target="_blank"><i class="fas fa-id-card-alt"> Print Demo</i> </a>
+                                {%endfor%}
+                            {%for w in producets_pp%}
+                            <a href="{%url 'purchage_info_pdf' w.Invoice_no%}" class="btn btn-success"
+                               target="_blank"><i class="fas fa-print"> Final Print</i> </a>
+                             {%endfor%}
+                            <a class="btn btn-danger mr-1" href="{%url 'inventory_product_purchase'%}"><i
+                                    class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+</section>
+
+{%else%}
+<section class="section">
+
+<!--    <div class="row ">-->
+<!--        <div class="col-md-12" style="margin-bottom:10px;">-->
+<!--            <form class="form-inline" action="{%url 'inventory_product_purchase'%}" method="POST" enctype="multipart/form-data">-->
+<!--                {%csrf_token%}-->
+<!--                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"-->
+<!--                       name="search">-->
+<!--                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"-->
+<!--                >Search Bill-->
+<!--                </button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+    <form method="POST" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-12 col-md-12 col-lg-12">
+                {%csrf_token%}
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Product Issue Adjustment Information</h4>
+
+
+                    </div>
+                    {%for x in bill%}
+                    <div><h4 style="text-align:right; padding-right:10px;">Last Entry:{{x.invoice_no}}</h4></div>
+                    {%endfor%}
+
+                    <div class="card-body" >
+                        <div class="row">
+                            <div class="search-results col-md-12">
+                                {%include 'inventory/message.html'%}
+                            </div>
+                            <div class="col-md-12">
+    <div class="form-group">
+        <label>Invoice Number</label>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <div class="input-group-text">
+                    <i class="far fa-building"></i>
+                </div>
+            </div>
+            <input type="text" class="form-control phone-number" name="invoice">
+        </div>
+    </div>
+</div>
+                            <div class="search-results col-md-12" >
+
+                                <div class="row enterss">
+
+                                {%include 'inventory/forms/product_issue_select.html'%}
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="card-footer text-right" >
+                            <button class="btn btn-primary mr-1" type="button"
+                                    hx-post="{%url 'issue_info_adjustment_save'%}" hx-target=".search-results"
+                            hx-encoding="multipart/form-data"><i
+                                    class="far fa-save"> Save</i>
+                            </button>
+<!--                            <a href="{%url 'inventory_product_demo_pdf'%}" class="btn btn-primary"-->
+<!--                               target="_blank"><i class="fas fa-id-card-alt"> Print Demo</i> </a>-->
+<!--                            <a href="{%url 'inventory_product_pdf'%}" class="btn btn-success"-->
+<!--                               target="_blank"><i class="fas fa-print"> Final Print</i> </a>-->
+                            <a class="btn btn-danger mr-1" href="{%url 'purchage_info_adjustment'%}"><i
+                                    class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+</section>
+{%endif%}
+{%endblock%}

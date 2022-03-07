@@ -1,5 +1,5 @@
 {%if datasall%}
-<div class="col-md-2">
+<div class="col-md-3">
     <div class="form-group">
         <label>Product Name</label>
         <div class="input-group">
@@ -14,15 +14,15 @@
     </div>
 </div>
 
-<div class="col-md-2">
+<div class="col-md-3">
     <div class="form-group">
-        <label>Supplier Name</label>
+        <label>Employees Name</label>
         <div class="input-group">
 
             <select class="form-control select2" name="s_name">
-                <option value="{{a.Product_Supplier_Name.id}}">{{a.Product_Supplier_Name.Supplier_Name}}</option>
-                {%for p in suppliers%}
-                <option value="{{p.id}}">{{p.Supplier_Name}}</option>
+                <option value="{{a.Product_Employees_Name.id}}">{{a.Product_Employees_Name.Employees_Name}}</option>
+                {%for p in employees%}
+                <option value="{{p.id}}">{{p.Employees_Name}}</option>
                 {%endfor%}
             </select>
         </div>
@@ -30,7 +30,7 @@
 </div>
 
 
-<div class="col-md-2">
+<div class="col-md-3">
     <div class="form-group">
         <label>Quantity</label>
         <div class="input-group">
@@ -40,40 +40,14 @@
     </div>
 </div>
 
-<div class="col-md-2">
-    <div class="form-group">
-        <label>@Price</label>
-        <div class="input-group">
 
-            <input type="text" class="form-control phone-number" name="price" value="{{a.Price}}">
-        </div>
-    </div>
-</div>
-<div class="col-md-1">
-    <div class="form-group">
-        <label>year</label>
-        <div class="input-group">
-
-            <input type="text" class="form-control phone-number" name="orantyy" value="{{a.Oranty_year}}">
-        </div>
-    </div>
-</div>
-<div class="col-md-2">
-    <div class="form-group">
-        <label>Date</label>
-        <div class="input-group">
-
-            <input type="date" class="form-control phone-number" name="orantysdate" value="{{a.Oranty_start_date|date:'Y-m-d'}}">
-        </div>
-    </div>
-</div>
-<div class="col-md-1">
+<div class="col-md-3">
     <div class="form-group">
         <label>Add</label>
         <div class="input-group">
 
             <button type="button" class=" btn btn-info"
-                    hx-post="{%url 'invontory_product_purchase_select'%}"
+                    hx-post="{%url 'invontory_product_issue_select'%}"
                     hx-target=".enterss" hx-swap="afterbegin"
                     style="height:40px;">
                 +
@@ -82,7 +56,7 @@
     </div>
 </div>
 {%else%}
-<div class="col-md-2">
+<div class="col-md-3">
     <div class="form-group">
         <label>Product Name</label>
         <div class="input-group">
@@ -97,15 +71,15 @@
     </div>
 </div>
 
-<div class="col-md-2">
+<div class="col-md-3">
     <div class="form-group">
-        <label>Supplier Name</label>
+        <label>Employees Name</label>
         <div class="input-group">
 
             <select class="form-control select2" name="s_name">
                 <option>Select Designation</option>
-                {%for a in suppliers%}
-                <option value="{{a.id}}">{{a.Supplier_Name}}</option>
+                {%for a in employees%}
+                <option value="{{a.id}}">{{a.Employees_Name}}</option>
                 {%endfor%}
             </select>
         </div>
@@ -113,7 +87,7 @@
 </div>
 
 
-<div class="col-md-2">
+<div class="col-md-3">
     <div class="form-group">
         <label>Quantity</label>
         <div class="input-group">
@@ -123,41 +97,15 @@
     </div>
 </div>
 
-<div class="col-md-2">
-    <div class="form-group">
-        <label>@Price</label>
-        <div class="input-group">
 
-            <input type="text" class="form-control phone-number" name="price">
-        </div>
-    </div>
-</div>
-<div class="col-md-1">
-    <div class="form-group">
-        <label>year</label>
-        <div class="input-group">
 
-            <input type="text" class="form-control phone-number" name="orantyy" value="0">
-        </div>
-    </div>
-</div>
-<div class="col-md-2">
-    <div class="form-group">
-        <label>Date</label>
-        <div class="input-group">
-
-            <input type="date" class="form-control phone-number" name="orantysdate" >
-        </div>
-    </div>
-</div>
-
-<div class="col-md-1">
+<div class="col-md-3">
     <div class="form-group">
         <label>Add</label>
         <div class="input-group">
 
             <button type="button" class=" btn btn-info"
-                    hx-post="{%url 'invontory_product_purchase_select'%}"
+                    hx-post="{%url 'invontory_product_issue_select'%}"
                     hx-target=".enterss" hx-swap="afterbegin"
                     style="height:40px;">
                 +

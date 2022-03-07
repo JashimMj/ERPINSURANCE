@@ -520,3 +520,61 @@
 
 </div>
 {%endfor%}
+{%for x in product_issue_edit%}
+<div class="row">
+    <div class="col-12 col-md-12 col-lg-12">
+        {%csrf_token%}
+        <div class="card">
+            <div class="card-header">
+                <h4>Product Issue Edit Information</h4>
+
+
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Invoice Number</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="product_issue_inv" value="{{x.Invoice_no}}"
+                                       readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Product Issue Information Edit</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="issue_edite"
+                                       value="{{x.Edits}}">
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-footer text-right">
+                    <button class="btn btn-primary mr-1" type="submit"><i
+                            class="fas fa-edit">
+                        Update</i>
+                    </button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{%endfor%}

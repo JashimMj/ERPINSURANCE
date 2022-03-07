@@ -83,6 +83,14 @@ urlpatterns = [
     path('inventory/purchase/pdf/<int:Invoice_no>', views.purchage_info_pdfV, name="purchage_info_pdf"),
     path('inventory/purchase/adjustment/', views.purchage_info_adjustmentV, name="purchage_info_adjustment"),
     path('inventory/purchase/adjustment/save', views.purchage_info_adjustment_saveV, name="purchage_info_adjustment_save"),
+    # ----------------------Inventory Product Purchase Info---------------------------
+    path('inventory/product/issue/', views.invontory_product_issue_infoV, name="inventory_product_issue"),
+    path('inventory/product/issue/save/', views.invontory_product_issue_saveV, name="invontory_product_issue_save"),
+    path('inventory/product/issue/select/', views.invontory_product_issue_select_infoV, name="invontory_product_issue_select"),
+    path('inventory/issue/demo/pdf/<int:Invoice_no>', views.issue_info_pdf_demoV, name="issue_info_pdf_demo"),
+    path('inventory/issue/pdf/<int:Invoice_no>', views.issue_info_pdfV, name="issue_info_pdf"),
+    path('inventory/issue/adjustment/', views.issue_info_adjustmentV, name="issue_info_adjustment"),
+    path('inventory/issue/adjustment/save', views.issue_info_adjustment_saveV, name="issue_info_adjustment_save"),
 
 
 

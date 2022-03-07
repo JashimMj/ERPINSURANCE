@@ -25,6 +25,23 @@ company = Company_Information.objects.filter(id=1)
 def index(request):
     user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
     user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    employees=Hr_Employees_infoM.objects.filter(Department__Name='IT')[:3]
+
+    ds=Product_PurchaseM.objects.all()
+    for y in ds:
+        ass = datetime.datetime.now().date()
+        dst=int(y.Oranty_year * 365)
+        uudd=(y.Oranty_start_date + datetime.timedelta(days=dst))
+        gf=uudd-ass
+        for x in employees:
+            abc=x.Email
+            product_name=y.Product_Name
+            if gf.days==3:
+                subject = f'license expiry {product_name}'
+                message = f'Dear {x.Employees_Name} , there are {gf.days} days left to license expiry of {product_name}, so take the necessary step as soon as possible.'
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [abc]
+                send_mail(subject, message, email_from, recipient_list)
 
     return render(request, 'index.html',
                   {'company': company, 'user_branch': user_branch, 'user_current_branch': user_current_branch})
@@ -356,6 +373,7 @@ def EditV(request):
     product_info = request.POST.get('product_info')
     suppler_info = request.POST.get('supplier_info')
     product_purchase_info = request.POST.get('product_purchase_info')
+    product_issue_info = request.POST.get('product_issue_info')
     if company_info:
         company_edit = Company_Information.objects.filter(id=company_info)
         return render(request, 'software_admin/forms/Edit_message.html',
@@ -403,6 +421,13 @@ def EditV(request):
         return render(request, 'software_admin/forms/Edit_message.html',
                       {'product_purchase_edit': product_purchase_edit, 'company': company,
                        'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    elif product_issue_info:
+        product_issue_edit = Product_issueM.objects.raw(
+            'select DISTINCT id=0 as id,Invoice_no,Edits from project_Product_issueM ppp WHERE Invoice_no =%s',
+            [product_issue_info])
+        return render(request, 'software_admin/forms/Edit_message.html',
+                      {'product_issue_edit': product_issue_edit, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
 
     return render(request, 'software_admin/forms/All_Edit.html',
                   {'company': company, 'user_current_branch': user_current_branch, 'user_branch': user_branch})
@@ -427,6 +452,8 @@ def All_Edit_saveV(request):
     supplier_edit_edit = request.POST.get('supplier_edite')
     product_purchase_inv = request.POST.get('product_purchase_inv')
     purchase_edite = request.POST.get('purchase_edite')
+    product_issue_inv = request.POST.get('product_issue_inv')
+    issue_edite = request.POST.get('issue_edite')
     if company_info:
         company_edits = Company_Information.objects.get(id=company_info)
         company_edits.Edits = cedit
@@ -465,6 +492,12 @@ def All_Edit_saveV(request):
             purchasep_edits = Product_PurchaseM.objects.get(id=x.id)
             purchasep_edits.Edits = purchase_edite
             purchasep_edits.save()
+    elif product_issue_inv:
+        abc = Product_issueM.objects.filter(Invoice_no=product_issue_inv)
+        for x in abc:
+            issue_edits = Product_issueM.objects.get(id=x.id)
+            issue_edits.Edits = issue_edite
+            issue_edits.save()
     messages.info(request, 'Data Update')
 
     return redirect('/software/admin/edit/')
@@ -1033,6 +1066,7 @@ def hr_employees_info_saveV(request):
         paddress = request.POST.get('paddress')
         paraddress = request.POST.get('paraddress')
         ephone = request.POST.get('ephone')
+        eemail = request.POST.get('eemail')
         efather = request.POST.get('efather')
         emother = request.POST.get('emother')
         eblood = request.POST.get('eblood')
@@ -1050,7 +1084,7 @@ def hr_employees_info_saveV(request):
                                       Employees_Mother_name=emother, Employees_Blood=eblood, Employees_NID=nid,
                                       Last_Education_Qualification=edu,
                                       Last_Education_CGPA=cgp, Employees_Date_of_Birth=ebarth, Appointment_Date=adate,
-                                      Joining_Date=jdate, userc=createuser)
+                                      Joining_Date=jdate, userc=createuser,Email=eemail)
             date.save()
             datas = Hr_Employees_infoM.objects.filter(id=id)
             messages.info(request, 'Data Save')
@@ -1078,6 +1112,7 @@ def hr_employees_info_saveV(request):
             data.Appointment_Date = adate
             data.Joining_Date = jdate
             data.create_user = createuser
+            data.Email=eemail
             data.save()
             messages.info(request, 'Data Update')
             return render(request, 'hr/forms/message.html',
@@ -1691,6 +1726,322 @@ def purchage_info_adjustment_saveV(request):
             return render(request, 'inventory/message.html',
                           {'producets_pp': producets_pp, 'bill': bill, 'company': company,
                            'user_current_branch': user_current_branch, 'user_branch': user_branch})
+
+
+
+def invontory_product_issue_infoV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    designationlist = DesignationM.objects.all()
+    depertmentlist = DepartmentM.objects.all()
+    products = Inventory_Product_Entry.objects.all()
+    employees = Hr_Employees_infoM.objects.all()
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        producets_pp = Product_issueM.objects.raw(
+            'select  DISTINCT id=0 as id,invoice_no,Edits from project_Product_issueM ppp where invoice_no=%s and User_Branch_id=%s',
+            [search, request.user.last_name])
+        datasall = Product_issueM.objects.filter(Invoice_no=search, User_Branch=request.user.last_name)
+        bill = Product_issueM.objects.raw(
+            'select id,count( DISTINCT invoice_no) as invoice_no from project_Product_issueM ppp ')
+
+        return render(request, 'inventory/forms/product_issue.html',
+                      {'producets_pp': producets_pp, 'datasall': datasall, 'bill': bill, 'products': products,
+                       'employees': employees,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch,
+                       'designationlist': designationlist, 'depertmentlist': depertmentlist, 'company': company})
+    else:
+        bill = Product_issueM.objects.raw(
+            'select id,count( DISTINCT invoice_no) as invoice_no from project_product_issuem ppp ')
+        return render(request, 'inventory/forms/product_issue.html',
+                      {'user_current_branch': user_current_branch, 'user_branch': user_branch,
+                       'designationlist': designationlist, 'depertmentlist': depertmentlist, 'bill': bill,
+                       'company': company, 'products': products, 'employees': employees})
+
+
+
+def invontory_product_issue_saveV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+
+    if request.method == 'POST':
+        bnumber = request.POST.get('Bnumber')
+        user = request.user.id
+        branchs = Branch_Infoamtion.objects.get(id=request.user.last_name)
+        createuser = User.objects.get(id=user)
+        p_name = request.POST.getlist('p_name')
+        s_name = request.POST.getlist('s_name')
+        qtt = request.POST.getlist('qtt')
+
+        id = request.POST.getlist('id')
+        invoice = request.POST.get('invoice')
+
+        if bnumber is None:
+            c = min([len(p_name), len(s_name), len(qtt)])
+            for i in range(c):
+
+                pr_name = Inventory_Product_Entry.objects.get(id=p_name[i])
+                su_name = Hr_Employees_infoM.objects.get(id=s_name[i])
+                if p_name[i] != None:
+                    date = Product_issueM(Product_Name=pr_name, Product_Employees_Name=su_name, Quantity=qtt[i],
+                                             User_Branch=branchs, userc=createuser,
+                                             Invoice_no=invoice)
+                    date.save()
+                else:
+                    date = Product_issueM(Product_Name=pr_name, Product_Employees_Name=su_name, Quantity=qtt[i],
+                                              User_Branch=branchs, userc=createuser,
+                                             Invoice_no=invoice
+                                             )
+                    date.save()
+                bill = Product_issueM.objects.raw(
+                    'select id,count( DISTINCT invoice_no) as invoice_no from project_Product_issueM ppp ')
+            messages.info(request, 'Data Save')
+            return render(request, 'inventory/message.html',
+                          {'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+        else:
+            bill = Product_issueM.objects.raw(
+                'select id,count( DISTINCT invoice_no) as invoice_no from project_Product_issueM ppp ')
+
+            producets_pp = Product_issueM.objects.raw(
+                'select  DISTINCT id=0 as id,invoice_no from project_Product_issueM ppp where invoice_no=%s',
+                [bnumber])
+            data = Product_issueM.objects.filter(Invoice_no=bnumber)
+            # for x in data
+
+            c = min([len(p_name), len(s_name), len(qtt), len(id)])
+            for i in range(c):
+
+                pr_name = Inventory_Product_Entry.objects.get(id=p_name[i])
+                su_name = Hr_Employees_infoM.objects.get(id=s_name[i])
+                # date = Product_PurchaseM.objects.filter(Invoice_no=a).update(Product_Name=pr_name, Product_Supplier_Name=su_name, Quantity=qtt[i],
+                #                          Price=price[i], User_Branch=branchs, userc=createuser, Invoice_no=bnumber)
+                if p_name[i] != "":
+                    data = Product_issueM.objects.get(id=id[i])
+                    data.Product_Name = pr_name
+                    data.Product_Employees_Name = su_name
+                    data.Quantity = qtt[i]
+
+                    data.userc = createuser
+                    data.User_Branch = branchs
+                    data.Invoice_no = bnumber
+
+                    data.save()
+                else:
+                    data = Product_issueM.objects.get(id=id[i])
+                    data.Product_Name = pr_name
+                    data.Product_Employees_Name = su_name
+                    data.Quantity = qtt[i]
+
+                    data.userc = createuser
+                    data.User_Branch = branchs
+                    data.Invoice_no = bnumber
+
+
+                    data.save()
+            messages.info(request, 'Data Update')
+            return render(request, 'inventory/message.html',
+                          {'producets_pp': producets_pp, 'bill': bill, 'company': company,
+                           'user_current_branch': user_current_branch, 'user_branch': user_branch})
+
+def invontory_product_issue_select_infoV(request):
+    products = Inventory_Product_Entry.objects.all()
+    employees = Hr_Employees_infoM.objects.all()
+
+    return render(request, 'inventory/forms/product_issue_select.html',
+                  {'products': products, 'employees': employees})
+
+
+def issue_info_pdf_demoV(request, Invoice_no=0):
+    invoice_number = Product_issueM.objects.raw(
+        'select DISTINCT id=0 as id,Invoice_no, userc_id from project_Product_issueM ppp WHERE Invoice_no =%s and User_Branch_id=%s',
+        [Invoice_no, request.user.last_name])
+    purchase_invoice = Product_issueM.objects.raw(
+        'select id=0 as id, Product_Name_id ,Product_Employees_Name_id ,Quantity from project_Product_issueM ppp where Invoice_no =%s and User_Branch_id=%s',
+        [Invoice_no, request.user.last_name])
+    totals = Product_issueM.objects.raw(
+        'select id=0 as id, sum(Quantity) as ttotal from project_Product_issueM ppp where Invoice_no =%s and User_Branch_id=%s',
+        [Invoice_no, request.user.last_name])
+    for x in totals:
+        amount = num2words(x.ttotal, lang="en_IN")
+    template_path = 'inventory/reports/issue_info_pdf_demo.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'purchase_invoice': purchase_invoice, 'invoice_number': invoice_number
+               ,'totals':totals,'amount':amount}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def issue_info_pdfV(request, Invoice_no=0):
+    invoice_number = Product_issueM.objects.raw(
+        'select DISTINCT id=0 as id,Invoice_no, userc_id from project_Product_issueM ppp WHERE Invoice_no =%s and User_Branch_id=%s',
+        [Invoice_no, request.user.last_name])
+    purchase_invoice = Product_issueM.objects.raw(
+        'select id=0 as id, Product_Name_id ,Product_Employees_Name_id ,Quantity from project_Product_issueM ppp where Invoice_no =%s and User_Branch_id=%s',
+        [Invoice_no, request.user.last_name])
+    totals = Product_issueM.objects.raw(
+        'select id=0 as id, sum(Quantity) as ttotal from project_Product_issueM ppp where Invoice_no =%s and User_Branch_id=%s',
+        [Invoice_no, request.user.last_name])
+    for x in totals:
+        amount = num2words(x.ttotal, lang="en_IN")
+    template_path = 'inventory/reports/issue_info_pdf.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'purchase_invoice': purchase_invoice, 'invoice_number': invoice_number,
+               'totals': totals, 'amount': amount}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+
+    abc = Product_issueM.objects.filter(Edits=None, Invoice_no=Invoice_no)
+    if abc:
+        for x in abc:
+            data = Product_issueM.objects.get(id=x.id)
+            data.Edits = 1
+            data.save()
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+
+def issue_info_adjustmentV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    designationlist = DesignationM.objects.all()
+    depertmentlist = DepartmentM.objects.all()
+    products = Inventory_Product_Entry.objects.all()
+    employees = Hr_Employees_infoM.objects.all()
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        producets_pp = Product_issueM.objects.raw(
+            'select  DISTINCT id=0 as id,invoice_no,Edits from project_Product_issueM ppp where invoice_no=%s and User_Branch_id=%s',
+            [search, request.user.last_name])
+        datasall = Product_issueM.objects.filter(Invoice_no=search, User_Branch=request.user.last_name)
+        bill = Product_issueM.objects.raw(
+            'select id,count( DISTINCT invoice_no) as invoice_no from project_Product_issueM ppp ')
+
+        return render(request, 'inventory/forms/product_issue_adjustment.html',
+                      {'producets_pp': producets_pp, 'datasall': datasall, 'bill': bill, 'products': products,
+                       'employees': employees,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch,
+                       'designationlist': designationlist, 'depertmentlist': depertmentlist, 'company': company})
+    else:
+        bill = Product_issueM.objects.raw(
+            'select id,count( DISTINCT invoice_no) as invoice_no from project_product_issuem ppp ')
+        return render(request, 'inventory/forms/product_issue_adjustment.html',
+                      {'user_current_branch': user_current_branch, 'user_branch': user_branch,
+                       'designationlist': designationlist, 'depertmentlist': depertmentlist, 'bill': bill,
+                       'company': company, 'products': products, 'employees': employees})
+
+
+
+def issue_info_adjustment_saveV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+
+    if request.method == 'POST':
+        bnumber = request.POST.get('Bnumber')
+        user = request.user.id
+        branchs = Branch_Infoamtion.objects.get(id=request.user.last_name)
+        createuser = User.objects.get(id=user)
+        p_name = request.POST.getlist('p_name')
+        s_name = request.POST.getlist('s_name')
+        qtt = request.POST.getlist('qtt')
+
+        id = request.POST.getlist('id')
+        invoice = request.POST.get('invoice')
+
+        if bnumber is None:
+            c = min([len(p_name), len(s_name), len(qtt)])
+            for i in range(c):
+
+                pr_name = Inventory_Product_Entry.objects.get(id=p_name[i])
+                su_name = Hr_Employees_infoM.objects.get(id=s_name[i])
+                if p_name[i] != None:
+                    date = Product_issueM(Product_Name=pr_name, Product_Employees_Name=su_name, Quantity=qtt[i],
+                                          User_Branch=branchs, userc=createuser,
+                                          Invoice_no=invoice,Edits=1)
+                    date.save()
+                else:
+                    date = Product_issueM(Product_Name=pr_name, Product_Employees_Name=su_name, Quantity=qtt[i],
+                                          User_Branch=branchs, userc=createuser,
+                                          Invoice_no=invoice
+                                          )
+                    date.save()
+                bill = Product_issueM.objects.raw(
+                    'select id,count( DISTINCT invoice_no) as invoice_no from project_Product_issueM ppp ')
+            messages.info(request, 'Data Save')
+            return render(request, 'inventory/message.html',
+                          {'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+        else:
+            bill = Product_issueM.objects.raw(
+                'select id,count( DISTINCT invoice_no) as invoice_no from project_Product_issueM ppp ')
+
+            producets_pp = Product_issueM.objects.raw(
+                'select  DISTINCT id=0 as id,invoice_no from project_Product_issueM ppp where invoice_no=%s',
+                [bnumber])
+            data = Product_issueM.objects.filter(Invoice_no=bnumber)
+            # for x in data
+
+            c = min([len(p_name), len(s_name), len(qtt), len(id)])
+            for i in range(c):
+
+                pr_name = Inventory_Product_Entry.objects.get(id=p_name[i])
+                su_name = Hr_Employees_infoM.objects.get(id=s_name[i])
+                # date = Product_PurchaseM.objects.filter(Invoice_no=a).update(Product_Name=pr_name, Product_Supplier_Name=su_name, Quantity=qtt[i],
+                #                          Price=price[i], User_Branch=branchs, userc=createuser, Invoice_no=bnumber)
+                if p_name[i] != "":
+                    data = Product_issueM.objects.get(id=id[i])
+                    data.Product_Name = pr_name
+                    data.Product_Employees_Name = su_name
+                    data.Quantity = qtt[i]
+
+                    data.userc = createuser
+                    data.User_Branch = branchs
+                    data.Invoice_no = bnumber
+
+                    data.save()
+                else:
+                    data = Product_issueM.objects.get(id=id[i])
+                    data.Product_Name = pr_name
+                    data.Product_Employees_Name = su_name
+                    data.Quantity = qtt[i]
+
+                    data.userc = createuser
+                    data.User_Branch = branchs
+                    data.Invoice_no = bnumber
+
+                    data.save()
+            messages.info(request, 'Data Update')
+            return render(request, 'inventory/message.html',
+                          {'producets_pp': producets_pp, 'bill': bill, 'company': company,
+                           'user_current_branch': user_current_branch, 'user_branch': user_branch})
+
 
 
 def TestV(request):
