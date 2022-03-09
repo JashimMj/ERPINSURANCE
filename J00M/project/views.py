@@ -1026,6 +1026,108 @@ def hr_bank_branch_info_pdfV(request, id=0):
     return response
 
 
+def hr_client_infoV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        datas = ClinetM.objects.filter(id=search)
+        datasall = ClinetM.objects.filter(id=search)
+        bill = ClinetM.objects.all().count()
+        return render(request, 'hr/forms/client_info.html',
+                      {'datas': datas, 'datasall': datasall, 'bill': bill, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    else:
+        bill = ClinetM.objects.all().count()
+    return render(request, 'hr/forms/client_info.html',
+                  {'company': company, 'bill': bill, 'user_current_branch': user_current_branch,
+                   'user_branch': user_branch})
+
+
+def hr_client_info_saveV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        bnumber = request.POST.get('Bnumber')
+        counter = ClinetM.objects.all().count()
+        id = counter + 1
+        user = request.user.id
+        createuser = User.objects.get(id=user)
+        branch=Branch_Infoamtion.objects.get(id=createuser.last_name)
+        cname = request.POST.get('cname')
+
+
+        if bnumber is None:
+            date = ClinetM(id=id, Name=cname, create_user=createuser,Branch_Info=branch)
+            date.save()
+            datas = ClinetM.objects.filter(id=id)
+            messages.info(request, 'Data Save')
+            bill = ClinetM.objects.all().count()
+            return render(request, 'hr/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+        else:
+            user = request.user.id
+            createuser = User.objects.get(id=user)
+            branch = Branch_Infoamtion.objects.get(id=createuser.last_name)
+            bill = ClinetM.objects.all().count()
+            datas = ClinetM.objects.filter(id=bnumber)
+            data = ClinetM.objects.get(id=bnumber)
+            data.Name = cname
+            data.create_user = createuser
+            data.Branch_Info = branch
+            data.save()
+            messages.info(request, 'Data Update')
+            return render(request, 'hr/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+
+def hr_client_info_demo_pdfV(request, id=0):
+    bank_info = ClinetM.objects.filter(id=id)
+    template_path = 'hr/reports/client_info_pdf_demo.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'bank_info': bank_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def hr_client_info_pdfV(request, id=0):
+    bank_info = ClinetM.objects.filter(id=id)
+    template_path = 'hr/reports/client_info_pdf.html'
+    context = {'company': company, 'bank_info': bank_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    data = ClinetM.objects.get(id=id)
+    data.Edits = 1
+    data.save()
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
 def hr_employees_infoV(request):
     user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
     user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
@@ -2042,6 +2144,17 @@ def issue_info_adjustment_saveV(request):
                           {'producets_pp': producets_pp, 'bill': bill, 'company': company,
                            'user_current_branch': user_current_branch, 'user_branch': user_branch})
 
+
+def uw_dashboardV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    return render(request,'uw/uw_dashboard.html',{'company':company,'user_branch':user_branch,'user_current_branch':user_current_branch})
+
+
+def uw_q_marineV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    return render(request,'uw/forms/quotation/marineq.html',{'company':company,'user_branch':user_branch,'user_current_branch':user_current_branch})
 
 
 def TestV(request):

@@ -113,6 +113,18 @@ class Bank_BranchM(models.Model):
     def __str__(self):
         return self.Bank_Branch
 
+class ClinetM(models.Model):
+    id = models.AutoField(primary_key=True)
+    Name = models.CharField(max_length=500, null=True, blank=True)
+    Branch_Info=models.ForeignKey(Branch_Infoamtion, on_delete=models.CASCADE, null=True, blank=True)
+    create_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    Edits = models.CharField(max_length=10, null=True, blank=True)
+
+    def __str__(self):
+        return self.Name
+
+
 class Software_Permittion_MainM(models.Model):
     id = models.AutoField(primary_key=True)
     Main_Name=models.CharField(max_length=300,null=True,blank=True)

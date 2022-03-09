@@ -52,6 +52,14 @@ urlpatterns = [
     # ----------------------HR Branch Information---------------------------
     path('hr/employees/info/', views.hr_employees_infoV, name="hr_employees_info"),
     path('hr/employees/info/save/', views.hr_employees_info_saveV, name="hr_employees_info_save"),
+    # ----------------------HR Branch Information---------------------------
+    path('hr/client/info/', views.hr_client_infoV, name="hr_client_info"),
+    path('hr/client/info/save/', views.hr_client_info_saveV, name="hr_client_info_save"),
+    path('hr/client/info/demo/pdf/<int:id>', views.hr_client_info_demo_pdfV, name="hr_client_info_demo_pdf"),
+    path('hr/client/info/pdf/<int:id>', views.hr_client_info_pdfV, name="hr_client_info_pdf"),
+
+
+
 
     # ----------------------Software Admin Create user---------------------------
     path('software/admin/user/create/', views.software_admin_user_createV, name="software_admin_user_create"),
@@ -91,6 +99,11 @@ urlpatterns = [
     path('inventory/issue/pdf/<int:Invoice_no>', views.issue_info_pdfV, name="issue_info_pdf"),
     path('inventory/issue/adjustment/', views.issue_info_adjustmentV, name="issue_info_adjustment"),
     path('inventory/issue/adjustment/save', views.issue_info_adjustment_saveV, name="issue_info_adjustment_save"),
+
+
+    # ----------------------UNDERWRITING DEPARTMENT---------------------------
+    path('uw/dashboard/', views.uw_dashboardV, name="uw_dashboard"),
+    path('uw/quotation/marine/', views.uw_q_marineV, name="uw_q_marine"),
 
 
 
