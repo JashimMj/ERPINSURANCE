@@ -1,0 +1,164 @@
+{%extends 'index.html'%}
+{%load static%}
+{%block contant%}
+{%if datasall%}
+{%for a in datasall%}
+<section class="section">
+
+    <div class="row ">
+        <div class="col-md-12" style="margin-bottom:10px;">
+            <form class="form-inline" action="{%url 'software_insurance_type_info'%}" method="POST">
+                {%csrf_token%}
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                       name="search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+                >Search Bill
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <form method="POST">
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-8">
+                {%csrf_token%}
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Insurance Type Information</h4>
+
+
+                    </div>
+                    <div><h4 style="text-align:right; padding-right:10px;">Last Entry:{{bill}}</h4></div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="search-results col-md-6">
+                                {%include 'software_admin/forms/message.html'%}
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Insurance Type</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="vname"
+                                               value="{{a.Name}}">
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div class="card-footer text-right">
+
+                            {%if a.Edits == '1'%}
+                            <button class="btn btn-primary mr-1" type="button">
+                                    <i class="fas fa-lock"> Data Lock</i>
+                            </button>
+                            {%else%}
+                            <button class="btn btn-primary mr-1" type="button" hx-encoding="multipart/form-data"
+                                    hx-post="{%url 'software_insurance_type_info_save'%}" hx-target=".search-results"><i class="fas fa-edit">
+                                Edit</i>
+                            </button>
+                            {%endif%}
+
+
+                            <a href="{%url 'software_insurance_type_info_demo_pdf' a.id%}" class="btn btn-primary"
+                               target="_blank"><i class="fas fa-id-card-alt"> Print Demo</i> </a>
+                            <a href="{%url 'software_insurance_type_info_pdf' a.id%}" class="btn btn-success"
+                               target="_blank"><i class="fas fa-print"> Final Print</i> </a>
+                            <a class="btn btn-danger mr-1" href="{%url 'software_insurance_type_info'%}"><i
+                                    class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+</section>
+{%endfor%}
+{%else%}
+<section class="section">
+
+    <div class="row ">
+        <div class="col-md-12" style="margin-bottom:10px;">
+            <form class="form-inline" action="{%url 'software_insurance_type_info'%}" method="POST">
+                {%csrf_token%}
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                       name="search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+                >Search Bill
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <form method="POST">
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-8">
+                {%csrf_token%}
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Insurance Type Information</h4>
+
+
+                    </div>
+                    <div><h4 style="text-align:right; padding-right:10px;">Last Entry:{{bill}}</h4></div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="search-results col-md-6">
+                                {%include 'software_admin/forms/message.html'%}
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Insurance Type</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="vname" required>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                        <div class="card-footer text-right">
+                            <button class="btn btn-primary mr-1" type="button" hx-encoding="multipart/form-data"
+                                    hx-post="{%url 'software_insurance_type_info_save'%}" hx-target=".search-results"><i
+                                    class="far fa-save"> Save</i>
+                            </button>
+
+
+                            <a class="btn btn-danger mr-1" href="{%url 'software_insurance_type_info'%}"><i
+                                    class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+</section>
+{%endif%}
+{%endblock%}

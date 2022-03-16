@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'project',
     'xhtml2pdf',
+    'import_export',
 ]
 
 MIDDLEWARE = [
@@ -83,6 +84,19 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.oracle',
+#         'NAME': 'oracle',
+#         'USER': 'abc',
+#         'PASSWORD': 'abc',
+#         'HOST': 'localhost',
+#         'PORT': '1521',
+#     }
+# }
 
 
 # Password validation

@@ -22,6 +22,38 @@ urlpatterns = [
     path('software/admin/edit/', views.EditV, name="software_admin_Edit"),
     path('software/admin/edit/save/', views.All_Edit_saveV, name="software_admin_Edit_save"),
 
+    # ----------------------Software Voyage form Information---------------------------
+    path('software/voyage/form/info/', views.software_voyage_form_infoV, name="software_voyage_form_info"),
+    path('software/voyage/form/info/save/', views.software_voyage_form_info_saveV, name="software_voyage_form_info_save"),
+    path('software/voyage/form/info/demo/pdf/<int:id>', views.software_voyage_form_info_demo_pdfV, name="software_voyage_form_info_demo_pdf"),
+    path('software/voyage/form/info/pdf/<int:id>', views.software_voyage_form_info_pdfV, name="software_voyage_form_info_pdf"),
+
+      # ----------------------Software Voyage To Information---------------------------
+    path('software/voyage/to/info/', views.software_voyage_to_infoV,name="software_voyage_to_info"),
+    path('software/voyage/to/info/save/', views.software_voyage_to_info_saveV,name="software_voyage_to_info_save"),
+    path('software/voyage/to/info/demo/pdf/<int:id>', views.software_voyage_to_info_demo_pdfV,name="software_voyage_to_info_demo_pdf"),
+    path('software/voyage/to/info/pdf/<int:id>', views.software_voyage_to_info_pdfV,name="software_voyage_to_info_pdf"),
+    # ----------------------Software Voyage Via Information---------------------------
+    path('software/voyage/via/info/', views.software_voyage_via_infoV,name="software_voyage_via_info"),
+    path('software/voyage/via/info/save/', views.software_voyage_via_info_saveV,name="software_voyage_via_info_save"),
+    path('software/voyage/via/info/demo/pdf/<int:id>', views.software_voyage_via_info_demo_pdfV,name="software_voyage_via_info_demo_pdf"),
+    path('software/voyage/via/info/pdf/<int:id>', views.software_voyage_via_info_pdfV,name="software_voyage_via_info_pdf"),
+    # ----------------------Software Voyage Via Information---------------------------
+    path('software/transit/by/info/', views.software_transit_by_infoV,name="software_transit_by_info"),
+    path('software/transit/by/info/save/', views.software_transit_by_info_saveV,name="software_transit_by_info_save"),
+    path('software/transit/by/info/demo/pdf/<int:id>', views.software_transit_by_info_demo_pdfV,name="software_transit_by_info_demo_pdf"),
+    path('software/transit/by/info/pdf/<int:id>', views.software_transit_by_info_pdfV,name="software_transit_by_info_pdf"),
+                  # ----------------------Software Risk Cover Information---------------------------
+    path('software/risk/cover/info/', views.software_risk_cover_infoV,name="software_risk_cover_info"),
+    path('software/risk/cover/info/save/', views.software_risk_cover_info_saveV,name="software_risk_cover_info_save"),
+    path('software/risk/cover/info/demo/pdf/<int:id>', views.software_risk_cover_info_demo_pdfV,name="software_risk_cover_info_demo_pdf"),
+    path('software/risk/cover/info/pdf/<int:id>', views.software_risk_cover_info_pdfV,name="software_risk_cover_info_pdf"),
+                  # ----------------------Software Insurance Type Information---------------------------
+    path('software/insurance/type/info/', views.software_insurance_type_infoV,name="software_insurance_type_info"),
+    path('software/insurance/type/info/save/', views.software_insurance_type_info_saveV,name="software_insurance_type_info_save"),
+    path('software/insurance/type/info/demo/pdf/<int:id>', views.software_insurance_type_info_demo_pdfV,name="software_insurance_type_info_demo_pdf"),
+    path('software/insurance/type/info/pdf/<int:id>', views.software_insurance_type_info_pdfV,name="software_insurance_type_info_pdf"),
+
     # ----------------------HR---------------------------
     path('hr/dashboard/', views.hr_dashboardV, name="hr_dashboard"),
     # ----------------------HR Branch Information---------------------------
@@ -52,11 +84,16 @@ urlpatterns = [
     # ----------------------HR Branch Information---------------------------
     path('hr/employees/info/', views.hr_employees_infoV, name="hr_employees_info"),
     path('hr/employees/info/save/', views.hr_employees_info_saveV, name="hr_employees_info_save"),
-    # ----------------------HR Branch Information---------------------------
+    # ----------------------HR client Information---------------------------
     path('hr/client/info/', views.hr_client_infoV, name="hr_client_info"),
     path('hr/client/info/save/', views.hr_client_info_saveV, name="hr_client_info_save"),
     path('hr/client/info/demo/pdf/<int:id>', views.hr_client_info_demo_pdfV, name="hr_client_info_demo_pdf"),
     path('hr/client/info/pdf/<int:id>', views.hr_client_info_pdfV, name="hr_client_info_pdf"),
+    # ----------------------HR client Branch Information---------------------------
+    path('hr/client/branch/info/', views.hr_client_branch_infoV, name="hr_client_branch_info"),
+    path('hr/client/branch/info/save/', views.hr_client_branch_info_saveV, name="hr_client_branch_info_save"),
+    # path('hr/client/info/branch/demo/pdf/<int:id>', views.hr_client_branch_info_demo_pdfV,name="hr_client_branch_info_demo_pdf"),
+    # path('hr/client/branch/info/pdf/<int:id>', views.hr_client_branch_info_pdfV, name="hr_client_branch_info_pdf"),
 
 
 
@@ -104,6 +141,9 @@ urlpatterns = [
     # ----------------------UNDERWRITING DEPARTMENT---------------------------
     path('uw/dashboard/', views.uw_dashboardV, name="uw_dashboard"),
     path('uw/quotation/marine/', views.uw_q_marineV, name="uw_q_marine"),
+    path('uw/quotation/marine/client/select/', views.uw_q_marine_client_selectV, name="uw_q_marine_client_select"),
+    path('uw/quotation/marine/bank/branch/select/', views.uw_q_marine_bank_branch_selectV, name="uw_q_marine_bank_branch_select"),
+    path('uw/quotation/marine/transit/by/select/', views.uw_q_marine_transit_by_selectV, name="uw_q_marine_transitby_select"),
 
 
 

@@ -48,6 +48,7 @@ class Company_Information(models.Model):
         return self.Company_Name
 
 
+
 class Branch_Infoamtion(models.Model):
     id = models.AutoField(primary_key=True)
     Branch_Name = models.CharField(max_length=500, null=True, blank=True)
@@ -63,6 +64,76 @@ class Branch_Infoamtion(models.Model):
 
     def __str__(self):
         return self.Branch_Name
+
+
+
+class VoyageForm(models.Model):
+    id = models.AutoField(primary_key=True)
+    Name=models.CharField(max_length=255,null=True,blank=True)
+    issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    Edits = models.CharField(max_length=10, null=True, blank=True)
+    create_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.Name
+
+class VoyageTo(models.Model):
+    id = models.AutoField(primary_key=True)
+    Name=models.CharField(max_length=255,null=True,blank=True)
+    issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    Edits = models.CharField(max_length=10, null=True, blank=True)
+    create_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.Name
+
+class VoyageVia(models.Model):
+    id = models.AutoField(primary_key=True)
+    Name=models.CharField(max_length=255,null=True,blank=True)
+    issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    Edits = models.CharField(max_length=10, null=True, blank=True)
+    create_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.Name
+
+class TransitBy(models.Model):
+    id = models.AutoField(primary_key=True)
+    Name=models.CharField(max_length=255,null=True,blank=True)
+    Stump_Rate=models.IntegerField(null=True,blank=True)
+    issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    Edits = models.CharField(max_length=10, null=True, blank=True)
+    create_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.Name
+
+
+class Currency(models.Model):
+    id = models.AutoField(primary_key=True)
+    Name=models.CharField(max_length=255,null=True,blank=True)
+    issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    Edits = models.CharField(max_length=10, null=True, blank=True)
+    create_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
+    # def __str__(self):
+    #     return self.Name
+
+class RiskCovered(models.Model):
+    id = models.AutoField(primary_key=True)
+    Name = models.CharField(max_length=255, null=True, blank=True)
+    issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    Edits = models.CharField(max_length=10, null=True, blank=True)
+    create_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
+
+class InsuraceType(models.Model):
+    id = models.AutoField(primary_key=True)
+    Name = models.CharField(max_length=255, null=True, blank=True)
+    issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    Edits = models.CharField(max_length=10, null=True, blank=True)
+    create_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
 
 
 class DepartmentM(models.Model):
@@ -123,6 +194,22 @@ class ClinetM(models.Model):
 
     def __str__(self):
         return self.Name
+
+
+class Client_BranchM(models.Model):
+    id = models.AutoField(primary_key=True)
+    Client_Name = models.ForeignKey(ClinetM,on_delete=models.CASCADE,null=True,blank=True)
+    Client_Branch=models.CharField(max_length=300,null=True,blank=True)
+    Client_Branch_Address=models.CharField(max_length=800,null=True,blank=True)
+    Client_Branch_Phone=models.CharField(max_length=20,null=True,blank=True)
+    Client_Branch_Mobile=models.CharField(max_length=20,null=True,blank=True)
+    Client_Branch_Email=models.EmailField(max_length=50,null=True,blank=True)
+    create_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    Edits = models.CharField(max_length=10, null=True, blank=True)
+
+    def __str__(self):
+        return self.Client_Branch
 
 
 class Software_Permittion_MainM(models.Model):
@@ -222,6 +309,38 @@ class Product_issueM(models.Model):
     User_Branch=models.ForeignKey(Branch_Infoamtion, on_delete=models.CASCADE, null=True, blank=True)
     Invoice_no=models.CharField(max_length=50,null=True,blank=True)
     objects = models.Manager()
+
+
+class MarineQuatationM(models.Model):
+    id = models.AutoField(primary_key=True)
+    Bill_date=models.DateField(auto_now=True)
+    Bill_No=models.CharField(max_length=255,null=True,blank=True)
+    Insurance_Type=models.ForeignKey(InsuraceType,on_delete=models.CASCADE,null=True,blank=True)
+    Client_NameM=models.ForeignKey(ClinetM,on_delete=models.CASCADE,null=True,blank=True)
+    Client_AddressM=models.ForeignKey(Client_BranchM,on_delete=models.CASCADE,null=True,blank=True)
+    Bank_Name=models.ForeignKey(BankM,on_delete=models.CASCADE,null=True,blank=True)
+    Bank_Branch=models.ForeignKey(Bank_BranchM,on_delete=models.CASCADE,null=True,blank=True)
+    Interest_covered=models.CharField(max_length=1000,null=True,blank=True)
+    Voyage_From=models.ForeignKey(VoyageForm,on_delete=models.CASCADE,null=True,blank=True)
+    Voyage_To=models.ForeignKey(VoyageTo,on_delete=models.CASCADE,null=True,blank=True)
+    Voyage_Via=models.ForeignKey(VoyageVia,on_delete=models.CASCADE,null=True,blank=True)
+    Transit_By=models.ForeignKey(TransitBy,on_delete=models.CASCADE,null=True,blank=True)
+    Sdate=models.DateField(null=True,blank=True)
+    Edate=models.DateField(null=True,blank=True)
+    Sum_insured=models.IntegerField(null=True,blank=True)
+    Extra1=models.IntegerField(null=True,blank=True)
+    Extra2=models.IntegerField(null=True,blank=True)
+    Currency=models.IntegerField(null=True,blank=True)
+    Excrate=models.IntegerField(null=True,blank=True)
+    Bdtamount=models.IntegerField(null=True,blank=True)
+    Declaration=models.CharField(max_length=600,null=True,blank=True)
+    SpDeclaration=models.CharField(max_length=600,null=True,blank=True)
+    Producer=models.ForeignKey(Hr_Employees_infoM,on_delete=models.CASCADE,null=True,blank=True)
+    RiskCover=models.ForeignKey(RiskCovered,on_delete=models.CASCADE,null=True,blank=True)
+
+
+
+
 
 
 

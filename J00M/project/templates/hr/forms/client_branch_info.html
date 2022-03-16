@@ -7,7 +7,7 @@
 
     <div class="row ">
         <div class="col-md-12" style="margin-bottom:10px;">
-            <form class="form-inline" action="{%url 'hr_bank_branch_info'%}" method="POST">
+            <form class="form-inline" action="{%url 'hr_client_branch_info'%}" method="POST">
                 {%csrf_token%}
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
                        name="search">
@@ -25,7 +25,7 @@
                 {%csrf_token%}
                 <div class="card">
                     <div class="card-header">
-                        <h4>Bank Branch Information</h4>
+                        <h4>Client Address Information</h4>
 
 
                     </div>
@@ -38,7 +38,7 @@
                             </div>
                               <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Bank Name</label>
+                                    <label>Client Name</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
@@ -47,8 +47,8 @@
                                         </div>
                                        
 
-                                        <select class="form-control select2" name="Bank_n">
-                                            <option value="{{a.Bank_Name.id}}"> {{a.Bank_Name}}</option>
+                                        <select class="form-control select2" name="client_n">
+                                            <option value="{{a.Client_Name.id}}"> {{a.Client_Name}}</option>
                                             {%for x in bank_name%}
                                             <option value="{{x.id}}">{{x.Name}}</option>
                                             {%endfor%}
@@ -58,67 +58,67 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Bank Branch Name</label>
+                                    <label>Client Branch Name</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control phone-number" name="Bank_Branch_n" value="{{a.Bank_Branch}}" >
+                                        <input type="text" class="form-control phone-number" name="client_Branch_n" value="{{a.Client_Branch}}" >
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Bank Branch Address</label>
+                                    <label>Client Branch Address</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <textarea name="Bank_Branch_a"  cols="30" rows="10" class="form-control phone-number">{{a.Bank_Branch_Address}}</textarea>
+                                        <textarea name="client_Branch_a"  cols="30" rows="10" class="form-control phone-number">{{a.Client_Branch_Address}}</textarea>
 
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Bank Branch Phone</label>
+                                    <label>Client Branch Phone</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control phone-number" name="Bank_Branch_p" value="{{a.Bank_Branch_Phone}}">
+                                        <input type="text" class="form-control phone-number" name="client_Branch_p" value="{{a.Client_Branch_Phone}}">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Bank Branch Mobile</label>
+                                    <label>Client Branch Mobile</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control phone-number" name="Bank_Branch_m" value="{{a.Bank_Branch_Mobile}}">
+                                        <input type="text" class="form-control phone-number" name="client_Branch_m" value="{{a.Client_Branch_Mobile}}">
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Bank Branch E-Mail</label>
+                                    <label>Client Branch E-Mail</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control phone-number" name="Bank_Branch_e" value="{{a.Bank_Branch_Email}}" >
+                                        <input type="text" class="form-control phone-number" name="client_Branch_e" value="{{a.Client_Branch_Email}}" >
                                     </div>
                                 </div>
                             </div>
@@ -133,7 +133,7 @@
                             </button>
                             {%else%}
                             <button class="btn btn-primary mr-1" type="button" hx-encoding="multipart/form-data"
-                                    hx-post="{%url 'hr_bank_branch_info_save'%}" hx-target=".search-results"><i
+                                    hx-post="{%url 'hr_client_branch_info_save'%}" hx-target=".search-results"><i
                                     class="fas fa-edit">
                                 Edit</i>
                             </button>
@@ -164,7 +164,7 @@
 
     <div class="row ">
         <div class="col-md-12" style="margin-bottom:10px;">
-            <form class="form-inline" action="{%url 'hr_bank_branch_info'%}" method="POST">
+            <form class="form-inline" action="{%url 'hr_client_branch_info'%}" method="POST">
                 {%csrf_token%}
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
                        name="search">
@@ -182,7 +182,7 @@
                 {%csrf_token%}
                 <div class="card">
                     <div class="card-header">
-                        <h4>Bank Branch Information</h4>
+                        <h4>Client Address Information</h4>
 
 
                     </div>
@@ -196,15 +196,15 @@
 
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Bank Name</label>
+                                    <label>Client Name</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <select class="form-control select2" name="Bank_n">
-                                        <option>Select Bank Name</option>
+                                        <select class="form-control select2" name="client_n">
+                                        <option>Select Client Name</option>
                                               {%for x in bank_name%}
                                         <option value="{{x.id}}">{{x.Name}}</option>
                                         {%endfor%}
@@ -215,67 +215,67 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Bank Branch Name</label>
+                                    <label>Client Branch Name</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control phone-number" name="Bank_Branch_n" >
+                                        <input type="text" class="form-control phone-number" name="client_Branch_n" >
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Bank Branch Address</label>
+                                    <label>Client Branch Address</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <textarea name="Bank_Branch_a" id="" cols="30" rows="10" class="form-control phone-number"></textarea>
+                                        <textarea name="client_Branch_a" id="" cols="30" rows="10" class="form-control phone-number"></textarea>
 
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Bank Branch Phone</label>
+                                    <label>Client Branch Phone</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control phone-number" name="Bank_Branch_p" >
+                                        <input type="text" class="form-control phone-number" name="client_Branch_p" >
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Bank Branch Mobile</label>
+                                    <label>Client Branch Mobile</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control phone-number" name="Bank_Branch_m" >
+                                        <input type="text" class="form-control phone-number" name="client_Branch_m" >
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Bank Branch E-Mail</label>
+                                    <label>Client Branch E-Mail</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control phone-number" name="Bank_Branch_e" >
+                                        <input type="text" class="form-control phone-number" name="client_Branch_e" >
                                     </div>
                                 </div>
                             </div>
@@ -285,7 +285,7 @@
                         </div>
                         <div class="card-footer text-right">
                             <button class="btn btn-primary mr-1" type="button" hx-encoding="multipart/form-data"
-                                    hx-post="{%url 'hr_bank_branch_info_save'%}" hx-target=".search-results"><i
+                                    hx-post="{%url 'hr_client_branch_info_save'%}" hx-target=".search-results"><i
                                     class="far fa-save"> Save</i>
                             </button>
 

@@ -10,7 +10,8 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
+from django.core import serializers
 from pathlib import Path
 import os
 from num2words import num2words
@@ -374,6 +375,10 @@ def EditV(request):
     suppler_info = request.POST.get('supplier_info')
     product_purchase_info = request.POST.get('product_purchase_info')
     product_issue_info = request.POST.get('product_issue_info')
+    voyageform_info = request.POST.get('voyageform_info')
+    voyageto_info = request.POST.get('voyageto_info')
+    voyagevia_info = request.POST.get('voyagevia_info')
+    transit_info = request.POST.get('transit_info')
     if company_info:
         company_edit = Company_Information.objects.filter(id=company_info)
         return render(request, 'software_admin/forms/Edit_message.html',
@@ -429,6 +434,36 @@ def EditV(request):
                       {'product_issue_edit': product_issue_edit, 'company': company,
                        'user_current_branch': user_current_branch, 'user_branch': user_branch})
 
+    elif voyageform_info:
+        voyageform_edit = VoyageForm.objects.raw(
+            'select DISTINCT id,Edits from project_voyageform ppp WHERE id =%s',
+            [voyageform_info])
+        return render(request, 'software_admin/forms/Edit_message.html',
+                      {'voyageform_edit': voyageform_edit, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    elif voyageto_info:
+        voyageto_edit = VoyageTo.objects.raw(
+            'select DISTINCT id,Edits from project_VoyageTo ppp WHERE id =%s',
+            [voyageto_info])
+        return render(request, 'software_admin/forms/Edit_message.html',
+                      {'voyageto_edit': voyageto_edit, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    elif voyagevia_info:
+        voyagevia_edit = VoyageVia.objects.raw(
+            'select DISTINCT id,Edits from project_voyagevia ppp WHERE id =%s',
+            [voyagevia_info])
+        return render(request, 'software_admin/forms/Edit_message.html',
+                      {'voyagevia_edit': voyagevia_edit, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    elif transit_info:
+        transit_edit = TransitBy.objects.raw(
+            'select DISTINCT id,Edits from project_transitby ppp WHERE id =%s',
+            [transit_info])
+        return render(request, 'software_admin/forms/Edit_message.html',
+                      {'transit_edit': transit_edit, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+
+
     return render(request, 'software_admin/forms/All_Edit.html',
                   {'company': company, 'user_current_branch': user_current_branch, 'user_branch': user_branch})
 
@@ -454,6 +489,14 @@ def All_Edit_saveV(request):
     purchase_edite = request.POST.get('purchase_edite')
     product_issue_inv = request.POST.get('product_issue_inv')
     issue_edite = request.POST.get('issue_edite')
+    voyageform_inv = request.POST.get('voyageform_inv')
+    voyageforms_edite = request.POST.get('voyageform_edite')
+    voyageto_inv = request.POST.get('voyageto_inv')
+    voyageto_edite = request.POST.get('voyageto_edite')
+    voyagevia_inv = request.POST.get('voyagevia_inv')
+    voyagevia_edite = request.POST.get('voyagevia_edite')
+    transit_inv = request.POST.get('transit_inv')
+    transit_edite = request.POST.get('transit_edite')
     if company_info:
         company_edits = Company_Information.objects.get(id=company_info)
         company_edits.Edits = cedit
@@ -497,6 +540,31 @@ def All_Edit_saveV(request):
         for x in abc:
             issue_edits = Product_issueM.objects.get(id=x.id)
             issue_edits.Edits = issue_edite
+            issue_edits.save()
+    elif voyageform_inv:
+        abc = VoyageForm.objects.filter(id=voyageform_inv)
+        for x in abc:
+            issue_edits = VoyageForm.objects.get(id=x.id)
+            issue_edits.Edits = voyageforms_edite
+            issue_edits.save()
+    elif voyageto_inv:
+        abc = VoyageTo.objects.filter(id=voyageto_inv)
+        for x in abc:
+            issue_edits = VoyageTo.objects.get(id=x.id)
+            issue_edits.Edits = voyageto_edite
+            issue_edits.save()
+
+    elif voyagevia_inv:
+        abc = VoyageVia.objects.filter(id=voyagevia_inv)
+        for x in abc:
+            issue_edits = VoyageVia.objects.get(id=x.id)
+            issue_edits.Edits = voyagevia_edite
+            issue_edits.save()
+    elif transit_inv:
+        abc = TransitBy.objects.filter(id=transit_inv)
+        for x in abc:
+            issue_edits = TransitBy.objects.get(id=x.id)
+            issue_edits.Edits = transit_edite
             issue_edits.save()
     messages.info(request, 'Data Update')
 
@@ -1127,6 +1195,72 @@ def hr_client_info_pdfV(request, id=0):
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
+
+def hr_client_branch_infoV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        datas = Client_BranchM.objects.filter(id=search)
+        datasall = Client_BranchM.objects.filter(id=search)
+        bill = Client_BranchM.objects.all().count()
+        bank_name = ClinetM.objects.all()
+        return render(request, 'hr/forms/client_branch_info.html',
+                      {'datas': datas, 'datasall': datasall, 'bill': bill, 'company': company, 'bank_name': bank_name,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    else:
+        bank_name = ClinetM.objects.all()
+        bill = Client_BranchM.objects.all().count()
+    return render(request, 'hr/forms/client_branch_info.html',
+                  {'company': company, 'bill': bill, 'bank_name': bank_name, 'user_current_branch': user_current_branch,
+                   'user_branch': user_branch})
+
+
+def hr_client_branch_info_saveV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        bnumber = request.POST.get('Bnumber')
+        counter = Client_BranchM.objects.all().count()
+        id = counter + 1
+        user = request.user.id
+        createuser = User.objects.get(id=user)
+        client_n = request.POST.get('client_n')
+        clientname = ClinetM.objects.get(id=client_n)
+        client_branch_n = request.POST.get('client_Branch_n')
+        client_branch_a = request.POST.get('client_Branch_a')
+        client_branch_p = request.POST.get('client_Branch_p')
+        client_branch_m = request.POST.get('client_Branch_m')
+        client_branch_e = request.POST.get('client_Branch_e')
+
+        if bnumber is None:
+            date = Client_BranchM(id=id, Client_Name=clientname, Client_Branch=client_branch_n, Client_Branch_Address=client_branch_a,
+                                Client_Branch_Phone=client_branch_p, Client_Branch_Mobile=client_branch_m,
+                                Client_Branch_Email=client_branch_e, create_user=createuser)
+            date.save()
+            datas = Client_BranchM.objects.filter(id=id)
+            messages.info(request, 'Data Save')
+            bill = Client_BranchM.objects.all().count()
+            return render(request, 'hr/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+        else:
+            bill = Client_BranchM.objects.all().count()
+            datas = Client_BranchM.objects.filter(id=bnumber)
+            data = Client_BranchM.objects.get(id=bnumber)
+            data.Client_Name = clientname
+            data.Client_Branch = client_branch_n
+            data.Client_Branch_Address = client_branch_a
+            data.Client_Branch_Phone = client_branch_p
+            data.Client_Branch_Mobile = client_branch_m
+            data.Client_Branch_Email = client_branch_e
+            data.create_user = createuser
+            data.save()
+            messages.info(request, 'Data Update')
+            return render(request, 'hr/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
 
 def hr_employees_infoV(request):
     user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
@@ -2144,6 +2278,567 @@ def issue_info_adjustment_saveV(request):
                           {'producets_pp': producets_pp, 'bill': bill, 'company': company,
                            'user_current_branch': user_current_branch, 'user_branch': user_branch})
 
+def software_voyage_form_infoV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        datas = VoyageForm.objects.filter(id=search)
+        datasall = VoyageForm.objects.filter(id=search)
+        bill = VoyageForm.objects.all().count()
+        return render(request, 'software_admin/forms/voyage_form.html',
+                      {'datas': datas, 'datasall': datasall, 'bill': bill, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    else:
+        bill = VoyageForm.objects.all().count()
+    return render(request,'software_admin/forms/voyage_form.html',{'company':company,'user_branch':user_branch,'user_current_branch':user_current_branch,'bill':bill})
+
+def software_voyage_form_info_saveV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        bnumber = request.POST.get('Bnumber')
+        counter = VoyageForm.objects.all().count()
+        id = counter + 1
+        user = request.user.id
+        createuser = User.objects.get(id=user)
+        dname = request.POST.get('vname')
+
+        if bnumber is None:
+            date = VoyageForm(id=id, Name=dname, create_user=createuser)
+            date.save()
+            datas = VoyageForm.objects.filter(id=id)
+            messages.info(request, 'Data Save')
+            bill = VoyageForm.objects.all().count()
+            return render(request, 'software_admin/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+        else:
+            bill = VoyageForm.objects.all().count()
+            datas = VoyageForm.objects.filter(id=bnumber)
+            data = VoyageForm.objects.get(id=bnumber)
+            data.Name = dname
+            data.create_user = createuser
+            data.save()
+            messages.info(request, 'Data Update')
+            return render(request, 'software_admin/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+
+
+def software_voyage_form_info_demo_pdfV(request, id=0):
+    voyage_info = VoyageForm.objects.filter(id=id)
+    template_path = 'software_admin/reports/voyageform_info_pdf_demo.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'voyage_info': voyage_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+def software_voyage_form_info_pdfV(request, id=0):
+    vaoyage_info = VoyageForm.objects.filter(id=id)
+    template_path = 'software_admin/reports/voyageform_info_pdf.html'
+    context = {'company': company, 'vaoyage_info': vaoyage_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    data = VoyageForm.objects.get(id=id)
+    data.Edits = 1
+    data.save()
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+
+
+def software_voyage_to_infoV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        datas = VoyageTo.objects.filter(id=search)
+        datasall = VoyageTo.objects.filter(id=search)
+        bill = VoyageTo.objects.all().count()
+        return render(request, 'software_admin/forms/voyage_to.html',
+                      {'datas': datas, 'datasall': datasall, 'bill': bill, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    else:
+        bill = VoyageTo.objects.all().count()
+    return render(request,'software_admin/forms/voyage_to.html',{'company':company,'user_branch':user_branch,'user_current_branch':user_current_branch,'bill':bill})
+
+def software_voyage_to_info_saveV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        bnumber = request.POST.get('Bnumber')
+        counter = VoyageTo.objects.all().count()
+        id = counter + 1
+        user = request.user.id
+        createuser = User.objects.get(id=user)
+        dname = request.POST.get('vname')
+
+        if bnumber is None:
+            date = VoyageTo(id=id, Name=dname, create_user=createuser)
+            date.save()
+            datas = VoyageTo.objects.filter(id=id)
+            messages.info(request, 'Data Save')
+            bill = VoyageTo.objects.all().count()
+            return render(request, 'software_admin/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+        else:
+            bill = VoyageTo.objects.all().count()
+            datas = VoyageTo.objects.filter(id=bnumber)
+            data = VoyageTo.objects.get(id=bnumber)
+            data.Name = dname
+            data.create_user = createuser
+            data.save()
+            messages.info(request, 'Data Update')
+            return render(request, 'software_admin/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+
+def software_voyage_to_info_demo_pdfV(request, id=0):
+    voyage_info = VoyageTo.objects.filter(id=id)
+    template_path = 'software_admin/reports/voyageto_info_pdf_demo.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'voyage_info': voyage_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+def software_voyage_to_info_pdfV(request, id=0):
+    vaoyage_info = VoyageTo.objects.filter(id=id)
+    template_path = 'software_admin/reports/voyageto_info_pdf.html'
+    context = {'company': company, 'vaoyage_info': vaoyage_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    data = VoyageTo.objects.get(id=id)
+    data.Edits = 1
+    data.save()
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def software_voyage_via_infoV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        datas = VoyageVia.objects.filter(id=search)
+        datasall = VoyageVia.objects.filter(id=search)
+        bill = VoyageVia.objects.all().count()
+        return render(request, 'software_admin/forms/voyage_via.html',
+                      {'datas': datas, 'datasall': datasall, 'bill': bill, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    else:
+        bill = VoyageVia.objects.all().count()
+    return render(request,'software_admin/forms/voyage_via.html',{'company':company,'user_branch':user_branch,'user_current_branch':user_current_branch,'bill':bill})
+
+def software_voyage_via_info_saveV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        bnumber = request.POST.get('Bnumber')
+        counter = VoyageVia.objects.all().count()
+        id = counter + 1
+        user = request.user.id
+        createuser = User.objects.get(id=user)
+        dname = request.POST.get('vname')
+
+        if bnumber is None:
+            date = VoyageVia(id=id, Name=dname, create_user=createuser)
+            date.save()
+            datas = VoyageVia.objects.filter(id=id)
+            messages.info(request, 'Data Save')
+            bill = VoyageVia.objects.all().count()
+            return render(request, 'software_admin/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+        else:
+            bill = VoyageVia.objects.all().count()
+            datas = VoyageVia.objects.filter(id=bnumber)
+            data = VoyageVia.objects.get(id=bnumber)
+            data.Name = dname
+            data.create_user = createuser
+            data.save()
+            messages.info(request, 'Data Update')
+            return render(request, 'software_admin/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+
+def software_voyage_via_info_demo_pdfV(request, id=0):
+    voyage_info = VoyageVia.objects.filter(id=id)
+    template_path = 'software_admin/reports/voyagevia_info_pdf_demo.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'voyage_info': voyage_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+def software_voyage_via_info_pdfV(request, id=0):
+    vaoyage_info = VoyageVia.objects.filter(id=id)
+    template_path = 'software_admin/reports/voyagevia_info_pdf.html'
+    context = {'company': company, 'vaoyage_info': vaoyage_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    data = VoyageVia.objects.get(id=id)
+    data.Edits = 1
+    data.save()
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+def software_transit_by_infoV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        datas = TransitBy.objects.filter(id=search)
+        datasall = TransitBy.objects.filter(id=search)
+        bill = TransitBy.objects.all().count()
+        return render(request, 'software_admin/forms/transit_by.html',
+                      {'datas': datas, 'datasall': datasall, 'bill': bill, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    else:
+        bill = TransitBy.objects.all().count()
+    return render(request,'software_admin/forms/transit_by.html',{'company':company,'user_branch':user_branch,'user_current_branch':user_current_branch,'bill':bill})
+
+def software_transit_by_info_saveV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        bnumber = request.POST.get('Bnumber')
+        counter = TransitBy.objects.all().count()
+        id = counter + 1
+        user = request.user.id
+        createuser = User.objects.get(id=user)
+        dname = request.POST.get('vname')
+        stump = request.POST.get('stump')
+
+        if bnumber is None:
+            date = TransitBy(id=id, Name=dname,Stump_Rate=stump, create_user=createuser)
+            date.save()
+            datas = TransitBy.objects.filter(id=id)
+            messages.info(request, 'Data Save')
+            bill = TransitBy.objects.all().count()
+            return render(request, 'software_admin/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+        else:
+            bill = TransitBy.objects.all().count()
+            datas = TransitBy.objects.filter(id=bnumber)
+            data = TransitBy.objects.get(id=bnumber)
+            data.Name = dname
+            data.Stump_Rate = stump
+            data.create_user = createuser
+            data.save()
+            messages.info(request, 'Data Update')
+            return render(request, 'software_admin/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+
+def software_transit_by_info_demo_pdfV(request, id=0):
+    voyage_info = TransitBy.objects.filter(id=id)
+    template_path = 'software_admin/reports/transitby_info_pdf_demo.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'voyage_info': voyage_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+#
+def software_transit_by_info_pdfV(request, id=0):
+    vaoyage_info = TransitBy.objects.filter(id=id)
+    template_path = 'software_admin/reports/transitby_info_pdf.html'
+    context = {'company': company, 'vaoyage_info': vaoyage_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    data = TransitBy.objects.get(id=id)
+    data.Edits = 1
+    data.save()
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def software_risk_cover_infoV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        datas = RiskCovered.objects.filter(id=search)
+        datasall = RiskCovered.objects.filter(id=search)
+        bill = RiskCovered.objects.all().count()
+        return render(request, 'software_admin/forms/RiskCover.html',
+                      {'datas': datas, 'datasall': datasall, 'bill': bill, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    else:
+        bill = RiskCovered.objects.all().count()
+    return render(request,'software_admin/forms/RiskCover.html',{'company':company,'user_branch':user_branch,'user_current_branch':user_current_branch,'bill':bill})
+
+def software_risk_cover_info_saveV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        bnumber = request.POST.get('Bnumber')
+        counter = RiskCovered.objects.all().count()
+        id = counter + 1
+        user = request.user.id
+        createuser = User.objects.get(id=user)
+        dname = request.POST.get('vname')
+
+        if bnumber is None:
+            date = RiskCovered(id=id, Name=dname, create_user=createuser)
+            date.save()
+            datas = RiskCovered.objects.filter(id=id)
+            messages.info(request, 'Data Save')
+            bill = RiskCovered.objects.all().count()
+            return render(request, 'software_admin/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+        else:
+            bill = RiskCovered.objects.all().count()
+            datas = RiskCovered.objects.filter(id=bnumber)
+            data = RiskCovered.objects.get(id=bnumber)
+            data.Name = dname
+            data.create_user = createuser
+            data.save()
+            messages.info(request, 'Data Update')
+            return render(request, 'software_admin/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+#
+def software_risk_cover_info_demo_pdfV(request, id=0):
+    voyage_info = RiskCovered.objects.filter(id=id)
+    template_path = 'software_admin/reports/riskcover_info_pdf_demo.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'voyage_info': voyage_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+# #
+def software_risk_cover_info_pdfV(request, id=0):
+    vaoyage_info = RiskCovered.objects.filter(id=id)
+    template_path = 'software_admin/reports/riskcover_info_pdf.html'
+    context = {'company': company, 'vaoyage_info': vaoyage_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    data = RiskCovered.objects.get(id=id)
+    data.Edits = 1
+    data.save()
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def software_insurance_type_infoV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        datas = InsuraceType.objects.filter(id=search)
+        datasall = InsuraceType.objects.filter(id=search)
+        bill = InsuraceType.objects.all().count()
+        return render(request, 'software_admin/forms/insurancetype.html',
+                      {'datas': datas, 'datasall': datasall, 'bill': bill, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    else:
+        bill = InsuraceType.objects.all().count()
+    return render(request,'software_admin/forms/insurancetype.html',{'company':company,'user_branch':user_branch,'user_current_branch':user_current_branch,'bill':bill})
+
+def software_insurance_type_info_saveV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        bnumber = request.POST.get('Bnumber')
+        counter = InsuraceType.objects.all().count()
+        id = counter + 1
+        user = request.user.id
+        createuser = User.objects.get(id=user)
+        dname = request.POST.get('vname')
+
+        if bnumber is None:
+            date = InsuraceType(id=id, Name=dname, create_user=createuser)
+            date.save()
+            datas = InsuraceType.objects.filter(id=id)
+            messages.info(request, 'Data Save')
+            bill = InsuraceType.objects.all().count()
+            return render(request, 'software_admin/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+        else:
+            bill = InsuraceType.objects.all().count()
+            datas = InsuraceType.objects.filter(id=bnumber)
+            data = InsuraceType.objects.get(id=bnumber)
+            data.Name = dname
+            data.create_user = createuser
+            data.save()
+            messages.info(request, 'Data Update')
+            return render(request, 'software_admin/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+# #
+def software_insurance_type_info_demo_pdfV(request, id=0):
+    voyage_info = InsuraceType.objects.filter(id=id)
+    template_path = 'software_admin/reports/insurancetype_info_pdf_demo.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'voyage_info': voyage_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+# # #
+def software_insurance_type_info_pdfV(request, id=0):
+    vaoyage_info = InsuraceType.objects.filter(id=id)
+    template_path = 'software_admin/reports/insurancetype_info_pdf.html'
+    context = {'company': company, 'vaoyage_info': vaoyage_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    data = InsuraceType.objects.get(id=id)
+    data.Edits = 1
+    data.save()
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
 
 def uw_dashboardV(request):
     user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
@@ -2154,8 +2849,66 @@ def uw_dashboardV(request):
 def uw_q_marineV(request):
     user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
     user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
-    return render(request,'uw/forms/quotation/marineq.html',{'company':company,'user_branch':user_branch,'user_current_branch':user_current_branch})
+    client_n=ClinetM.objects.all()
+    bank_n=BankM.objects.all()
+    client_add = Client_BranchM.objects.all()
+    voyagefrom=VoyageForm.objects.all()
+    voyageto=VoyageTo.objects.all()
+    transitby=TransitBy.objects.all()
+    voyagevia=VoyageVia.objects.all()
+    currenct=Currency.objects.all()
+    risk=RiskCovered.objects.all()
+    insurance=InsuraceType.objects.all()
+    producer=Hr_Employees_infoM.objects.all()
+
+    return render(request,'uw/forms/quotation/marineq.html',{'company':company,'user_branch':user_branch,
+                                                             'user_current_branch':user_current_branch,
+                                                             'client_n':client_n,'client_add':client_add,
+                                                             'bank_n':bank_n,'voyagefrom':voyagefrom,
+                                                             'voyageto':voyageto,'transitby':transitby,
+                                                             'voyagevia':voyagevia,'currenct':currenct,
+                                                             'risk':risk,'insurance':insurance,
+                                                             'producer':producer})
+
+
+def uw_q_marine_client_selectV(request):
+    cname=request.GET.get('client_n')
+    client_adds=Client_BranchM.objects.filter(Client_Name=cname)
+    abc=client_adds.values()
+    good=list(abc)
+    return JsonResponse({'client':good}, status=200)
+
+
+
+
+def uw_q_marine_bank_branch_selectV(request):
+    bank=request.GET.get('bank_n')
+    bank_adds=Bank_BranchM.objects.filter(Bank_Name=bank)
+    abc=bank_adds.values()
+
+    good=list(abc)
+    return JsonResponse({'bank':good}, status=200)
+
+def uw_q_marine_transit_by_selectV(request):
+    trys=request.GET.get('transits')
+    transit=TransitBy.objects.filter(id=trys)
+    abc=transit.values()
+    #
+    good=list(abc)
+    return JsonResponse({'trans':good}, status=200)
+
+
+
+def uw_q_marine_bank_selectV(request):
+    cname=request.GET.get('bank_n')
+    bank_adds=Bank_BranchM.objects.filter(Client_Name=cname)
+    return render(request,'uw/forms/quotation/clientaddress.html',{'bank_adds':bank_adds})
+
+
 
 
 def TestV(request):
-    return render(request, 'test.html')
+    client_n = ClinetM.objects.all()
+    return render(request, 'test.html',{'client_n':client_n})
+
+

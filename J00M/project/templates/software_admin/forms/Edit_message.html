@@ -578,3 +578,235 @@
 
 </div>
 {%endfor%}
+{%for x in voyageform_edit%}
+<div class="row">
+    <div class="col-12 col-md-12 col-lg-12">
+        {%csrf_token%}
+        <div class="card">
+            <div class="card-header">
+                <h4>Voyage Form Information</h4>
+
+
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Invoice Number</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="voyageform_inv" value="{{x.id}}"
+                                       readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Voyage Form Information</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="voyageform_edite"
+                                       value="{{x.Edits}}">
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-footer text-right">
+                    <button class="btn btn-primary mr-1" type="submit"><i
+                            class="fas fa-edit">
+                        Update</i>
+                    </button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{%endfor%}
+{%for x in voyageto_edit%}
+<div class="row">
+    <div class="col-12 col-md-12 col-lg-12">
+        {%csrf_token%}
+        <div class="card">
+            <div class="card-header">
+                <h4>Voyage To Information</h4>
+
+
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Invoice Number</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="voyageto_inv" value="{{x.id}}"
+                                       readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Voyage To Information</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="voyageto_edite"
+                                       value="{{x.Edits}}">
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-footer text-right">
+                    <button class="btn btn-primary mr-1" type="submit"><i
+                            class="fas fa-edit">
+                        Update</i>
+                    </button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{%endfor%}
+{%for x in voyagevia_edit%}
+<div class="row">
+    <div class="col-12 col-md-12 col-lg-12">
+        {%csrf_token%}
+        <div class="card">
+            <div class="card-header">
+                <h4>Voyage Via Information</h4>
+
+
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Invoice Number</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="voyagevia_inv" value="{{x.id}}"
+                                       readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Voyage Via Information</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="voyagevia_edite"
+                                       value="{{x.Edits}}">
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-footer text-right">
+                    <button class="btn btn-primary mr-1" type="submit"><i
+                            class="fas fa-edit">
+                        Update</i>
+                    </button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{%endfor%}
+{%for x in transit_edit%}
+<div class="row">
+    <div class="col-12 col-md-12 col-lg-12">
+        {%csrf_token%}
+        <div class="card">
+            <div class="card-header">
+                <h4>Transit By Information</h4>
+
+
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Invoice Number</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="transit_inv" value="{{x.id}}"
+                                       readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Transit By Information</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="transit_edite"
+                                       value="{{x.Edits}}">
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-footer text-right">
+                    <button class="btn btn-primary mr-1" type="submit"><i
+                            class="fas fa-edit">
+                        Update</i>
+                    </button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{%endfor%}
