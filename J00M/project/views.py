@@ -2891,12 +2891,34 @@ def uw_q_marine_bank_branch_selectV(request):
 
 def uw_q_marine_transit_by_selectV(request):
     trys=request.GET.get('transits')
+    bd=int(request.GET.get('bdamountds'))
+    warenet=int(request.GET.get('warenet'))
+    marinenet=int(request.GET.get('marinenet'))
+    vateas=int(request.GET.get('vateas'))
     transit=TransitBy.objects.filter(id=trys)
-    abc=transit.values()
-    #
-    good=list(abc)
-    return JsonResponse({'trans':good}, status=200)
+    for x in transit:
+        if x.Stump_Rate == 50:
+            sdam = x.Stump_Rate
+            sumg=warenet+marinenet+vateas+sdam
+            # abc = sdam.values()
+            # print(abc)
+            # good = list(sdam)
+            return JsonResponse({'trans': sdam,'sumg':sumg}, status=200)
+        else:
+            sdam = round(bd/1500)
+            sumg = warenet + marinenet + vateas + sdam
+            # abc = sdam.values()
+            # good = list(abc)
+            return JsonResponse({'trans': sdam,'sumg':sumg}, status=200)
+    abc = transit.values()
+    good = list(abc)
+    return JsonResponse({'trans': good},status=200)
 
+def qmarinedateV(request):
+    fdates = request.GET.get('fdares')
+    datess=datetime.datetime.strptime(fdates,'%d-%m-%Y')
+    datas = (datess + datetime.timedelta(days=364)).date()
+    return JsonResponse({"trans":datas},status=200)
 
 
 def uw_q_marine_bank_selectV(request):
@@ -2905,6 +2927,128 @@ def uw_q_marine_bank_selectV(request):
     return render(request,'uw/forms/quotation/clientaddress.html',{'bank_adds':bank_adds})
 
 
+def uw_q_marine_saveV(request):
+    if request.method == 'POST':
+        bnumber = request.POST.get('billnos')
+        print(bnumber)
+        counter = MarineQuatationM.objects.all().count()
+        id = counter + 1
+        user = request.user.id
+        createuser = User.objects.get(id=user)
+
+        billdate = request.POST.get('billdates')
+        billdates=datetime.datetime.strptime(billdate,'%d-%m-%Y')
+        ac = request.POST.get('acs')
+        client_n = request.POST.get('client_ns')
+        client=ClinetM.objects.get(id=client_n)
+        client_addres = request.POST.get('client_address')
+        c_address=Client_BranchM.objects.get(id=client_addres)
+        bank_names = request.POST.get('bank_namess')
+        bank=BankM.objects.get(id=bank_names)
+        bank_address = request.POST.get('bank_addressss')
+        b_branch=Bank_BranchM.objects.get(id=bank_address)
+        transit = request.POST.get('transits')
+        tarnsit_by=TransitBy.objects.get(id=transit)
+        vforms = request.POST.get('vformss')
+        voyagef=VoyageForm.objects.get(id=vforms)
+        vTos = request.POST.get('vToss')
+        voyaget=VoyageTo.objects.get(id=vTos)
+        interestcover = request.POST.get('interestcovers')
+        vvias = request.POST.get('vviass')
+        voyagevis=VoyageVia.objects.get(id=vvias)
+        fdate = request.POST.get('fdates')
+        from_date=datetime.datetime.strptime(fdate,'%d-%m-%Y')
+        tdate = request.POST.get('tdates')
+        to_date = datetime.datetime.strptime(tdate, '%d-%m-%Y')
+        sinsured = request.POST.get('sinsureds')
+        extra1 = request.POST.get('extra1s')
+        extra2 = request.POST.get('extra2s')
+        currency = request.POST.get('currents')
+        rate = request.POST.get('rates')
+        bdamounts = request.POST.get('bdamounts')
+        declaration = request.POST.get('decss')
+        riskcoder = request.POST.get('riskcoderss')
+        risk=RiskCovered.objects.get(id=riskcoder)
+        insurances = request.POST.get('insurancess')
+        insurance_type=InsuraceType.objects.get(id=insurances)
+        producers = request.POST.get('producerss')
+        producer=Hr_Employees_infoM.objects.get(id=producers)
+        dis = request.POST.get('diss')
+        spdis = request.POST.get('spdiss')
+        mrate = request.POST.get('mrates')
+        mamount = request.POST.get('mamounts')
+        wrates = request.POST.get('wratess')
+        wamount = request.POST.get('wamounts')
+        netid = request.POST.get('netids')
+        vataid = request.POST.get('vataids')
+        samount = request.POST.get('samounts')
+        gross = request.POST.get('grosss')
+        nara = request.POST.get('naras')
+        branchs = Branch_Infoamtion.objects.get(id=request.user.last_name)
+
+        if bnumber == '':
+            date = MarineQuatationM(id=id, Bill_date=billdates,Bill_No=id,Ac=ac,Insurance_Type=insurance_type,Client_NameM=client,
+                                    Client_AddressM=c_address,Bank_Name=bank,Bank_Branch=b_branch,Interest_covered=interestcover,
+                                    Voyage_From=voyagef,Voyage_To=voyaget,Voyage_Via=voyagevis,Transit_By=tarnsit_by,
+                                    Sdate=from_date,Edate=to_date,Sum_insured=sinsured,Extra1=extra1,Extra2=extra2,
+                                    Currency=currency,Excrate=rate,Bdtamount=bdamounts,Declaration=declaration,
+                                    Discount=dis,SpDiscount=spdis,Marine_Rate=mrate,Marine_Amount=mamount,
+                                    Ware_Rate=wrates,Ware_Amount=wamount,Net_Amount=netid,Vat_Amount=vataid,
+                                    Stump_Amount=samount,Gross_Amount=gross,Producer=producer,RiskCover=risk,
+                                    narration=nara,userc=createuser,User_Branch=branchs)
+            date.save()
+            # datas = MarineQuatationM.objects.filter(id=id)
+            #
+            # # bill = MarineQuatationM.objects.all().count()
+            # abc = datas.values()
+            # good = list(abc)
+            # good = messages.info(request, 'Data Save')
+            abc = 'Data Save'
+            return JsonResponse({'id':id,'messages':abc},status=200)
+
+
+        else:
+            bill = MarineQuatationM.objects.all().count()
+            datas = MarineQuatationM.objects.filter(id=bnumber)
+            data = MarineQuatationM.objects.get(id=bnumber)
+            data.Bill_date=billdates
+            data.Ac=ac
+            data.Insurance_Type=insurance_type
+            data.Client_NameM=client
+            data.Client_AddressM=c_address
+            data.Bank_Name=bank
+            data.Bank_Branch=b_branch
+            data.Interest_covered=interestcover
+            data.Voyage_From=voyagef
+            data.Voyage_To=voyaget
+            data.Voyage_Via=voyagevis
+            data.Transit_By=tarnsit_by
+            data.Sdate=from_date
+            data.Edate=to_date
+            data.Sum_insured=sinsured
+            data.Extra1=extra1
+            data.Extra2=extra2
+            data.Currency=currency
+            data.Excrate=rate
+            data.Bdtamount=bdamounts
+            data.Declaration=declaration
+            data.Discount=dis
+            data.SpDiscount=spdis
+            data.Marine_Rate=mrate
+            data.Marine_Amount=mamount
+            data.Ware_Rate=wrates
+            data.Ware_Amount=wamount
+            data.Net_Amount=netid
+            data.Vat_Amount=vataid
+            data.Stump_Amount=samount
+            data.Gross_Amount=gross
+            data.Producer=producer
+            data.RiskCover=risk
+            data.narration=nara
+            data.userc=createuser
+            data.save()
+            abc='Data Update'
+            return JsonResponse({'id':id,'messages':abc},status=200)
 
 
 def TestV(request):

@@ -95,6 +95,7 @@
     <div class="row ">
         <div class="col-md-12" style="margin-bottom:10px;">
             <form class="form-inline" action="{%url 'hr_department_info'%}" method="POST">
+
                 {%csrf_token%}
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
                        name="search">
@@ -106,16 +107,18 @@
     </div>
 
 
-    <form method="POST">
+    <form method="POST" id="formq">
+                   {%csrf_token%}
         <div class="row">
             <div class="col-12 col-md-8 col-lg-8">
-                {%csrf_token%}
+
                 <div class="card" style="background-color:#CDB7B5">
                     <div class="card-header">
                         <h4>Marine Quotation</h4>
 
 
                     </div>
+
                     <div><h4 style="text-align:right; padding-right:10px;">Last Entry:{{bill}}</h4></div>
 
                     <div class="card-body">
@@ -132,7 +135,7 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control phone-number" name="bno" required>
+                                        <input type="text" class="form-control phone-number" name="bno" id="billno">
                                     </div>
                                 </div>
                             </div>
@@ -145,7 +148,7 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control phone-number" name="bdate" required>
+                                        <input type="text" class="form-control phone-number" name="bdate" id="billdate" value='{% now "d-m-Y" %}' readonly>
                                     </div>
                                 </div>
                             </div>
@@ -159,7 +162,7 @@
                                             </div>
                                         </div>
                                         <input type="text" class="form-control phone-number" name="acms" required
-                                               value="A/C. M/S.">
+                                               value="A/C. M/S." id="ac">
                                     </div>
                                 </div>
                             </div>
@@ -262,7 +265,7 @@
                                             </div>
                                         </div>
                                         <input type="text" class="form-control phone-number" name="interestcover"
-                                        >
+                                        id="interestcover">
                                     </div>
                                 </div>
                             </div>
@@ -275,7 +278,7 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <select class="form-control select2" name="vfrom">
+                                        <select class="form-control select2" name="vfrom" id="vforms">
                                             <option selected>Open this select menu</option>
                                             {%for x in voyagefrom%}
                                             <option value="{{x.id}}">{{x.Name}}</option>
@@ -293,7 +296,7 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <select class="custom-select select2" name="vTo">
+                                        <select class="custom-select select2" name="vTo" id="vTos">
                                             <option selected>Open this select menu</option>
                                             {%for x in voyageto%}
                                             <option value="{{x.id}}">{{x.Name}}</option>
@@ -329,12 +332,40 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <select class="custom-select select2" name="vvia">
+                                        <select class="custom-select select2" name="vvia" id="vvias">
                                             <option selected>Open this select menu</option>
                                             {%for x in voyagevia%}
                                             <option value="{{x.id}}">{{x.Name}}</option>
                                             {%endfor%}
                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>From Date (DD-MM-YYYY)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                         <input type="text" class="form-control phone-number" name="fromdate" id="fdate" value='{% now "d-m-Y" %}'
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>To Date (DD-MM-YYYY)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                         <input type="text" class="form-control phone-number" name="tdate" id="tdate"
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -389,10 +420,10 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <select class="custom-select select2" name="currency">
+                                        <select class="custom-select select2" name="currency" id="current">
                                             <option selected>Select Currency</option>
                                             {%for x in currenct%}
-                                            <option value="{{x.id}}">{{x.Name}}</option>
+                                            <option value="{{x.Name}}">{{x.Name}}</option>
                                             {%endfor%}
                                         </select>
                                     </div>
@@ -436,7 +467,7 @@
                                             </div>
                                         </div>
                                         <input type="text" class="form-control phone-number" name="dec"
-                                               value="All other terms, conditions and warranties of the said Marine Covernote will remain unchanged.">
+                                               value="All other terms, conditions and warranties of the said Marine Covernote will remain unchanged." id="decs">
                                     </div>
                                 </div>
                             </div>
@@ -449,7 +480,7 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <select class="custom-select select2" name="riskcoder">
+                                        <select class="custom-select select2" name="riskcoder" id="riskcoders">
                                             <option selected>Open this select menu</option>
                                             {%for x in risk%}
                                             <option value="{{x.id}}">{{x.Name}}</option>
@@ -467,7 +498,7 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <select class="custom-select select2" name="insurance">
+                                        <select class="custom-select select2" name="insurance" id="insurances">
                                             <option selected>Open this select menu</option>
                                             {%for x in insurance%}
                                             <option value="{{x.id}}">{{x.Name}}</option>
@@ -485,7 +516,7 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <select class="custom-select select2" name="producer">
+                                        <select class="custom-select select2" name="producer" id="producers">
                                             <option selected>Open this select menu</option>
                                             {%for x in producer%}
                                             <option value="{{x.id}}">Id: {{x.id}}, Name: {{x.Employees_Name}}</option>
@@ -497,11 +528,16 @@
 
 
                         </div>
+                        <div class="alert alert-warning" role="alert" id="message"></div>
                         <div class="card-footer text-right">
-                            <button class="btn btn-primary mr-1" type="button" hx-encoding="multipart/form-data"
-                                    hx-post="{%url 'hr_department_info_save'%}" hx-target=".search-results"><i
+                            <button class="btn btn-primary mr-1" id="save" type="submit"><i
                                     class="far fa-save"> Save</i>
+
                             </button>
+                            <a href="" class="btn btn-primary"
+                               target="_blank"><i class="fas fa-id-card-alt"> Print Demo</i> </a>
+                            <a href="" class="btn btn-success"
+                               target="_blank"><i class="fas fa-print"> Final Print</i> </a>
 
 
                             <a class="btn btn-danger mr-1" href="{%url 'hr_department_info'%}"><i
@@ -513,7 +549,7 @@
                 </div>
             </div>
             <div class="col-12 col-md-4 col-lg-4">
-                {%csrf_token%}
+
                 <div class="card" style="background-color:#CDC9A5">
                     <div class="card-header">
                         <h4>Calculation</h4>
@@ -655,7 +691,7 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="stamoamount" id="samount">
+                                        <input type="text" class="form-control phone-number" name="stamoamount" id="samount" value="0">
                                     </div>
                                 </div>
                             </div>
@@ -668,7 +704,7 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="sp-discount">
+                                        <input type="text" class="form-control phone-number" name="sp-discount" id="gross">
                                     </div>
                                 </div>
                             </div>
@@ -682,7 +718,7 @@
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
 <!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
-                                        <textarea name="narration" id="" cols="40" rows="6"></textarea>
+                                        <textarea name="narration" id="nara" cols="40" rows="6"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -701,6 +737,11 @@
 
 </section>
 {%endif%}
+<script>
+    $(document).ready(function(){
+    $('#message').hide();
+    });
+</script>
 <script>
  $("#client").click(function(){
 <!--    alert("The paragraph was clicked.");-->
@@ -742,7 +783,7 @@
 
 </script>
 <script>
- $("#rate").blur(function(){
+ $("#rate, #extra1, #extra2").blur(function(){
 
        suminsured=$('#sinsured').val()
      var extra =$('#extra1').val()
@@ -750,7 +791,7 @@
     var rate=$('#rate').val()
     var sumex1=parseInt(parseInt(suminsured) + (parseInt(suminsured)*parseInt(extra))/100 );
     var sumex2=sumex1 * (parseInt(extra2)/100);
-    var sum=(sumex1 + sumex2) * rate;
+    var sum=Math.round((sumex1 + sumex2) * rate);
     $('#bdamount').val(sum);
 
   });
@@ -775,11 +816,15 @@
 
   });
 
- $("#wrates, #mrate").blur(function(){
+ $("#wrates, #mrate, #vatid, #samount, #rate, #samount, #extra1, #extra2 ").blur(function(){
     var warenet=$('#wamount').val();
     var marinenet=$('#mamount').val();
+    var vateas=$('#vataid').val();
+    var stump_ac=$('#samount').val();
     var netamount=(parseInt(warenet) + parseInt(marinenet));
+    var grossa=(parseInt(warenet) + parseInt(marinenet)+parseInt(vateas)+parseInt(stump_ac));
     $('#netid').val(Math.round(netamount));
+    $('#gross').val(Math.round(grossa));
 
   });
 
@@ -790,27 +835,132 @@
     var neta=(parseInt(net) * (parseInt(vatr)/100));
     $('#vataid').val(Math.round(neta));
 
+
+     var warenet=$('#wamount').val();
+    var marinenet=$('#mamount').val();
+    var vateas=$('#vataid').val();
+    var stump_ac=$('#samount').val();
+     var grossa=(parseInt(warenet) + parseInt(marinenet)+parseInt(vateas)+parseInt(stump_ac));
+     $('#gross').val(Math.round(grossa));
+
+
   });
 
   $("#samount").blur(function(){
-    alert("The paragraph was clicked.");
+<!--    alert("The paragraph was clicked.");-->
     $.ajax({
     url:"{%url 'uw_q_marine_transitby_select'%}",
     type:'GET',
     data:{
-     transits:$('#transit').val()
+     transits:$('#transit').val(),
+     bdamountds:$('#bdamount').val(),
+     warenet:$('#wamount').val(),
+     marinenet:$('#mamount').val(),
+     vateas:$('#vataid').val(),
+
+
     },
     success: function(response){
         x=response.trans
-         for (i=0;i<x.length;i++){ $('#samount').val(x[i].Stump_Rate)}
+        sumgross=response.sumg
+         $('#samount').val(x)
+          $('#gross').val(sumgross);
     },
     });
+
+
 
   });
 
 
 
+ $("#fdate").blur(function(){
+ $.ajax({
+    url:"{%url 'uw_q_marine_date_select'%}",
+    type:'GET',
+    data:{
+     fdares:$('#fdate').val(),
+    },
+    success: function(response){
+        x = response.trans
+        var d = new Date(x);
+        var curr_day = String(d.getDate()).padStart(2, '0');
+        var curr_month = String(d.getMonth()).padStart(2, '0');
+        var curr_year = d.getFullYear();
+
+        $('#tdate').val(curr_day + "-" + curr_month + "-" + curr_year);
+    },
+    });
+
+
+  });
+
 
 </script>
+<script>
+     $("#formq").on('submit',function(e){
+      e.preventDefault();
+<!--    alert("The paragraph was clicked.");-->
+    $.ajax({
+    url:"{%url 'uw_q_marine_save'%}",
+    type:'POST',
+    data:{
+     csrfmiddlewaretoken: '{{ csrf_token }}',
+    billnos:$('#billno').val(),
+    billdates:$('#billdate').val(),
+        acs:$('#ac').val(),
+        client_ns:$('#ccl').val(),
+        client_address:$('#sums').val(),
+        bank_namess:$('#bname').val(),
+        bank_addressss:$('#bbranch').val(),
+        interestcovers:$('#interestcover').val(),
+        vformss:$('#vforms').val(),
+        vToss:$('#vTos').val(),
+        transits:$('#transit').val(),
+        vviass:$('#vvias').val(),
+        fdates:$('#fdate').val(),
+        tdates:$('#tdate').val(),
+        sinsureds:$('#sinsured').val(),
+        extra1s:$('#extra1').val(),
+        extra2s:$('#extra2').val(),
+        currents:$('#current').val(),
+        rates:$('#rate').val(),
+        bdamounts:$('#bdamount').val(),
+        decss:$('#decs').val(),
+        riskcoderss:$('#riskcoders').val(),
+        insurancess:$('#insurances').val(),
+        producerss:$('#producers').val(),
+        diss:$('#dis').val(),
+        spdiss:$('#spdis').val(),
+        mrates:$('#mrate').val(),
+        mamounts:$('#mamount').val(),
+        wratess:$('#wrates').val(),
+        wamounts:$('#wamount').val(),
+        netids:$('#netid').val(),
+        vataids:$('#vataid').val(),
+        samounts:$('#samount').val(),
+        grosss:$('#gross').val(),
+        naras:$('#nara').val(),
+
+    },
+    success: function(response){
+        x=response.id
+        y=response.messages
+        $('#billno').val(x)
+        $("#save").html("Edit");
+       $('#message').html(y).show();
+
+
+
+
+    },
+    });
+
+
+
+  });
+
+</script>
+
 
 {%endblock%}

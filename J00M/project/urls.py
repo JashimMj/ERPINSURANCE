@@ -145,6 +145,9 @@ urlpatterns = [
     path('uw/quotation/marine/bank/branch/select/', views.uw_q_marine_bank_branch_selectV, name="uw_q_marine_bank_branch_select"),
     path('uw/quotation/marine/transit/by/select/', views.uw_q_marine_transit_by_selectV, name="uw_q_marine_transitby_select"),
 
+    path('uw/quotation/marine/date/select/', views.qmarinedateV, name="uw_q_marine_date_select"),
+    path('uw/quotation/marine/save/', views.uw_q_marine_saveV, name="uw_q_marine_save"),
+
 
 
 
