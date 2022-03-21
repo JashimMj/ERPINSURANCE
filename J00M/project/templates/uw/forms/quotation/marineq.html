@@ -90,7 +90,7 @@
                                         </div>
 
                                         <select class="form-control select2" name="clint_n" id="ccl">
-                                            <option value="">Select Client Name</option>
+                                            <option value="" id="yyy">Select Client Name</option>
                                             {%for x in client_n%}
                                             <option value="{{x.id}}">{{x.Name}}</option>
                                             {%endfor%}
@@ -665,7 +665,12 @@
     },
     success: function(response){
         x=response.client
-        for (i=0;i<x.length;i++){ $('#sums').html('<option value="' + x[i].id+ '">' +x[i].Client_Branch+', '+x[i].Client_Branch_Address+'</option>')}
+        let text ="";
+        for (i=0;i<x.length;i++){
+
+        text +='<option value="' + x[i].Client_Name_id+ '">' +x[i].Client_Branch+', '+x[i].Client_Branch_Address+'</option>'
+        }
+        $('#sums').html(text)
     },
     });
   });
@@ -898,7 +903,8 @@
 
         $('#billdate').val(curr_day + "-" + curr_month + "-" + curr_year);
         $('#ac').val(x[i].fields.Ac);
-        $('#ccl').html('<option value="'+x[i].Client_NameM_id+'">'+x[i].Client_NameM_id.Name+'</option>');
+         $("#ccl").val(x[i].fields.Client_NameM).trigger('change');
+
 
 
         }

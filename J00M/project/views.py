@@ -16,6 +16,8 @@ from pathlib import Path
 import os
 from num2words import num2words
 import datetime
+from django.core import serializers
+import json
 
 from django.db.models import F, Sum
 
@@ -2875,7 +2877,8 @@ def uw_q_marineV(request):
 
 def uw_q_marine_client_selectV(request):
     cname=request.GET.get('client_n')
-    client_adds=Client_BranchM.objects.filter(Client_Name=cname)
+    print(cname)
+    client_adds=Client_BranchM.objects.filter(Client_Name=1)
     abc=client_adds.values()
     good=list(abc)
     return JsonResponse({'client':good}, status=200)
@@ -3052,11 +3055,11 @@ def uw_q_marine_saveV(request):
             abc='Data Update'
             return JsonResponse({'id':id,'messages':abc},status=200)
 
-from django.core import serializers
-import json
+
 def uw_q_marine_searchV(request):
     search_b=request.POST.get('search')
-    all=MarineQuatationM.objects.raw('select mar.id as id ,mar.Bill_date as Bill_date  ,mar.Bill_No as Bill_No, mar.Ac as Ac ,bb.Bank_Branch ||" "|| bb.Bank_Branch_Address as Bank_Branch_id ,ban.Name as Bank_Name_id, mar.Bdtamount as Bdtamount ,clb.Client_Branch ||" "|| clb.Client_Branch_Address as Client_AddressM_id,cl.Name as client_name ,mar.Declaration as  Declaration,mar.Discount as Discount ,mar.Edate as Edate ,mar.Edits as Edits,mar.Excrate as Excrate  ,mar.Extra1 as Extra1 ,mar.Extra2 as Extra2,mar.Gross_Amount as Gross_Amount,insu.Name as insurancetype ,mar.Interest_covered as Interest_covered ,mar.Marine_Amount as Marine_Amount ,mar.Marine_Rate as Marine_Rate ,mar.Net_Amount as Net_Amount ,hr.Employees_Name as producer ,res.Name as riskcover ,mar.Sdate as Sdate ,mar.SpDiscount as SpDiscount ,mar.Stump_Amount as Stump_Amount,mar.Sum_insured as Sum_insured,trn.Name as transit_by ,mar.Vat_Amount as Vat_Amount ,vf.Name as voyage_form ,vt.Name as voyage_to,vv.Name as voyage_via,mar.Ware_Amount as Ware_Amount,mar.Ware_Rate as Ware_Rate ,mar.issu_date as issu_date ,mar.narration as narration ,mar.Currency as Currency from project_marinequatationm mar join project_bankm ban on mar.Bank_Name_id =ban.id join project_bank_branchm bb on mar.Bank_Branch_id =bb.id join project_clinetm cl on mar.Client_NameM_id =cl.id join project_client_branchm clb on mar.Client_AddressM_id =clb.id join project_insuracetype insu on mar.Insurance_Type_id =insu.id join project_hr_employees_infom hr on mar.Producer_id =hr.id join project_riskcovered res on mar.RiskCover_id =res.id join project_transitby trn on mar.Transit_By_id =trn.id join project_voyageform vf on mar.Voyage_From_id =vf.id join project_voyageto vt on mar.Voyage_To_id =vt.id join project_voyagevia vv on mar.Voyage_Via_id =vv.id where mar.Bill_No =%s',[search_b])
+    # all=MarineQuatationM.objects.raw('select mar.id as id ,mar.Bill_date as Bill_date  ,mar.Bill_No as Bill_No, mar.Ac as Ac ,bb.Bank_Branch ||" "|| bb.Bank_Branch_Address as Bank_Branch_id ,ban.Name as Bank_Name_id, mar.Bdtamount as Bdtamount ,clb.Client_Branch ||" "|| clb.Client_Branch_Address as Client_AddressM_id,cl.Name as Client_NameM_id ,mar.Declaration as  Declaration,mar.Discount as Discount ,mar.Edate as Edate ,mar.Edits as Edits,mar.Excrate as Excrate  ,mar.Extra1 as Extra1 ,mar.Extra2 as Extra2,mar.Gross_Amount as Gross_Amount,insu.Name as insurancetype ,mar.Interest_covered as Interest_covered ,mar.Marine_Amount as Marine_Amount ,mar.Marine_Rate as Marine_Rate ,mar.Net_Amount as Net_Amount ,hr.Employees_Name as producer ,res.Name as riskcover ,mar.Sdate as Sdate ,mar.SpDiscount as SpDiscount ,mar.Stump_Amount as Stump_Amount,mar.Sum_insured as Sum_insured,trn.Name as transit_by ,mar.Vat_Amount as Vat_Amount ,vf.Name as voyage_form ,vt.Name as voyage_to,vv.Name as voyage_via,mar.Ware_Amount as Ware_Amount,mar.Ware_Rate as Ware_Rate ,mar.issu_date as issu_date ,mar.narration as narration ,mar.Currency as Currency from project_marinequatationm mar join project_bankm ban on mar.Bank_Name_id =ban.id join project_bank_branchm bb on mar.Bank_Branch_id =bb.id join project_clinetm cl on mar.Client_NameM_id =cl.id join project_client_branchm clb on mar.Client_AddressM_id =clb.id join project_insuracetype insu on mar.Insurance_Type_id =insu.id join project_hr_employees_infom hr on mar.Producer_id =hr.id join project_riskcovered res on mar.RiskCover_id =res.id join project_transitby trn on mar.Transit_By_id =trn.id join project_voyageform vf on mar.Voyage_From_id =vf.id join project_voyageto vt on mar.Voyage_To_id =vt.id join project_voyagevia vv on mar.Voyage_Via_id =vv.id where mar.Bill_No =%s',[14])
+    all=MarineQuatationM.objects.filter(Bill_No=14)
     good=serializers.serialize('json',all)
     abc=json.loads(good)
     return JsonResponse({'all':abc},safe=False)
