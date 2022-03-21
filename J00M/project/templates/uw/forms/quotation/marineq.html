@@ -1,104 +1,16 @@
 {%extends 'index.html'%}
 {%load static%}
 {%block contant%}
-{%if datasall%}
-{%for a in datasall%}
 
 <section class="section">
 
     <div class="row ">
         <div class="col-md-12" style="margin-bottom:10px;">
-            <form class="form-inline" action="{%url 'hr_department_info'%}" method="POST">
-                {%csrf_token%}
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
-                       name="search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
-                >Search Bill
-                </button>
-            </form>
-        </div>
-    </div>
-
-
-    <form method="POST">
-        <div class="row">
-            <div class="col-12 col-md-12 col-lg-12">
-                {%csrf_token%}
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Department Information</h4>
-
-
-                    </div>
-                    <div><h4 style="text-align:right; padding-right:10px;">Last Entry:{{bill}}</h4></div>
-
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="search-results col-md-12">
-                                {%include 'hr/forms/message.html'%}
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Department Name</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text">
-                                                <i class="far fa-building"></i>
-                                            </div>
-                                        </div>
-                                        <input type="text" class="form-control phone-number" name="Dname"
-                                               value="{{a.Name}}">
-                                    </div>
-                                </div>
-                            </div>
-
-
-                        </div>
-                        <div class="card-footer text-right">
-
-                            {%if a.Edits == '1'%}
-                            <button class="btn btn-primary mr-1" type="button">
-                                <i class="fas fa-lock"> Data Lock</i>
-                            </button>
-                            {%else%}
-                            <button class="btn btn-primary mr-1" type="button" hx-encoding="multipart/form-data"
-                                    hx-post="{%url 'hr_department_info_save'%}" hx-target=".search-results"><i
-                                    class="fas fa-edit">
-                                Edit</i>
-                            </button>
-                            {%endif%}
-
-
-                            <a href="{%url 'hr_department_info_demo_pdf' a.id%}" class="btn btn-primary"
-                               target="_blank"><i class="fas fa-id-card-alt"> Print Demo</i> </a>
-                            <a href="{%url 'hr_department_info_pdf' a.id%}" class="btn btn-success"
-                               target="_blank"><i class="fas fa-print"> Final Print</i> </a>
-                            <a class="btn btn-danger mr-1" href="{%url 'hr_department_info'%}"><i
-                                    class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
-                            </a>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-        </div>
-    </form>
-
-
-</section>
-{%endfor%}
-{%else%}
-<section class="section">
-
-    <div class="row ">
-        <div class="col-md-12" style="margin-bottom:10px;">
-            <form class="form-inline" action="{%url 'hr_department_info'%}" method="POST">
+            <form class="form-inline" action="{%url 'uw_q_marine_search'%}" method="POST" id="searc_form">
 
                 {%csrf_token%}
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
-                       name="search">
+                       name="search" id="searchs">
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
                 >Search Bill
                 </button>
@@ -736,7 +648,7 @@
 
 
 </section>
-{%endif%}
+
 <script>
     $(document).ready(function(){
     $('#message').hide();
@@ -960,6 +872,46 @@
 
   });
 
+</script>
+
+<script>
+     $("#searc_form").on('submit',function(e){
+      e.preventDefault();
+    alert("The paragraph was clicked.");
+    $.ajax({
+    url:"{%url 'uw_q_marine_search'%}",
+    type:'POST',
+    dataType:'json',
+    data:{
+     csrfmiddlewaretoken: '{{ csrf_token }}',
+     search:$('#searchs').val(),
+
+    },
+    success: function(response){
+        x=response.all
+        for (i=0;i<x.length;i++){
+        $('#billno').val(x[i].fields.Bill_No);
+        var d = new Date(x[i].fields.Bill_date);
+        var curr_day = String(d.getDate()).padStart(2, '0');
+        var curr_month = String(d.getMonth()).padStart(2, '0');
+        var curr_year = d.getFullYear();
+
+        $('#billdate').val(curr_day + "-" + curr_month + "-" + curr_year);
+        $('#ac').val(x[i].fields.Ac);
+        $('#ccl').html('<option value="'+x[i].Client_NameM_id+'">'+x[i].Client_NameM_id.Name+'</option>');
+
+
+        }
+
+
+
+
+    },
+    });
+
+
+
+  });
 </script>
 
 
