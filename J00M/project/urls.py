@@ -147,6 +147,7 @@ urlpatterns = [
     path('uw/quotation/marine/date/select/', views.qmarinedateV, name="uw_q_marine_date_select"),
     path('uw/quotation/marine/save/', views.uw_q_marine_saveV, name="uw_q_marine_save"),
     path('uw/quotation/marine/search/', views.uw_q_marine_searchV, name="uw_q_marine_search"),
+    path('uw/quotation/marine/bill/pdf/<int:id>', views.uw_q_marine_pdfsV, name="uw_q_marine_pdf"),
 
 
 

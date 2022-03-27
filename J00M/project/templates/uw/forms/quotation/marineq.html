@@ -119,6 +119,9 @@
                                         </div>
                                         <select class="form-control select2" name="department" id="sums">
                                             <option value=""> Select Address</option>
+                                            {%for x in client_add%}
+                                            <option value="{{x.id}}">{{x.Client_Branch}}, {{x.Client_Branch_Address}}</option>
+                                            {%endfor%}
 
                                         </select>
                                     </div>
@@ -162,6 +165,9 @@
                                         </div>
                                         <select class="form-control select2" name="bank_n" id="bbranch">
                                             <option value="">Select Bank Branch</option>
+                                            {%for x in bankbranch%}
+                                            <option value="{{x.id}}">{{x.Bank_Branch}}, {{x.Bank_Branch_Address}}</option>
+                                            {%endfor%}
 
                                         </select>
                                     </div>
@@ -446,13 +452,11 @@
                                     class="far fa-save"> Save</i>
 
                             </button>
-                            <a href="" class="btn btn-primary"
-                               target="_blank"><i class="fas fa-id-card-alt"> Print Demo</i> </a>
-                            <a href="" class="btn btn-success"
-                               target="_blank"><i class="fas fa-print"> Final Print</i> </a>
+                            <a class="btn btn-primary" id="printd" target="_blank"><i class="fas fa-id-card-alt" > Print Demo</i> </a>
+                            <a href="" class="btn btn-success" target="_blank"><i class="fas fa-print"> Final Print</i> </a>
 
 
-                            <a class="btn btn-danger mr-1" href="{%url 'hr_department_info'%}"><i
+                            <a class="btn btn-danger mr-1" href="{%url 'uw_q_marine'%}"><i
                                     class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
                             </a>
 
@@ -670,7 +674,7 @@
 
         text +='<option value="' + x[i].Client_Name_id+ '">' +x[i].Client_Branch+', '+x[i].Client_Branch_Address+'</option>'
         }
-        $('#sums').html(text)
+        $('#sums').html(text);
     },
     });
   });
@@ -686,11 +690,15 @@
     url:"{%url 'uw_q_marine_bank_branch_select'%}",
     type:'GET',
     data:{
-     bank_n:$('#bname').val()
+     bank_n:$('#bname').val(),
     },
     success: function(response){
         x=response.bank
-        for (i=0;i<x.length;i++){ $('#bbranch').html('<option value="' + x[i].id+ '">' +x[i].Bank_Branch+', '+x[i].Bank_Branch_Address+'</option>')}
+          let texts ="";
+        for (i=0;i<x.length;i++){
+        texts +='<option value="' + x[i].id+ '">' +x[i].Bank_Branch+', '+x[i].Bank_Branch_Address+'</option>'
+          }
+          $('#bbranch').html(texts);
     },
     });
   });
@@ -802,7 +810,7 @@
         x = response.trans
         var d = new Date(x);
         var curr_day = String(d.getDate()).padStart(2, '0');
-        var curr_month = String(d.getMonth()).padStart(2, '0');
+        var curr_month = String(d.getMonth()+1).padStart(2, '0');
         var curr_year = d.getFullYear();
 
         $('#tdate').val(curr_day + "-" + curr_month + "-" + curr_year);
@@ -863,9 +871,20 @@
     success: function(response){
         x=response.id
         y=response.messages
+        u=response.abcs
         $('#billno').val(x)
         $("#save").html("Edit");
        $('#message').html(y).show();
+
+        for (i=0;i<u.length;i++){
+       var abct = u[i].fields.Bill_No;
+        if (abct >0){
+        $('#printd').attr("href", "/uw/quotation/marine/bill/pdf/"+ u[i].fields.Bill_No );
+        }
+        else{
+        $('#printd').attr("href", "" );
+        }
+        }
 
 
 
@@ -882,7 +901,7 @@
 <script>
      $("#searc_form").on('submit',function(e){
       e.preventDefault();
-    alert("The paragraph was clicked.");
+<!--    alert("The paragraph was clicked.");-->
     $.ajax({
     url:"{%url 'uw_q_marine_search'%}",
     type:'POST',
@@ -896,22 +915,67 @@
         x=response.all
         for (i=0;i<x.length;i++){
         $('#billno').val(x[i].fields.Bill_No);
-        var d = new Date(x[i].fields.Bill_date);
-        var curr_day = String(d.getDate()).padStart(2, '0');
-        var curr_month = String(d.getMonth()).padStart(2, '0');
-        var curr_year = d.getFullYear();
+        var dr = new Date(x[i].fields.Bill_date);
+        var curr_day = String(dr.getDate()).padStart(2, '0');
+        var curr_month = String(dr.getMonth()+1).padStart(2, '0');
+        var curr_year = dr.getFullYear();
 
         $('#billdate').val(curr_day + "-" + curr_month + "-" + curr_year);
         $('#ac').val(x[i].fields.Ac);
-         $("#ccl").val(x[i].fields.Client_NameM).trigger('change');
+        $("#ccl").val(x[i].fields.Client_NameM).trigger('change');
+        $('#sums').val(x[i].fields.Client_AddressM).trigger('change');
+        $('#bname').val(x[i].fields.Bank_Name).trigger('change');
+        $('#bbranch').val(x[i].fields.Bank_Branch).trigger('change');
+        $('#interestcover').val(x[i].fields.Interest_covered);
+        $('#vforms').val(x[i].fields.Voyage_From).trigger('change');
+        $('#vTos').val(x[i].fields.Voyage_To).trigger('change');
+        $('#transit').val(x[i].fields.Transit_By).trigger('change');
+        $('#vvias').val(x[i].fields.Voyage_Via).trigger('change');
+        var da = new Date(x[i].fields.Sdate);
+        var c_date = String(da.getDate()).padStart(2, '0');
+        var c_month = String(da.getMonth()+1).padStart(2, '0');
+        var c_year = da.getFullYear();
+        $('#fdate').val(c_date + "-" + c_month + "-" + c_year);
 
+        var c = new Date(x[i].fields.Edate);
+        var e_date = String(c.getDate()).padStart(2, '0');
+        var e_month = String(c.getMonth()+1).padStart(2, '0');
+        var e_year = c.getFullYear();
+        $('#tdate').val(e_date + "-" + e_month + "-" + e_year);
+        $('#sinsured').val(x[i].fields.Sum_insured);
+        $('#extra1 ').val(x[i].fields.Extra1);
+        $('#extra2 ').val(x[i].fields.Extra2);
+        $('#current ').val(x[i].fields.Currency).trigger('change');
+        $('#rate ').val(x[i].fields.Excrate);
+        $('#bdamount').val(x[i].fields.Bdtamount);
+        $('#decs').val(x[i].fields.Declaration);
+        $('#riskcoders').val(x[i].fields.RiskCover).trigger('change');
+        $('#insurances').val(x[i].fields.Insurance_Type).trigger('change');
+        $('#producers').val(x[i].fields.Producer).trigger('change');
+        $('#dis').val(x[i].fields.Discount);
+        $('#spdis').val(x[i].fields.SpDiscount);
+        $('#mrate').val(x[i].fields.Marine_Rate);
+        $('#mamount').val(x[i].fields.Marine_Amount);
+        $('#wrates').val(x[i].fields.Ware_Rate);
+        $('#wamount').val(x[i].fields.Ware_Amount);
+        $('#netid').val(x[i].fields.Net_Amount);
+        $('#vataid').val(x[i].fields.Vat_Amount);
+        $('#samount').val(x[i].fields.Stump_Amount);
+        $('#gross').val(x[i].fields.Gross_Amount);
+        $('#nara').val(x[i].fields.narration);
+        $("#save").html("Edit");
 
-
+        var abc = x[i].fields.Bill_No;
+        if (abc >0){
+        $('#printd').attr("href", "/uw/quotation/marine/bill/pdf/"+ x[i].fields.Bill_No );
+        }
+        else{
+        $('#printd').attr("href", "" );
         }
 
 
 
-
+        }
     },
     });
 
@@ -919,6 +983,7 @@
 
   });
 </script>
+
 
 
 {%endblock%}
