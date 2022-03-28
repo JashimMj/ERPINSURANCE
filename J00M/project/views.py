@@ -3070,11 +3070,11 @@ def uw_q_marine_searchV(request):
     abc=json.loads(good)
     return JsonResponse({'all':abc},safe=False)
 
-def uw_q_marine_pdfsV(request,id=0):
+def uw_q_marine_demo_pdfsV(request,id=0):
     marine_bill = MarineQuatationM.objects.filter(Bill_No=id)
     for x in marine_bill:
         amount = num2words(x.Gross_Amount, lang="en_IN")
-    template_path = 'uw/reports/marine_biil_a.html'
+    template_path = 'uw/reports/marine_bill_demo.html'
     BASE_DIR = Path(__file__).resolve().parent.parent
     path = os.path.join(BASE_DIR, 'project\static')
     context = {'company': company, 'path': path, 'marine_bill': marine_bill,'amount':amount}
@@ -3094,9 +3094,38 @@ def uw_q_marine_pdfsV(request,id=0):
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
 
+def uw_q_marine_pdfsV(request,id=0):
+    marine_bill = MarineQuatationM.objects.filter(Bill_No=id)
+    for x in marine_bill:
+        amount = num2words(x.Gross_Amount, lang="en_IN")
+    template_path = 'uw/reports/marine_bill.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'marine_bill': marine_bill,'amount':amount}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    data = MarineQuatationM.objects.get(Bill_No=id)
+    data.Edits = 1
+    data.save()
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
 
 def TestV(request):
-    client_n = ClinetM.objects.all()
-    return render(request, 'uw/reports/marine_biil_a.html',{'client_n':client_n})
+    marine_bill = MarineQuatationM.objects.filter(Bill_No=16)
+    for x in marine_bill:
+        amount = num2words(x.Gross_Amount, lang="en_IN")
+    return render(request, 'uw/reports/marine_bill_demo.html',{'marine_bill':marine_bill,'amount':amount})
 
 

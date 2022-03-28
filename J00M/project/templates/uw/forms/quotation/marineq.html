@@ -453,7 +453,7 @@
 
                             </button>
                             <a class="btn btn-primary" id="printd" target="_blank"><i class="fas fa-id-card-alt" > Print Demo</i> </a>
-                            <a href="" class="btn btn-success" target="_blank"><i class="fas fa-print"> Final Print</i> </a>
+                            <a href="" class="btn btn-success" id="finalp" target="_blank"><i class="fas fa-print"> Final Print</i> </a>
 
 
                             <a class="btn btn-danger mr-1" href="{%url 'uw_q_marine'%}"><i
@@ -879,10 +879,22 @@
         for (i=0;i<u.length;i++){
        var abct = u[i].fields.Bill_No;
         if (abct >0){
-        $('#printd').attr("href", "/uw/quotation/marine/bill/pdf/"+ u[i].fields.Bill_No );
+        $('#printd').attr("href", "/uw/quotation/marine/bill/pdf/demo/"+ u[i].fields.Bill_No );
+        $('#finalp').attr("href", "/uw/quotation/marine/bill/pdf/"+ u[i].fields.Bill_No );
         }
         else{
         $('#printd').attr("href", "" );
+        $('#finalp').attr("href", "");
+        }
+
+        var edits=u[i].fields.Edits;
+        if (edits >0){
+        $('#save').hide();
+
+        }
+        else{
+        $('#save').show();
+
         }
         }
 
@@ -967,10 +979,21 @@
 
         var abc = x[i].fields.Bill_No;
         if (abc >0){
-        $('#printd').attr("href", "/uw/quotation/marine/bill/pdf/"+ x[i].fields.Bill_No );
+        $('#printd').attr("href", "/uw/quotation/marine/bill/pdf/demo/"+ x[i].fields.Bill_No );
+        $('#finalp').attr("href", "/uw/quotation/marine/bill/pdf/"+ x[i].fields.Bill_No );
         }
         else{
         $('#printd').attr("href", "" );
+        $('#final').attr("href", "" );
+        }
+        var edits=x[i].fields.Edits;
+        if (edits >0){
+        $('#save').hide();
+
+        }
+        else{
+        $('#save').show();
+
         }
 
 

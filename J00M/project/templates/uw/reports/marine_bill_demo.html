@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load humanize %}
+{%load static%}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +10,7 @@
   <style>
   @page {
     size: 21cm 28.5cm;
-    margin: 27mm 16mm 27mm 16mm;
+    margin: 27mm 16mm 27mm 22mm;
 }
 
 td{
@@ -20,6 +21,8 @@ th {
     font-weight: normal;
     text-align:center;
 }
+
+
 </style>
 <body>
 {%for y in marine_bill%}
@@ -45,7 +48,7 @@ th {
   <tr>
     <td colspan="3" style="padding:3px; text-align:center; border-left:1px solid black; ">{{y.RiskCover.Name}}</td>
     <td colspan="7" style="padding:3px; text-align:justify; border-left:1px solid black; border-right:1px solid black">Being the Marine Insurance Premium for sum insured of
-      {{y.Currency}} {{y.Sum_insured|intcomma }} + {{y.Extra1}}% + {{y.Extra2}}% @ {{y.Excrate}} = Tk. {{y.Bdtamount|intcomma}}</td>
+      {{y.Currency}} {{y.Sum_insured|intcomma }} + {{y.Extra1}}% + {{y.Extra2}}% @ {{y.Excrate}} = Tk. {{y.Bdtamount|intcomma}}/-</td>
   </tr>
   <tr>
     <td colspan="3" style="padding:3px; text-align:center; border-left:1px solid black; border-right:1px solid black"><b>Voyage From :</b>
@@ -119,6 +122,7 @@ th {
 
 
 
+  <img style="width:80px; padding:0;margin:0" align="right" src="{{path}}\demo.png" alt="">
 
 </table>
 {%endfor%}
