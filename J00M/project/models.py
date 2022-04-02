@@ -346,6 +346,7 @@ class MarineQuatationM(models.Model):
     Stump_Amount=models.IntegerField(null=True,blank=True)
     Gross_Amount=models.IntegerField(null=True,blank=True)
     narration=models.CharField(max_length=1000,null=True,blank=True)
+    sendmail=models.CharField(max_length=1000,null=True,blank=True)
     Producer=models.ForeignKey(Hr_Employees_infoM,on_delete=models.CASCADE,null=True,blank=True)
     RiskCover=models.ForeignKey(RiskCovered,on_delete=models.CASCADE,null=True,blank=True)
     issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)

@@ -18,8 +18,12 @@ from num2words import num2words
 import datetime
 from django.core import serializers
 import json
-
 from django.db.models import F, Sum
+# send html mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
 
 company = Company_Information.objects.filter(id=1)
 
@@ -2989,6 +2993,7 @@ def uw_q_marine_saveV(request):
         samount = request.POST.get('samounts')
         gross = request.POST.get('grosss')
         nara = request.POST.get('naras')
+        tomail = request.POST.get('tomail')
         branchs = Branch_Infoamtion.objects.get(id=request.user.last_name)
         id = counter + 1
         if bnumber == '':
@@ -3001,7 +3006,7 @@ def uw_q_marine_saveV(request):
                                     Discount=dis,SpDiscount=spdis,Marine_Rate=mrate,Marine_Amount=mamount,
                                     Ware_Rate=wrates,Ware_Amount=wamount,Net_Amount=netid,Vat_Amount=vataid,
                                     Stump_Amount=samount,Gross_Amount=gross,Producer=producer,RiskCover=risk,
-                                    narration=nara,userc=createuser,User_Branch=branchs)
+                                    narration=nara,userc=createuser,User_Branch=branchs,sendmail=tomail)
             date.save()
             # datas = MarineQuatationM.objects.filter(id=id)
             #
@@ -3054,6 +3059,7 @@ def uw_q_marine_saveV(request):
             data.RiskCover=risk
             data.narration=nara
             data.userc=createuser
+            data.sendmail=tomail
             data.save()
             all = MarineQuatationM.objects.filter(Bill_No=id)
             good = serializers.serialize('json', all)
@@ -3122,10 +3128,34 @@ def uw_q_marine_pdfsV(request,id=0):
     return response
 
 
+def uw_q_marine_sendV(request,id=0):
+    if id !=0:
+        marine_bill = MarineQuatationM.objects.filter(Bill_No=id)
+        for x in marine_bill:
+            amount = num2words(x.Gross_Amount, lang="en_IN")
+            to= x.sendmail
+            my_list = to.split(",")
+        html_contant=render_to_string('uw/reports/marine_bill_email.html',{'company':company,'marine_bill':marine_bill,'amount':amount})
+        text_contant=strip_tags(html_contant)
+        email=EmailMultiAlternatives(
+            #subject
+            'test',
+            text_contant,
+            settings.EMAIL_HOST_USER,
+            my_list,
+
+        )
+        email.attach_alternative(html_contant,'text/html')
+        email.send()
+        return HttpResponse('Send your Email')
+    else:
+        return HttpResponse('Error your Email')
+
+
 def TestV(request):
     marine_bill = MarineQuatationM.objects.filter(Bill_No=16)
     for x in marine_bill:
         amount = num2words(x.Gross_Amount, lang="en_IN")
-    return render(request, 'uw/reports/marine_bill_demo.html',{'marine_bill':marine_bill,'amount':amount})
+    return render(request, 'uw/reports/marine_bill_email.html',{'company':company,'marine_bill':marine_bill,'amount':amount})
 
 

@@ -149,6 +149,7 @@ urlpatterns = [
     path('uw/quotation/marine/search/', views.uw_q_marine_searchV, name="uw_q_marine_search"),
     path('uw/quotation/marine/bill/pdf/demo/<int:id>', views.uw_q_marine_demo_pdfsV, name="uw_q_marine_demo_pdf"),
     path('uw/quotation/marine/bill/pdf/<int:id>', views.uw_q_marine_pdfsV, name="uw_q_marine_pdf"),
+    path('uw/quotation/marine/bill/send/email/<int:id>', views.uw_q_marine_sendV, name="uw_q_marine_send"),
 
 
 

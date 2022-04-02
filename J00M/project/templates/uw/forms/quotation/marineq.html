@@ -454,6 +454,7 @@
                             </button>
                             <a class="btn btn-primary" id="printd" target="_blank"><i class="fas fa-id-card-alt" > Print Demo</i> </a>
                             <a href="" class="btn btn-success" id="finalp" target="_blank"><i class="fas fa-print"> Final Print</i> </a>
+                            <a href="" class="btn btn-warning" id="sendq" target="_blank"><i class="fa fa-envelope"> Send Quotation</i> </a>
 
 
                             <a class="btn btn-danger mr-1" href="{%url 'uw_q_marine'%}"><i
@@ -635,6 +636,20 @@
                                         <!--                                        </div>-->
 <!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
                                         <textarea name="narration" id="nara" cols="40" rows="6"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>To Send</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+<!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
+                                        <input type="text" name="tomail" id="tomail" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -866,6 +881,7 @@
         samounts:$('#samount').val(),
         grosss:$('#gross').val(),
         naras:$('#nara').val(),
+        tomail:$('#tomail').val(),
 
     },
     success: function(response){
@@ -881,10 +897,12 @@
         if (abct >0){
         $('#printd').attr("href", "/uw/quotation/marine/bill/pdf/demo/"+ u[i].fields.Bill_No );
         $('#finalp').attr("href", "/uw/quotation/marine/bill/pdf/"+ u[i].fields.Bill_No );
+        $('#sendq').attr("href", "/uw/quotation/marine/bill/send/email/"+ x[i].fields.Bill_No );
         }
         else{
         $('#printd').attr("href", "" );
         $('#finalp').attr("href", "");
+        $('#sendq').attr("href", "");
         }
 
         var edits=u[i].fields.Edits;
@@ -975,16 +993,19 @@
         $('#samount').val(x[i].fields.Stump_Amount);
         $('#gross').val(x[i].fields.Gross_Amount);
         $('#nara').val(x[i].fields.narration);
+        $('#tomail').val(x[i].fields.sendmail);
         $("#save").html("Edit");
 
         var abc = x[i].fields.Bill_No;
         if (abc >0){
         $('#printd').attr("href", "/uw/quotation/marine/bill/pdf/demo/"+ x[i].fields.Bill_No );
         $('#finalp').attr("href", "/uw/quotation/marine/bill/pdf/"+ x[i].fields.Bill_No );
+        $('#sendq').attr("href", "/uw/quotation/marine/bill/send/email/"+ x[i].fields.Bill_No );
         }
         else{
         $('#printd').attr("href", "" );
         $('#final').attr("href", "" );
+        $('#sendq').attr("href", "" );
         }
         var edits=x[i].fields.Edits;
         if (edits >0){

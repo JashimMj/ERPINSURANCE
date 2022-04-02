@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+{% load humanize %}
+{%load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<style>
+  @page {
+    size: 21cm 28.5cm;
+    margin: 27mm 16mm 27mm 22mm;
+}
+
+td{
+font-size: 12px;
+}
+th {
+  font-size: 12px;
+    font-weight: normal;
+    text-align:center;
+}
+
+
+
+
+</style>
+<body>
+{%for y in marine_bill%}
+<table style="width:100%">
+    {%for x in company%}
+    <tr style="background-color:#1340AD; ">
+        <th colspan="10">
+            <img src="{{x.image}}" alt="" style="width:60px;">
+            <p style="color:#fff"><span style="font-size:18px;">{{x.Company_Name}}</span><br>{{x.Company_Address}}, <br>{{x.Company_Email}}, {{x.Company_Phone}}, {{x.Company_Fax}}, {{x.Company_Web_site}} </p>
+        </th>
+    </tr>
+    {%endfor%}
+    <tr>
+        <th colspan="10">As per Insurance Development Regulatory Authority (IDRA) rule, <br>before insurance of policy
+            insurance premium is required to be received.
+        </th>
+    </tr>
+    <tr>
+        <th colspan="10" style="padding-top:10px; padding-bottom:10px; font-size: 14px;"><b><u>Premium Bill</u></b></th>
+    </tr>
+    <tr>
+        <th colspan="2" style="text-align:right; padding-right:5px;"><b>The Insured Name:</b></th>
+        <th colspan="8" style="text-align:left;"> {{y.Bank_Name}}, {{y.Bank_Branch}} , {{y.Ac}}
+            {{y.Client_NameM}},{{y.Client_AddressM}}
+        </th>
+    </tr>
+    <tr>
+        <th colspan="5" style="text-align:left; padding:10px;"><b>Bill No: {{y.Bill_No}}</b></th>
+        <th colspan="5" style="text-align:right; padding:10px;"><b>Date: {{y.Bill_date|date:"d/m/Y"}}</b></th>
+    </tr>
+    <tr>
+        <th colspan="3" style="border:1px solid black; padding:3px;"><b>Risk Covered</b></th>
+        <th colspan="7" style="border:1px solid black; padding:3px;"><b>Particulars</b></th>
+    </tr>
+    <tr>
+        <td colspan="3" style="padding:3px; text-align:center; border-left:1px solid black; ">{{y.RiskCover.Name}}</td>
+        <td colspan="7"
+            style="padding:3px; text-align:justify; border-left:1px solid black; border-right:1px solid black">Being the
+            Marine Insurance Premium for sum insured of
+            {{y.Currency}} {{y.Sum_insured|intcomma }} + {{y.Extra1}}% + {{y.Extra2}}% @ {{y.Excrate}} = Tk.
+            {{y.Bdtamount|intcomma}}/-
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3"
+            style="padding:3px; text-align:center; border-left:1px solid black; border-right:1px solid black"><b>Voyage
+            From :</b>
+            {{y.Voyage_From}}
+        </td>
+        <td colspan="7" style="padding:3px; text-align:center;  border-right:1px solid black;"><b>as per our Marine
+            cover note no. as under bellow:</b></td>
+    </tr>
+    <tr>
+        <td colspan="3" style="text-align:center; border-left:1px solid black; border-right:1px solid black"><b>Voyage
+            To :</b>
+            {{y.Voyage_To}}
+        </td>
+        <td colspan="4"
+            style="text-align:right;  padding:1px;border-right:1px solid black; border-top:1px solid black;"><b>MARINE @
+            {{y.Marine_Rate}} %</b></td>
+        <td colspan="3"
+            style="text-align:center; padding:1px;  border-right:1px solid black; border-top:1px solid black;">
+            {{y.Marine_Amount|intcomma}}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" style="text-align:center; border-right:1px solid black; border-left:1px solid black;"></td>
+        <td colspan="4" style="text-align:right;  padding:1px;   border-right:1px solid black; "><b>War & SRCC @
+            {{y.Ware_Rate}} %</b></td>
+        <td colspan="3" style="text-align:center; padding:1px;  border-right:1px solid black;">
+            {{y.Ware_Amount|intcomma}}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" style="text-align:center; border-right:1px solid black; border-left:1px solid black;"></td>
+        <td colspan="4" style="text-align:right;  padding:1px;   border-right:1px solid black; "><b>Net Premium</b></b>
+        </td>
+        <td colspan="3" style="text-align:center; padding:1px;  border:1px solid black;">
+            <b>{{y.Net_Amount|intcomma}}</b></td>
+    </tr>
+    <tr>
+        <td colspan="3" style="text-align:center; border-right:1px solid black; border-left:1px solid black;"></td>
+        <td colspan="4" style="text-align:right;  padding:1px;   border-right:1px solid black; "><b>Vat</b></td>
+        <td colspan="3" style="text-align:center; padding:1px;  border-right:1px solid black;">
+            {{y.Vat_Amount|intcomma}}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" style="text-align:center; border-right:1px solid black; border-left:1px solid black;"></td>
+        <td colspan="4" style="text-align:right;  padding:1px;   border-right:1px solid black; "><b>Stamp Duty</b></td>
+        <td colspan="3" style="text-align:center; padding:1px;  border-right:1px solid black;">
+            {{y.Stump_Amount|intcomma}}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" style="text-align:center; border-right:1px solid black; border-left:1px solid black; "></td>
+        <td colspan="4" style="text-align:right;  padding:1px;   border-right:1px solid black; "><b>Gross</b></td>
+        <td colspan="3" style="text-align:center; padding:1px;  border:1px solid black;">
+            <b>{{y.Gross_Amount|intcomma}}</b></td>
+    </tr>
+    <tr>
+        <td colspan="3"
+            style="text-align:center; border-right:1px solid black; border-left:1px solid black; border-bottom:1px solid black; "></td>
+
+        <td colspan="7"
+            style="text-align:left;  padding:1px;   border-right:1px solid black; border-bottom:1px solid black;border-top:1px solid black; ">
+            <b>Taka ( In words ) : ({{amount}}) only</b></td>
+
+    </tr>
+    <tr>
+        <td colspan="10" style="padding:2px; border:1px solid black; text-align:justify;"><b>Item:</b>{{y.Interest_covered}}
+        </td>
+    </tr>
+    <tr>
+        <td colspan="10" style="text-align:justify;  padding-top:3px; padding-bottom:3px;"><b>Narration :</b>
+            {{y.narration}}
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td colspan="5" style="text-align:left;"><u><b>Prepared By</b></u></td>
+        <td colspan="5" style="text-align:right;"><b>For and on behalf of </b></td>
+    </tr>
+
+    <tr>
+        <td colspan="5" style="text-align:left;"><b>{{y.userc}}</b></td>
+        {%for x in company%}
+        <td colspan="5" style="text-align:right;"><b>{{x.Company_Name}}</b></td>
+        {%endfor%}
+    </tr>
+    <tr>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+    </tr>
+    <tr>
+        <td colspan="5" style="text-align:left;"></td>
+        <td colspan="5" style="text-align:right;"><b>Authorized Officer</b></td>
+    </tr>
+
+
+    <!--  <img style="width:80px; padding:0;margin:0" align="right" src="{{path}}\demo.png" alt="">-->
+
+</table>
+{%endfor%}
+</body>
+</html>
