@@ -31,6 +31,7 @@ class Company_Information(models.Model):
     Company_Fax=models.CharField(max_length=50,null=True,blank=True)
     Company_Web_site=models.CharField(max_length=50,null=True,blank=True)
     Company_Short_Name=models.CharField(max_length=50,null=True,blank=True)
+    Authorization=models.ImageField(upload_to='authorization',null=True,blank=True)
     create_user=models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
     logo=models.ImageField(upload_to='logo',null=True,blank=True)
     issu_date=models.DateTimeField(auto_now_add=True,null=True,blank=True)
@@ -43,6 +44,13 @@ class Company_Information(models.Model):
         except:
             urls = ''
         return urls
+
+    def authusers(self):
+        try:
+            agd = self.Authorization.url
+        except:
+            urlss = ''
+        return agd
 
     def __str__(self):
         return self.Company_Name
@@ -328,7 +336,53 @@ class MarineQuatationM(models.Model):
     Transit_By=models.ForeignKey(TransitBy,on_delete=models.CASCADE,null=True,blank=True)
     Sdate=models.DateField(null=True,blank=True)
     Edate=models.DateField(null=True,blank=True)
-    Sum_insured=models.IntegerField(null=True,blank=True)
+    Sum_insured=models.FloatField(null=True,blank=True)
+    Extra1=models.IntegerField(null=True,blank=True)
+    Extra2=models.IntegerField(null=True,blank=True)
+    Currency=models.CharField(max_length=20,null=True,blank=True)
+    Excrate=models.FloatField(null=True,blank=True)
+    Bdtamount=models.IntegerField(null=True,blank=True)
+    Declaration=models.CharField(max_length=1000,null=True,blank=True)
+    Discount=models.IntegerField(null=True,blank=True)
+    SpDiscount=models.IntegerField(null=True,blank=True)
+    Marine_Rate=models.FloatField(null=True,blank=True)
+    Marine_Amount=models.IntegerField(null=True,blank=True)
+    Ware_Rate=models.FloatField(null=True,blank=True)
+    Ware_Amount=models.IntegerField(null=True,blank=True)
+    Net_Amount=models.IntegerField(null=True,blank=True)
+    Vat_Amount=models.IntegerField(null=True,blank=True)
+    Stump_Amount=models.IntegerField(null=True,blank=True)
+    Gross_Amount=models.IntegerField(null=True,blank=True)
+    narration=models.CharField(max_length=1000,null=True,blank=True)
+    sendmail=models.CharField(max_length=1000,null=True,blank=True)
+    Producer=models.ForeignKey(Hr_Employees_infoM,on_delete=models.CASCADE,null=True,blank=True)
+    RiskCover=models.ForeignKey(RiskCovered,on_delete=models.CASCADE,null=True,blank=True)
+    issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    Edits = models.CharField(max_length=10, null=True, blank=True)
+    User_Branch = models.ForeignKey(Branch_Infoamtion, on_delete=models.CASCADE, null=True, blank=True)
+    userc = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
+
+class MarineCovernoteM(models.Model):
+    id = models.AutoField(primary_key=True)
+    Bill_No=models.CharField(max_length=255,null=True,blank=True)
+    Cover_No=models.CharField(max_length=255,null=True,blank=True)
+    Cover_No_no=models.CharField(max_length=255,null=True,blank=True)
+    Cover_Date=models.DateField(null=True,blank=True)
+    Ac=models.CharField(max_length=255,null=True,blank=True)
+    Insurance_Type=models.ForeignKey(InsuraceType,on_delete=models.CASCADE,null=True,blank=True)
+    Client_NameM=models.ForeignKey(ClinetM,on_delete=models.CASCADE,null=True,blank=True)
+    Client_AddressM=models.ForeignKey(Client_BranchM,on_delete=models.CASCADE,null=True,blank=True)
+    Bank_Name=models.ForeignKey(BankM,on_delete=models.CASCADE,null=True,blank=True)
+    Bank_Branch=models.ForeignKey(Bank_BranchM,on_delete=models.CASCADE,null=True,blank=True)
+    Interest_covered=models.CharField(max_length=1000,null=True,blank=True)
+    Voyage_From=models.ForeignKey(VoyageForm,on_delete=models.CASCADE,null=True,blank=True)
+    Voyage_To=models.ForeignKey(VoyageTo,on_delete=models.CASCADE,null=True,blank=True)
+    Voyage_Via=models.ForeignKey(VoyageVia,on_delete=models.CASCADE,null=True,blank=True)
+    Transit_By=models.ForeignKey(TransitBy,on_delete=models.CASCADE,null=True,blank=True)
+    Sdate=models.DateField(null=True,blank=True)
+    Edate=models.DateField(null=True,blank=True)
+    Sum_insured=models.FloatField(null=True,blank=True)
     Extra1=models.IntegerField(null=True,blank=True)
     Extra2=models.IntegerField(null=True,blank=True)
     Currency=models.CharField(max_length=20,null=True,blank=True)

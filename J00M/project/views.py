@@ -276,15 +276,20 @@ def software_admin_company_info_saveV(request):
         cemail = request.POST.get('Cemail')
         cweb = request.POST.get('Cweb')
         cshort = request.POST.get('Cshort')
+
         if bnumber is None:
             image = request.FILES['logo']
             store = FileSystemStorage()
             filename = store.save(image.name, image)
             profile_pic_url = store.url(filename)
+            ddsa = request.FILES['authres']
+            store = FileSystemStorage()
+            filenames = store.save(ddsa.name, ddsa)
+            profiles_pic_url = store.url(filenames)
             date = Company_Information(id=id, Company_Name=cname, Company_Address=caddress, Company_Email=cemail,
                                        Company_Phone=cphone,
                                        Company_Fax=cfax, create_user=createuser, Company_Web_site=cweb,
-                                       Company_Short_Name=cshort, logo=image)
+                                       Company_Short_Name=cshort, logo=image,Authorization=ddsa)
             date.save()
             datas = Company_Information.objects.filter(id=id)
             messages.info(request, 'Data Save')
@@ -304,16 +309,23 @@ def software_admin_company_info_saveV(request):
             data.create_user = createuser
             data.Company_Web_site = cweb
             data.Company_Short_Name = cshort
-            if request.method == 'File':
+            if request.method == 'POST' and request.FILES:
                 image = request.FILES['logo']
                 store = FileSystemStorage()
                 filename = store.save(image.name, image)
                 profile_pic_url = store.url(filename)
                 data.logo = image
+                ddsa = request.FILES['authres']
+                store = FileSystemStorage()
+                filenames = store.save(ddsa.name, ddsa)
+                profiles_pic_url = store.url(filenames)
+                data.Authorization = ddsa
+                data.save()
             else:
                 datas = Company_Information.objects.filter(id=bnumber)
                 for x in datas:
                     data.logo = x.logo
+                    data.Authorization = x.Authorization
                     data.save()
             messages.info(request, 'Data Update')
             return render(request, 'software_admin/forms/message.html',
@@ -385,6 +397,7 @@ def EditV(request):
     voyageto_info = request.POST.get('voyageto_info')
     voyagevia_info = request.POST.get('voyagevia_info')
     transit_info = request.POST.get('transit_info')
+    marine_quotation = request.POST.get('marinequotation')
     if company_info:
         company_edit = Company_Information.objects.filter(id=company_info)
         return render(request, 'software_admin/forms/Edit_message.html',
@@ -468,6 +481,13 @@ def EditV(request):
         return render(request, 'software_admin/forms/Edit_message.html',
                       {'transit_edit': transit_edit, 'company': company,
                        'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    elif marine_quotation:
+        marinequotation = TransitBy.objects.raw(
+            'select id,Bill_No,Bill_date,Marine_Amount,Ware_Amount,Net_Amount,Vat_Amount,Stump_Amount,Gross_Amount,Edits from project_marinequatationm mq where bill_no=%s',
+            [marine_quotation])
+        return render(request, 'software_admin/forms/Edit_message.html',
+                      {'marinequotation': marinequotation, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
 
 
     return render(request, 'software_admin/forms/All_Edit.html',
@@ -503,6 +523,18 @@ def All_Edit_saveV(request):
     voyagevia_edite = request.POST.get('voyagevia_edite')
     transit_inv = request.POST.get('transit_inv')
     transit_edite = request.POST.get('transit_edite')
+
+
+    Bill_nos = request.POST.get('bill_no')
+    Bill_date = request.POST.get('billdate')
+    marine_amount = request.POST.get('marineamount')
+    ws_amount = request.POST.get('wsamount')
+    net_amount = request.POST.get('netamount')
+    vat_amount = request.POST.get('vatamount')
+    stump_amount = request.POST.get('stumpamount')
+    gross_amount = request.POST.get('grossamount')
+
+
     if company_info:
         company_edits = Company_Information.objects.get(id=company_info)
         company_edits.Edits = cedit
@@ -571,6 +603,19 @@ def All_Edit_saveV(request):
         for x in abc:
             issue_edits = TransitBy.objects.get(id=x.id)
             issue_edits.Edits = transit_edite
+            issue_edits.save()
+    elif Bill_nos:
+        abc = MarineQuatationM.objects.filter(Bill_No=Bill_nos)
+        for x in abc:
+            issue_edits = MarineQuatationM.objects.get(id=x.id)
+            issue_edits.Bill_No = Bill_nos
+            issue_edits.Bill_date = Bill_date
+            issue_edits.Marine_Amount = marine_amount
+            issue_edits.Ware_Amount = ws_amount
+            issue_edits.Net_Amount = net_amount
+            issue_edits.Vat_Amount = vat_amount
+            issue_edits.Stump_Amount = stump_amount
+            issue_edits.Gross_Amount = gross_amount
             issue_edits.save()
     messages.info(request, 'Data Update')
 
@@ -2855,6 +2900,7 @@ def uw_dashboardV(request):
 def uw_q_marineV(request):
     user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
     user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    bill = MarineQuatationM.objects.all().count()
     client_n=ClinetM.objects.all()
     bank_n=BankM.objects.all()
     client_add = Client_BranchM.objects.all()
@@ -2875,7 +2921,7 @@ def uw_q_marineV(request):
                                                              'voyageto':voyageto,'transitby':transitby,
                                                              'voyagevia':voyagevia,'currenct':currenct,
                                                              'risk':risk,'insurance':insurance,
-                                                             'producer':producer,'bankbranch':bankbranch})
+                                                             'producer':producer,'bankbranch':bankbranch,'bill':bill})
 
 
 
@@ -3076,6 +3122,14 @@ def uw_q_marine_searchV(request):
     abc=json.loads(good)
     return JsonResponse({'all':abc},safe=False)
 
+def uw_q_marine_cover_searchV(request):
+    search_b=request.POST.get('searchcover')
+    # all=MarineQuatationM.objects.raw('select mar.id as id ,mar.Bill_date as Bill_date  ,mar.Bill_No as Bill_No, mar.Ac as Ac ,bb.Bank_Branch ||" "|| bb.Bank_Branch_Address as Bank_Branch_id ,ban.Name as Bank_Name_id, mar.Bdtamount as Bdtamount ,clb.Client_Branch ||" "|| clb.Client_Branch_Address as Client_AddressM_id,cl.Name as Client_NameM_id ,mar.Declaration as  Declaration,mar.Discount as Discount ,mar.Edate as Edate ,mar.Edits as Edits,mar.Excrate as Excrate  ,mar.Extra1 as Extra1 ,mar.Extra2 as Extra2,mar.Gross_Amount as Gross_Amount,insu.Name as insurancetype ,mar.Interest_covered as Interest_covered ,mar.Marine_Amount as Marine_Amount ,mar.Marine_Rate as Marine_Rate ,mar.Net_Amount as Net_Amount ,hr.Employees_Name as producer ,res.Name as riskcover ,mar.Sdate as Sdate ,mar.SpDiscount as SpDiscount ,mar.Stump_Amount as Stump_Amount,mar.Sum_insured as Sum_insured,trn.Name as transit_by ,mar.Vat_Amount as Vat_Amount ,vf.Name as voyage_form ,vt.Name as voyage_to,vv.Name as voyage_via,mar.Ware_Amount as Ware_Amount,mar.Ware_Rate as Ware_Rate ,mar.issu_date as issu_date ,mar.narration as narration ,mar.Currency as Currency from project_marinequatationm mar join project_bankm ban on mar.Bank_Name_id =ban.id join project_bank_branchm bb on mar.Bank_Branch_id =bb.id join project_clinetm cl on mar.Client_NameM_id =cl.id join project_client_branchm clb on mar.Client_AddressM_id =clb.id join project_insuracetype insu on mar.Insurance_Type_id =insu.id join project_hr_employees_infom hr on mar.Producer_id =hr.id join project_riskcovered res on mar.RiskCover_id =res.id join project_transitby trn on mar.Transit_By_id =trn.id join project_voyageform vf on mar.Voyage_From_id =vf.id join project_voyageto vt on mar.Voyage_To_id =vt.id join project_voyagevia vv on mar.Voyage_Via_id =vv.id where mar.Bill_No =%s',[14])
+    all=MarineCovernoteM.objects.filter(Cover_No_no=1)
+    good=serializers.serialize('json',all)
+    abc=json.loads(good)
+    return JsonResponse({'all':abc},safe=False)
+
 def uw_q_marine_demo_pdfsV(request,id=0):
     marine_bill = MarineQuatationM.objects.filter(Bill_No=id)
     for x in marine_bill:
@@ -3152,10 +3206,207 @@ def uw_q_marine_sendV(request,id=0):
         return HttpResponse('Error your Email')
 
 
-def TestV(request):
-    marine_bill = MarineQuatationM.objects.filter(Bill_No=16)
+def uw_q_marine_covernoteV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    bill = MarineCovernoteM.objects.all().count()
+    client_n = ClinetM.objects.all()
+    bank_n = BankM.objects.all()
+    client_add = Client_BranchM.objects.all()
+    voyagefrom = VoyageForm.objects.all()
+    voyageto = VoyageTo.objects.all()
+    transitby = TransitBy.objects.all()
+    voyagevia = VoyageVia.objects.all()
+    currenct = Currency.objects.all()
+    risk = RiskCovered.objects.all()
+    insurance = InsuraceType.objects.all()
+    producer = Hr_Employees_infoM.objects.all()
+    bankbranch = Bank_BranchM.objects.all()
+    return render(request, 'uw/forms/covernot/marinecovernote.html', {'company': company, 'user_branch': user_branch,
+                                                               'user_current_branch': user_current_branch,
+                                                               'client_n': client_n, 'client_add': client_add,
+                                                               'bank_n': bank_n, 'voyagefrom': voyagefrom,
+                                                               'voyageto': voyageto, 'transitby': transitby,
+                                                               'voyagevia': voyagevia, 'currenct': currenct,
+                                                               'risk': risk, 'insurance': insurance,
+                                                               'producer': producer, 'bankbranch': bankbranch,
+                                                               'bill': bill})
+
+
+def uw_q_marine_covernote_saveV(request):
+    if request.method == 'POST':
+        bnumber = request.POST.get('billnos')
+        counter = MarineCovernoteM.objects.all().count()
+        id = counter + 1
+        cover = request.POST.get('coverno')
+        short=Company_Information.objects.all()
+        branchs = Branch_Infoamtion.objects.get(id=request.user.last_name)
+        dates=datetime.date.today()
+        moth_date=dates.month
+        print(moth_date)
+        year_date=dates.year
+        print(year_date)
+        for x in short:
+            short=x.Company_Short_Name
+            coberno = short + "/" + branchs.Branch_Short_Name + "/" + "MC" + "-" +str(id)+"/"+str(moth_date)+"/"+str(year_date)
+            print(coberno)
+        user = request.user.id
+        createuser = User.objects.get(id=user)
+
+        billdate = request.POST.get('billdates')
+        billdates=datetime.datetime.strptime(billdate,'%d-%m-%Y')
+        ac = request.POST.get('acs')
+        client_n = request.POST.get('client_ns')
+        client=ClinetM.objects.get(id=client_n)
+        client_addres = request.POST.get('client_address')
+        c_address=Client_BranchM.objects.get(id=client_addres)
+        bank_names = request.POST.get('bank_namess')
+        bank=BankM.objects.get(id=bank_names)
+        bank_address = request.POST.get('bank_addressss')
+        b_branch=Bank_BranchM.objects.get(id=bank_address)
+        transit = request.POST.get('transits')
+        tarnsit_by=TransitBy.objects.get(id=transit)
+        vforms = request.POST.get('vformss')
+        voyagef=VoyageForm.objects.get(id=vforms)
+        vTos = request.POST.get('vToss')
+        voyaget=VoyageTo.objects.get(id=vTos)
+        interestcover = request.POST.get('interestcovers')
+        vvias = request.POST.get('vviass')
+        voyagevis=VoyageVia.objects.get(id=vvias)
+        fdate = request.POST.get('fdates')
+        from_date=datetime.datetime.strptime(fdate,'%d-%m-%Y')
+        tdate = request.POST.get('tdates')
+        to_date = datetime.datetime.strptime(tdate, '%d-%m-%Y')
+        sinsured = request.POST.get('sinsureds')
+        extra1 = request.POST.get('extra1s')
+        extra2 = request.POST.get('extra2s')
+        currency = request.POST.get('currents')
+        rate = request.POST.get('rates')
+        bdamounts = request.POST.get('bdamounts')
+        declaration = request.POST.get('decss')
+        riskcoder = request.POST.get('riskcoderss')
+        risk=RiskCovered.objects.get(id=riskcoder)
+        insurances = request.POST.get('insurancess')
+        insurance_type=InsuraceType.objects.get(id=insurances)
+        producers = request.POST.get('producerss')
+        producer=Hr_Employees_infoM.objects.get(id=producers)
+        dis = request.POST.get('diss')
+        spdis = request.POST.get('spdiss')
+        mrate = request.POST.get('mrates')
+        mamount = request.POST.get('mamounts')
+        wrates = request.POST.get('wratess')
+        wamount = request.POST.get('wamounts')
+        netid = request.POST.get('netids')
+        vataid = request.POST.get('vataids')
+        samount = request.POST.get('samounts')
+        gross = request.POST.get('grosss')
+        nara = request.POST.get('naras')
+        tomail = request.POST.get('tomail')
+
+
+        if cover == '':
+
+            date = MarineCovernoteM(id=id, Cover_Date=billdates,Bill_No=bnumber,Cover_No=coberno,Ac=ac,Insurance_Type=insurance_type,Client_NameM=client,
+                                    Client_AddressM=c_address,Bank_Name=bank,Bank_Branch=b_branch,Interest_covered=interestcover,
+                                    Voyage_From=voyagef,Voyage_To=voyaget,Voyage_Via=voyagevis,Transit_By=tarnsit_by,
+                                    Sdate=from_date,Edate=to_date,Sum_insured=sinsured,Extra1=extra1,Extra2=extra2,
+                                    Currency=currency,Excrate=rate,Bdtamount=bdamounts,Declaration=declaration,
+                                    Discount=dis,SpDiscount=spdis,Marine_Rate=mrate,Marine_Amount=mamount,
+                                    Ware_Rate=wrates,Ware_Amount=wamount,Net_Amount=netid,Vat_Amount=vataid,
+                                    Stump_Amount=samount,Gross_Amount=gross,Producer=producer,RiskCover=risk,
+                                    narration=nara,userc=createuser,User_Branch=branchs,sendmail=tomail,Cover_No_no=id)
+            date.save()
+            # datas = MarineQuatationM.objects.filter(id=id)
+            #
+            # # bill = MarineQuatationM.objects.all().count()
+            # abc = datas.values()
+            # good = list(abc)
+            # good = messages.info(request, 'Data Save')
+            all = MarineCovernoteM.objects.filter(Cover_No_no=id)
+            good = serializers.serialize('json', all)
+            abcs = json.loads(good)
+            abc = 'Data Save'
+            return JsonResponse({'id':id,'messages':abc,'abcs':abcs},status=200)
+        else:
+            id=cover
+            bill = MarineCovernoteM.objects.all().count()
+            datas = MarineCovernoteM.objects.filter(Cover_No=cover)
+            data = MarineCovernoteM.objects.get(Cover_No=cover)
+            # data.Bill_date=billdates
+            data.Ac=ac
+            data.Insurance_Type=insurance_type
+            data.Client_NameM=client
+            data.Client_AddressM=c_address
+            data.Bank_Name=bank
+            data.Bank_Branch=b_branch
+            data.Interest_covered=interestcover
+            data.Voyage_From=voyagef
+            data.Voyage_To=voyaget
+            data.Voyage_Via=voyagevis
+            data.Transit_By=tarnsit_by
+            data.Sdate=from_date
+            data.Edate=to_date
+            data.Sum_insured=sinsured
+            data.Extra1=extra1
+            data.Extra2=extra2
+            data.Currency=currency
+            data.Excrate=rate
+            data.Bdtamount=bdamounts
+            data.Declaration=declaration
+            data.Discount=dis
+            data.SpDiscount=spdis
+            data.Marine_Rate=mrate
+            data.Marine_Amount=mamount
+            data.Ware_Rate=wrates
+            data.Ware_Amount=wamount
+            data.Net_Amount=netid
+            data.Vat_Amount=vataid
+            data.Stump_Amount=samount
+            data.Gross_Amount=gross
+            data.Producer=producer
+            data.RiskCover=risk
+            data.narration=nara
+            data.userc=createuser
+            data.sendmail=tomail
+            data.save()
+            all = MarineQuatationM.objects.filter(Bill_No=id)
+            good = serializers.serialize('json', all)
+            abcs = json.loads(good)
+            abc = 'Data Update'
+            return JsonResponse({'id':id,'messages':abc,'abcs':abcs},status=200,safe=False)
+
+
+def uw_q_marine_cover_pdfsV(request):
+    marine_bill = MarineCovernoteM.objects.filter(id=1)
     for x in marine_bill:
         amount = num2words(x.Gross_Amount, lang="en_IN")
-    return render(request, 'uw/reports/marine_bill_email.html',{'company':company,'marine_bill':marine_bill,'amount':amount})
+    template_path = 'uw/reports/marine_cover_note_f.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'marine_bill': marine_bill,'amount':amount}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    # data = MarineQuatationM.objects.get(Bill_No=id)
+    # data.Edits = 1
+    # data.save()
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+def TestV(request):
+    marine_bill = MarineCovernoteM.objects.filter(Cover_No_no=1)
+    for x in marine_bill:
+        amount = num2words(x.Gross_Amount, lang="en_IN")
+    return render(request, 'uw/reports/marine_cover_note_f.html',{'company':company,'marine_bill':marine_bill,'amount':amount})
 
 

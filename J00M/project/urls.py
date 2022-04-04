@@ -147,9 +147,14 @@ urlpatterns = [
     path('uw/quotation/marine/date/select/', views.qmarinedateV, name="uw_q_marine_date_select"),
     path('uw/quotation/marine/save/', views.uw_q_marine_saveV, name="uw_q_marine_save"),
     path('uw/quotation/marine/search/', views.uw_q_marine_searchV, name="uw_q_marine_search"),
+    path('uw/quotation/marine/cover/search/', views.uw_q_marine_cover_searchV, name="uw_q_marine_covernote_search"),
     path('uw/quotation/marine/bill/pdf/demo/<int:id>', views.uw_q_marine_demo_pdfsV, name="uw_q_marine_demo_pdf"),
     path('uw/quotation/marine/bill/pdf/<int:id>', views.uw_q_marine_pdfsV, name="uw_q_marine_pdf"),
     path('uw/quotation/marine/bill/send/email/<int:id>', views.uw_q_marine_sendV, name="uw_q_marine_send"),
+    path('uw/quotation/marine/cover/note/', views.uw_q_marine_covernoteV, name="uw_q_marine_covernote"),
+    path('uw/quotation/marine/cover/note/save/', views.uw_q_marine_covernote_saveV, name="uw_q_marine_covernote_save"),
+    path('uw/quotation/marine/cover/pdf/', views.uw_q_marine_cover_pdfsV, name="uw_q_marine_cover_pdf"),
+
 
 
 

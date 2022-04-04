@@ -1,0 +1,1157 @@
+{%extends 'index.html'%}
+{%load static%}
+{%block contant%}
+<section class="section">
+    <div class="row ">
+        <div class="col-md-6" style="margin-bottom:10px;">
+            <form class="form-inline" action="{%url 'uw_q_marine_search'%}" method="POST" id="searc_form">
+                {%csrf_token%}
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                       name="search" id="searchs">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+                >Search Bill
+                </button>
+            </form>
+        </div>
+
+
+        <div class="col-md-6" style="margin-bottom:10px;">
+            <form class="form-inline" action="{%url 'uw_q_marine_covernote_search'%}" method="POST" id="searc_form_cover">
+                {%csrf_token%}
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                       name="searchcover" id="searchcover">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+                >Search Cover note
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <form method="POST" id="formq">
+                   {%csrf_token%}
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-8">
+
+                <div class="card" style="background-color:#CDB7B5">
+                    <div class="card-header">
+                        <h4>Marine Cover Note</h4>
+
+
+                    </div>
+
+                    <div><h4 style="text-align:right; padding-right:10px;">Last Entry:{{bill}}</h4></div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="search-results col-md-12">
+                                {%include 'software_admin/forms/message.html'%}
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Bill No.</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="bno" id="billno">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Cover Note Date.</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="bdate" id="billdate" value='{% now "d-m-Y" %}' readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Cover Note No.</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="bdate" id="coverno" value='' readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>A/C. M/C</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="acms" required
+                                               value="A/C. M/S." id="ac">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label>Client Name</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+
+                                        <select class="form-control select2" name="clint_n" id="ccl">
+                                            <option value="" id="yyy">Select Client Name</option>
+                                            {%for x in client_n%}
+                                            <option value="{{x.id}}">{{x.Name}}</option>
+                                            {%endfor%}
+                                        </select>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class=" col-md-2">
+                                <div class="from-group">
+                                    <label>Search</label>
+                                    <button type="button" id="client" class="btn btn-primary mr-1" type="button">
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+                            <div class=" col-md-12">
+                                <div class="form-group">
+                                    <label>Client Address</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="form-control select2" name="department" id="sums">
+                                            <option value=""> Select Address</option>
+                                            {%for x in client_add%}
+                                            <option value="{{x.id}}">{{x.Client_Branch}}, {{x.Client_Branch_Address}}</option>
+                                            {%endfor%}
+
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="col-sm-10 col-md-4 ">
+                                <div class="form-group">
+                                    <label>Bank Name</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="form-control select2" name="bank_n" id="bname">
+                                            <option value="">Select Bank Name</option>
+                                            {%for x in bank_n%}
+                                            <option value="{{x.id}}">{{x.Name}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-10 col-md-2 ">
+                                <div class="from-group">
+                                    <label>Search</label>
+                                    <button type="button" id="bankb" class="btn btn-primary mr-1" type="button">Search
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Bank Branch</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="form-control select2" name="bank_n" id="bbranch">
+                                            <option value="">Select Bank Branch</option>
+                                            {%for x in bankbranch%}
+                                            <option value="{{x.id}}">{{x.Bank_Branch}}, {{x.Bank_Branch_Address}}</option>
+                                            {%endfor%}
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Interest Cover</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="interestcover"
+                                        id="interestcover">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Voyage From</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="form-control select2" name="vfrom" id="vforms">
+                                            <option selected>Open this select menu</option>
+                                            {%for x in voyagefrom%}
+                                            <option value="{{x.id}}">{{x.Name}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Voyage To</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="custom-select select2" name="vTo" id="vTos">
+                                            <option selected>Open this select menu</option>
+                                            {%for x in voyageto%}
+                                            <option value="{{x.id}}">{{x.Name}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Transit By</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="custom-select select2" name="tby" id="transit">
+                                            <option selected>Open this select menu</option>
+                                            {%for x in transitby%}
+                                            <option value="{{x.id}}">{{x.Name}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Voyage Via</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="custom-select select2" name="vvia" id="vvias">
+                                            <option selected>Open this select menu</option>
+                                            {%for x in voyagevia%}
+                                            <option value="{{x.id}}">{{x.Name}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>From Date (DD-MM-YYYY)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                         <input type="text" class="form-control phone-number" name="fromdate" id="fdate" value='{% now "d-m-Y" %}'
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>To Date (DD-MM-YYYY)</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                         <input type="text" class="form-control phone-number" name="tdate" id="tdate"
+                                        >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Sum insured</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="sinsured"
+                                               value="0" id="sinsured">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Extra %</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="extra1" value="0"
+                                               id="extra1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Extra %</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="extra2" value="0"
+                                               id="extra2">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Currency</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="custom-select select2" name="currency" id="current">
+                                            <option selected>Select Currency</option>
+                                            {%for x in currenct%}
+                                            <option value="{{x.Name}}">{{x.Name}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Rate %</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="rate" value="0"
+                                               id="rate">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>BD Amount</label>
+                                    <div class="input-group calcu">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="dec" id="bdamount"
+                                               readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Declaration</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="dec"
+                                               value="All other terms, conditions and warranties of the said Marine Covernote will remain unchanged." id="decs">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Risk Covered</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="custom-select select2" name="riskcoder" id="riskcoders">
+                                            <option selected>Open this select menu</option>
+                                            {%for x in risk%}
+                                            <option value="{{x.id}}">{{x.Name}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Insurance Type</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="custom-select select2" name="insurance" id="insurances">
+                                            <option selected>Open this select menu</option>
+                                            {%for x in insurance%}
+                                            <option value="{{x.id}}">{{x.Name}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Producer</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <select class="custom-select select2" name="producer" id="producers">
+                                            <option selected>Open this select menu</option>
+                                            {%for x in producer%}
+                                            <option value="{{x.id}}">Id: {{x.id}}, Name: {{x.Employees_Name}}</option>
+                                            {%endfor%}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="alert alert-warning" role="alert" id="message"></div>
+                        <div class="card-footer text-right">
+                            <button class="btn btn-primary mr-1" id="save" type="submit"><i
+                                    class="far fa-save"> Save</i>
+
+                            </button>
+                            <a class="btn btn-primary" id="printd" target="_blank"><i class="fas fa-id-card-alt" > Print Demo</i> </a>
+                            <a href="" class="btn btn-success" id="finalp" target="_blank"><i class="fas fa-print"> Final Print</i> </a>
+                            <a href="" class="btn btn-warning" id="sendq" target="_blank"><i class="fa fa-envelope"> Send Quotation</i> </a>
+
+
+                            <a class="btn btn-danger mr-1" href="{%url 'uw_q_marine_covernote'%}"><i
+                                    class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 col-lg-4">
+
+                <div class="card" style="background-color:#CDC9A5">
+                    <div class="card-header">
+                        <h4>Calculation</h4>
+
+
+                    </div>
+                    <div><h4 style="text-align:right; padding-right:10px;">Last Entry:{{bill}}</h4></div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="search-results col-md-6">
+                                {%include 'software_admin/forms/message.html'%}
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Discount</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <input type="text" class="form-control phone-number" name="discount" id="dis" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Sp-Discount</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <input type="text" class="form-control phone-number" name="sp-discount" id="spdis" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Rate%</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <input type="text" class="form-control phone-number" name="mrate" id="mrate" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>Marine Amount</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <input type="text" class="form-control phone-number" name="mamount" id="mamount" value="0">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>W & S Rate</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <input type="text" class="form-control phone-number" name="wrate" id="wrates" value="0.05">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>War & Srcc Amount</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <input type="text" class="form-control phone-number" name="wamount" id="wamount" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Net Amount</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <input type="text" class="form-control phone-number" name="netamount" id="netid" value="0">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Vat Rate</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <input type="text" class="form-control phone-number" name="vatrate" id="vatid" value="15" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>Vat Amount</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <input type="text" class="form-control phone-number" name="vatamount" id="vataid" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Stamp Amount</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <input type="text" class="form-control phone-number" name="stamoamount" id="samount" value="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Gross Amount</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <input type="text" class="form-control phone-number" name="sp-discount" id="gross">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Narration</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+<!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
+                                        <textarea name="narration" id="nara" cols="40" rows="6"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>To Send</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+<!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
+                                        <input type="text" name="tomail" id="tomail" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        </div>
+    </form>
+
+
+</section>
+
+<script>
+    $(document).ready(function(){
+    $('#message').hide();
+    });
+</script>
+<script>
+ $("#client").click(function(){
+<!--    alert("The paragraph was clicked.");-->
+    $.ajax({
+    url:"{%url 'uw_q_marine_client_select'%}",
+    type:'GET',
+    data:{
+     client_n:$('#ccl').val()
+    },
+    success: function(response){
+        x=response.client
+        let text ="";
+        for (i=0;i<x.length;i++){
+
+        text +='<option value="' + x[i].Client_Name_id+ '">' +x[i].Client_Branch+', '+x[i].Client_Branch_Address+'</option>'
+        }
+        $('#sums').html(text);
+    },
+    });
+  });
+
+
+
+
+</script>
+<script>
+ $("#bankb").click(function(){
+<!--    alert("The paragraph was clicked.");-->
+    $.ajax({
+    url:"{%url 'uw_q_marine_bank_branch_select'%}",
+    type:'GET',
+    data:{
+     bank_n:$('#bname').val(),
+    },
+    success: function(response){
+        x=response.bank
+          let texts ="";
+        for (i=0;i<x.length;i++){
+        texts +='<option value="' + x[i].id+ '">' +x[i].Bank_Branch+', '+x[i].Bank_Branch_Address+'</option>'
+          }
+          $('#bbranch').html(texts);
+    },
+    });
+  });
+
+
+
+
+</script>
+<script>
+ $("#rate, #extra1, #extra2").blur(function(){
+
+       suminsured=$('#sinsured').val()
+     var extra =$('#extra1').val()
+    var extra2=$('#extra2').val()
+    var rate=$('#rate').val()
+    var sumex1=parseInt(parseInt(suminsured) + (parseInt(suminsured)*parseInt(extra))/100 );
+    var sumex2=sumex1 * (parseInt(extra2)/100);
+    var sum=Math.round((sumex1 + sumex2) * rate);
+    $('#bdamount').val(sum);
+
+  });
+
+  $("#mrate").blur(function(){
+    var dis   = $('#dis').val();
+    var spdis = $('#spdis').val();
+    var mrate = $('#mrate').val();
+    var bdamounts=$('#bdamount').val();
+    var disc=(parseInt(bdamounts) - (parseInt(bdamounts) * (parseInt(dis)/100))) ;
+    var marinem1 = (disc * parseFloat(mrate))/100;
+    var marinem2 =marinem1-((marinem1 * parseInt(spdis))/100);
+    $('#mamount').val(Math.round(marinem2));
+
+  });
+
+ $("#wrates").blur(function(){
+    var amountbd=$('#bdamount').val();
+    var wrated=$('#wrates').val();
+    var wcc=(parseInt(amountbd) * (parseFloat(wrated)/100));
+    $('#wamount').val(Math.round(wcc));
+
+  });
+
+ $("#wrates, #mrate, #vatid, #samount, #rate, #samount, #extra1, #extra2 ").blur(function(){
+    var warenet=$('#wamount').val();
+    var marinenet=$('#mamount').val();
+    var vateas=$('#vataid').val();
+    var stump_ac=$('#samount').val();
+    var netamount=(parseInt(warenet) + parseInt(marinenet));
+    var grossa=(parseInt(warenet) + parseInt(marinenet)+parseInt(vateas)+parseInt(stump_ac));
+    $('#netid').val(Math.round(netamount));
+    $('#gross').val(Math.round(grossa));
+
+  });
+
+
+   $("#vatid").blur(function(){
+    var  net=$('#netid').val();
+    var vatr=$('#vatid').val();
+    var neta=(parseInt(net) * (parseInt(vatr)/100));
+    $('#vataid').val(Math.round(neta));
+
+
+     var warenet=$('#wamount').val();
+    var marinenet=$('#mamount').val();
+    var vateas=$('#vataid').val();
+    var stump_ac=$('#samount').val();
+     var grossa=(parseInt(warenet) + parseInt(marinenet)+parseInt(vateas)+parseInt(stump_ac));
+     $('#gross').val(Math.round(grossa));
+
+
+  });
+
+  $("#samount").blur(function(){
+<!--    alert("The paragraph was clicked.");-->
+    $.ajax({
+    url:"{%url 'uw_q_marine_transitby_select'%}",
+    type:'GET',
+    data:{
+     transits:$('#transit').val(),
+     bdamountds:$('#bdamount').val(),
+     warenet:$('#wamount').val(),
+     marinenet:$('#mamount').val(),
+     vateas:$('#vataid').val(),
+
+
+    },
+    success: function(response){
+        x=response.trans
+        sumgross=response.sumg
+         $('#samount').val(x)
+          $('#gross').val(sumgross);
+    },
+    });
+
+
+
+  });
+
+
+
+ $("#fdate").blur(function(){
+ $.ajax({
+    url:"{%url 'uw_q_marine_date_select'%}",
+    type:'GET',
+    data:{
+     fdares:$('#fdate').val(),
+    },
+    success: function(response){
+        x = response.trans
+        var d = new Date(x);
+        var curr_day = String(d.getDate()).padStart(2, '0');
+        var curr_month = String(d.getMonth()+1).padStart(2, '0');
+        var curr_year = d.getFullYear();
+
+        $('#tdate').val(curr_day + "-" + curr_month + "-" + curr_year);
+    },
+    });
+
+
+  });
+
+
+</script>
+<script>
+     $("#formq").on('submit',function(e){
+      e.preventDefault();
+<!--    alert("The paragraph was clicked.");-->
+    $.ajax({
+    url:"{%url 'uw_q_marine_covernote_save'%}",
+    type:'POST',
+    data:{
+     csrfmiddlewaretoken: '{{ csrf_token }}',
+        billnos:$('#billno').val(),
+        billdates:$('#billdate').val(),
+        acs:$('#ac').val(),
+        client_ns:$('#ccl').val(),
+        client_address:$('#sums').val(),
+        bank_namess:$('#bname').val(),
+        bank_addressss:$('#bbranch').val(),
+        interestcovers:$('#interestcover').val(),
+        vformss:$('#vforms').val(),
+        vToss:$('#vTos').val(),
+        transits:$('#transit').val(),
+        vviass:$('#vvias').val(),
+        fdates:$('#fdate').val(),
+        tdates:$('#tdate').val(),
+        sinsureds:$('#sinsured').val(),
+        extra1s:$('#extra1').val(),
+        extra2s:$('#extra2').val(),
+        currents:$('#current').val(),
+        rates:$('#rate').val(),
+        bdamounts:$('#bdamount').val(),
+        decss:$('#decs').val(),
+        riskcoderss:$('#riskcoders').val(),
+        insurancess:$('#insurances').val(),
+        producerss:$('#producers').val(),
+        diss:$('#dis').val(),
+        spdiss:$('#spdis').val(),
+        mrates:$('#mrate').val(),
+        mamounts:$('#mamount').val(),
+        wratess:$('#wrates').val(),
+        wamounts:$('#wamount').val(),
+        netids:$('#netid').val(),
+        vataids:$('#vataid').val(),
+        samounts:$('#samount').val(),
+        grosss:$('#gross').val(),
+        naras:$('#nara').val(),
+        tomail:$('#tomail').val(),
+        coverno:$('#coverno').val(),
+
+    },
+    success: function(response){
+        x=response.id
+        y=response.messages
+        u=response.abcs
+        $('#billno').val(x)
+        $("#save").html("Edit");
+       $('#message').html(y).show();
+
+        for (i=0;i<u.length;i++){
+       var abct = u[i].fields.Bill_No;
+        if (abct >0){
+        $('#printd').attr("href", "/uw/quotation/marine/bill/pdf/demo/"+ u[i].fields.Bill_No );
+        $('#finalp').attr("href", "/uw/quotation/marine/bill/pdf/"+ u[i].fields.Bill_No );
+        $('#sendq').attr("href", "/uw/quotation/marine/bill/send/email/"+ x[i].fields.Bill_No );
+        }
+        else{
+        $('#printd').attr("href", "" );
+        $('#finalp').attr("href", "");
+        $('#sendq').attr("href", "");
+        }
+
+        var edits=u[i].fields.Edits;
+        if (edits >0){
+        $('#save').hide();
+
+        }
+        else{
+        $('#save').show();
+
+        }
+        }
+
+
+
+
+    },
+    });
+
+
+
+  });
+
+</script>
+
+<script>
+     $("#searc_form").on('submit',function(e){
+      e.preventDefault();
+<!--    alert("The paragraph was clicked.");-->
+    $.ajax({
+    url:"{%url 'uw_q_marine_search'%}",
+    type:'POST',
+    dataType:'json',
+    data:{
+     csrfmiddlewaretoken: '{{ csrf_token }}',
+     search:$('#searchs').val(),
+
+    },
+    success: function(response){
+        x=response.all
+        for (i=0;i<x.length;i++){
+        $('#billno').val(x[i].fields.Bill_No);
+        var dr = new Date(x[i].fields.Bill_date);
+        var curr_day = String(dr.getDate()).padStart(2, '0');
+        var curr_month = String(dr.getMonth()+1).padStart(2, '0');
+        var curr_year = dr.getFullYear();
+
+        $('#billdate').val(curr_day + "-" + curr_month + "-" + curr_year);
+        $('#ac').val(x[i].fields.Ac);
+        $("#ccl").val(x[i].fields.Client_NameM).trigger('change');
+        $('#sums').val(x[i].fields.Client_AddressM).trigger('change');
+        $('#bname').val(x[i].fields.Bank_Name).trigger('change');
+        $('#bbranch').val(x[i].fields.Bank_Branch).trigger('change');
+        $('#interestcover').val(x[i].fields.Interest_covered);
+        $('#vforms').val(x[i].fields.Voyage_From).trigger('change');
+        $('#vTos').val(x[i].fields.Voyage_To).trigger('change');
+        $('#transit').val(x[i].fields.Transit_By).trigger('change');
+        $('#vvias').val(x[i].fields.Voyage_Via).trigger('change');
+        var da = new Date(x[i].fields.Sdate);
+        var c_date = String(da.getDate()).padStart(2, '0');
+        var c_month = String(da.getMonth()+1).padStart(2, '0');
+        var c_year = da.getFullYear();
+        $('#fdate').val(c_date + "-" + c_month + "-" + c_year);
+
+        var c = new Date(x[i].fields.Edate);
+        var e_date = String(c.getDate()).padStart(2, '0');
+        var e_month = String(c.getMonth()+1).padStart(2, '0');
+        var e_year = c.getFullYear();
+        $('#tdate').val(e_date + "-" + e_month + "-" + e_year);
+        $('#sinsured').val(x[i].fields.Sum_insured);
+        $('#extra1 ').val(x[i].fields.Extra1);
+        $('#extra2 ').val(x[i].fields.Extra2);
+        $('#current ').val(x[i].fields.Currency).trigger('change');
+        $('#rate ').val(x[i].fields.Excrate);
+        $('#bdamount').val(x[i].fields.Bdtamount);
+        $('#decs').val(x[i].fields.Declaration);
+        $('#riskcoders').val(x[i].fields.RiskCover).trigger('change');
+        $('#insurances').val(x[i].fields.Insurance_Type).trigger('change');
+        $('#producers').val(x[i].fields.Producer).trigger('change');
+        $('#dis').val(x[i].fields.Discount);
+        $('#spdis').val(x[i].fields.SpDiscount);
+        $('#mrate').val(x[i].fields.Marine_Rate);
+        $('#mamount').val(x[i].fields.Marine_Amount);
+        $('#wrates').val(x[i].fields.Ware_Rate);
+        $('#wamount').val(x[i].fields.Ware_Amount);
+        $('#netid').val(x[i].fields.Net_Amount);
+        $('#vataid').val(x[i].fields.Vat_Amount);
+        $('#samount').val(x[i].fields.Stump_Amount);
+        $('#gross').val(x[i].fields.Gross_Amount);
+        $('#nara').val(x[i].fields.narration);
+        $('#tomail').val(x[i].fields.sendmail);
+
+
+        var abc = x[i].fields.Bill_No;
+        if (abc >0){
+        $('#printd').attr("href", "/uw/quotation/marine/bill/pdf/demo/"+ x[i].fields.Bill_No );
+        $('#finalp').attr("href", "/uw/quotation/marine/bill/pdf/"+ x[i].fields.Bill_No );
+        $('#sendq').attr("href", "/uw/quotation/marine/bill/send/email/"+ x[i].fields.Bill_No );
+        }
+        else{
+        $('#printd').attr("href", "" );
+        $('#final').attr("href", "" );
+        $('#sendq').attr("href", "" );
+        }
+        var edits=x[i].fields.Edits;
+<!--        if (edits >0){-->
+<!--        $('#save').hide();-->
+
+<!--        }-->
+<!--        else{-->
+<!--        $('#save').show();-->
+
+<!--        }-->
+
+
+
+        }
+    },
+    });
+
+
+
+  });
+</script>
+<script>
+     $("#searc_form_cover").on('submit',function(e){
+      e.preventDefault();
+<!--    alert("The paragraph was clicked.");-->
+    $.ajax({
+    url:"{%url 'uw_q_marine_covernote_search'%}",
+    type:'POST',
+    dataType:'json',
+    data:{
+     csrfmiddlewaretoken: '{{ csrf_token }}',
+     search:$('#searchs').val(),
+
+    },
+    success: function(response){
+        x=response.all
+        for (i=0;i<x.length;i++){
+        $('#billno').val(x[i].fields.Bill_No);
+        var dr = new Date(x[i].fields.Cover_Date);
+        var curr_day = String(dr.getDate()).padStart(2, '0');
+        var curr_month = String(dr.getMonth()+1).padStart(2, '0');
+        var curr_year = dr.getFullYear();
+
+        $('#billdate').val(curr_day + "-" + curr_month + "-" + curr_year);
+        $('#ac').val(x[i].fields.Ac);
+        $('#coverno').val(x[i].fields.Cover_No);
+        $("#ccl").val(x[i].fields.Client_NameM).trigger('change');
+        $('#sums').val(x[i].fields.Client_AddressM).trigger('change');
+        $('#bname').val(x[i].fields.Bank_Name).trigger('change');
+        $('#bbranch').val(x[i].fields.Bank_Branch).trigger('change');
+        $('#interestcover').val(x[i].fields.Interest_covered);
+        $('#vforms').val(x[i].fields.Voyage_From).trigger('change');
+        $('#vTos').val(x[i].fields.Voyage_To).trigger('change');
+        $('#transit').val(x[i].fields.Transit_By).trigger('change');
+        $('#vvias').val(x[i].fields.Voyage_Via).trigger('change');
+        var da = new Date(x[i].fields.Sdate);
+        var c_date = String(da.getDate()).padStart(2, '0');
+        var c_month = String(da.getMonth()+1).padStart(2, '0');
+        var c_year = da.getFullYear();
+        $('#fdate').val(c_date + "-" + c_month + "-" + c_year);
+
+        var c = new Date(x[i].fields.Edate);
+        var e_date = String(c.getDate()).padStart(2, '0');
+        var e_month = String(c.getMonth()+1).padStart(2, '0');
+        var e_year = c.getFullYear();
+        $('#tdate').val(e_date + "-" + e_month + "-" + e_year);
+        $('#sinsured').val(x[i].fields.Sum_insured);
+        $('#extra1 ').val(x[i].fields.Extra1);
+        $('#extra2 ').val(x[i].fields.Extra2);
+        $('#current ').val(x[i].fields.Currency).trigger('change');
+        $('#rate ').val(x[i].fields.Excrate);
+        $('#bdamount').val(x[i].fields.Bdtamount);
+        $('#decs').val(x[i].fields.Declaration);
+        $('#riskcoders').val(x[i].fields.RiskCover).trigger('change');
+        $('#insurances').val(x[i].fields.Insurance_Type).trigger('change');
+        $('#producers').val(x[i].fields.Producer).trigger('change');
+        $('#dis').val(x[i].fields.Discount);
+        $('#spdis').val(x[i].fields.SpDiscount);
+        $('#mrate').val(x[i].fields.Marine_Rate);
+        $('#mamount').val(x[i].fields.Marine_Amount);
+        $('#wrates').val(x[i].fields.Ware_Rate);
+        $('#wamount').val(x[i].fields.Ware_Amount);
+        $('#netid').val(x[i].fields.Net_Amount);
+        $('#vataid').val(x[i].fields.Vat_Amount);
+        $('#samount').val(x[i].fields.Stump_Amount);
+        $('#gross').val(x[i].fields.Gross_Amount);
+        $('#nara').val(x[i].fields.narration);
+        $('#tomail').val(x[i].fields.sendmail);
+         $("#save").html("Edit");
+
+
+        var abc = x[i].fields.Bill_No;
+        if (abc >0){
+        $('#printd').attr("href", "/uw/quotation/marine/bill/pdf/demo/"+ x[i].fields.Bill_No );
+        $('#finalp').attr("href", "/uw/quotation/marine/bill/pdf/"+ x[i].fields.Bill_No );
+        $('#sendq').attr("href", "/uw/quotation/marine/bill/send/email/"+ x[i].fields.Bill_No );
+        }
+        else{
+        $('#printd').attr("href", "" );
+        $('#final').attr("href", "" );
+        $('#sendq').attr("href", "" );
+        }
+        var edits=x[i].fields.Edits;
+        if (edits >0){
+        $('#save').hide();
+
+        }
+        else{
+        $('#save').show();
+
+        }
+
+
+
+        }
+    },
+    });
+
+
+
+  });
+</script>
+
+
+
+{%endblock%}

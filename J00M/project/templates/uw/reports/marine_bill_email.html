@@ -161,15 +161,13 @@ th {
         <td colspan="5" style="text-align:right;"><b>{{x.Company_Name}}</b></td>
         {%endfor%}
     </tr>
+ {%for u in company%}
     <tr>
-        <td></td>
+        <td colspan="5" style="text-align:left;"></td>
+        <th colspan="5" style="text-align:right;"><b><img src="{{u.authusers}}" alt="" style="width:100px;"></b> </th>
+
     </tr>
-    <tr>
-        <td></td>
-    </tr>
-    <tr>
-        <td></td>
-    </tr>
+    {%endfor%}
     <tr>
         <td colspan="5" style="text-align:left;"></td>
         <td colspan="5" style="text-align:right;"><b>Authorized Officer</b></td>

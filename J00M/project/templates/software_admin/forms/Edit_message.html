@@ -810,3 +810,166 @@
 
 </div>
 {%endfor%}
+{%for x in marinequotation%}
+<div class="row">
+    <div class="col-12 col-md-12 col-lg-12">
+        {%csrf_token%}
+        <div class="card">
+            <div class="card-header">
+                <h4>Marine Quotation</h4>
+
+
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Bill Number</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="bill_no" value="{{x.Bill_No}}"
+                                       readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Bill Date</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="date" class="form-control phone-number" name="billdate"
+                                       value="{{x.Bill_date|date:'Y-m-d'}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Marine Amount</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="marineamount"
+                                       value="{{x.Marine_Amount}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>WAR & SRCC Amount</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="wsamount"
+                                       value="{{x.Ware_Amount}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Net Amount</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="netamount"
+                                       value="{{x.Net_Amount}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Vat Amount</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="vatamount"
+                                       value="{{x.Vat_Amount}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Vat Amount</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="vatamount"
+                                       value="{{x.Vat_Amount}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Stump Amount</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="stumpamount"
+                                       value="{{x.Stump_Amount}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6"></div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Gross Amount</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="grossamount"
+                                       value="{{x.Gross_Amount}}">
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-footer text-right">
+                    <button class="btn btn-primary mr-1" type="submit"><i
+                            class="fas fa-edit">
+                        Update</i>
+                    </button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{%endfor%}
