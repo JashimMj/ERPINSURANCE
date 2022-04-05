@@ -3376,14 +3376,44 @@ def uw_q_marine_covernote_saveV(request):
             return JsonResponse({'id':id,'messages':abc,'abcs':abcs},status=200,safe=False)
 
 
-def uw_q_marine_cover_pdfsV(request):
-    marine_bill = MarineCovernoteM.objects.filter(id=1)
+def uw_q_marine_cover_pdfsV(request, id=0):
+    cv_banner=covernover_banner.objects.all()
+    marine_bill = MarineCovernoteM.objects.filter(Cover_No_no=id)
     for x in marine_bill:
-        amount = num2words(x.Gross_Amount, lang="en_IN")
+        amount = num2words(x.Bdtamount, lang="en_IN")
     template_path = 'uw/reports/marine_cover_note_f.html'
     BASE_DIR = Path(__file__).resolve().parent.parent
     path = os.path.join(BASE_DIR, 'project\static')
-    context = {'company': company, 'path': path, 'marine_bill': marine_bill,'amount':amount}
+    context = {'company': company, 'path': path, 'marine_bill': marine_bill,'amount':amount,'cv_banner':cv_banner}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    # data = MarineQuatationM.objects.get(Bill_No=id)
+    # data.Edits = 1
+    # data.save()
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def uw_q_marine_cover_demo_pdfsV(request, id=0):
+    cv_banner=covernover_banner.objects.all()
+    marine_bill = MarineCovernoteM.objects.filter(Cover_No_no=id)
+    for x in marine_bill:
+        amount = num2words(x.Bdtamount, lang="en_IN")
+    template_path = 'uw/reports/marine_cover_note_f_demo.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'marine_bill': marine_bill,'amount':amount,'cv_banner':cv_banner}
     response = HttpResponse(content_type='application/pdf')
     # for downlode
     # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'

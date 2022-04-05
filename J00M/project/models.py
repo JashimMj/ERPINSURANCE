@@ -21,6 +21,18 @@ class UserProfileM(models.Model):
         return urls
 
 
+class covernover_banner(models.Model):
+    id = models.AutoField(primary_key=True)
+    cv_banner = models.ImageField(upload_to='cv', null=True, blank=True)
+    objects = models.Manager()
+
+    def cv_image(self):
+        try:
+            urls = self.cv_banner.url
+        except:
+            urls = ''
+        return urls
+
 
 class Company_Information(models.Model):
     id = models.AutoField(primary_key=True)

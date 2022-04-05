@@ -73,7 +73,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Cover Note No.</label>
                                     <div class="input-group">
@@ -916,11 +916,11 @@
        $('#message').html(y).show();
 
         for (i=0;i<u.length;i++){
-       var abct = u[i].fields.Bill_No;
+       var abct = u[i].fields.Cover_No_no;
         if (abct >0){
-        $('#printd').attr("href", "/uw/quotation/marine/bill/pdf/demo/"+ u[i].fields.Bill_No );
-        $('#finalp').attr("href", "/uw/quotation/marine/bill/pdf/"+ u[i].fields.Bill_No );
-        $('#sendq').attr("href", "/uw/quotation/marine/bill/send/email/"+ x[i].fields.Bill_No );
+        $('#printd').attr("href", "/uw/quotation/marine/cover/pdf/demo/"+ u[i].fields.Cover_No_no );
+        $('#finalp').attr("href", "/uw/quotation/marine/cover/pdf/"+ u[i].fields.Cover_No_no );
+        $('#sendq').attr("href", "/uw/quotation/marine/bill/send/email/"+ x[i].fields.Cover_No_no );
         }
         else{
         $('#printd').attr("href", "" );
@@ -1019,11 +1019,11 @@
         $('#tomail').val(x[i].fields.sendmail);
 
 
-        var abc = x[i].fields.Bill_No;
+        var abc = x[i].fields.Cover_No_no;
         if (abc >0){
-        $('#printd').attr("href", "/uw/quotation/marine/bill/pdf/demo/"+ x[i].fields.Bill_No );
-        $('#finalp').attr("href", "/uw/quotation/marine/bill/pdf/"+ x[i].fields.Bill_No );
-        $('#sendq').attr("href", "/uw/quotation/marine/bill/send/email/"+ x[i].fields.Bill_No );
+        $('#printd').attr("href", "/uw/quotation/marine/cover/pdf/demo/"+ x[i].fields.Cover_No_no );
+        $('#finalp').attr("href", "/uw/quotation/marine/cover/pdf/"+ x[i].fields.Cover_No_no );
+        $('#sendq').attr("href", "/uw/quotation/marine/bill/send/email/"+ x[i].fields.Cover_No_no );
         }
         else{
         $('#printd').attr("href", "" );
@@ -1120,11 +1120,11 @@
          $("#save").html("Edit");
 
 
-        var abc = x[i].fields.Bill_No;
+        var abc = x[i].fields.Cover_No_no;
         if (abc >0){
-        $('#printd').attr("href", "/uw/quotation/marine/bill/pdf/demo/"+ x[i].fields.Bill_No );
-        $('#finalp').attr("href", "/uw/quotation/marine/bill/pdf/"+ x[i].fields.Bill_No );
-        $('#sendq').attr("href", "/uw/quotation/marine/bill/send/email/"+ x[i].fields.Bill_No );
+        $('#printd').attr("href", "/uw/quotation/marine/cover/pdf/demo/"+ x[i].fields.Cover_No_no );
+        $('#finalp').attr("href", "/uw/quotation/marine/cover/pdf/"+ x[i].fields.Cover_No_no );
+        $('#sendq').attr("href", "/uw/quotation/marine/bill/send/email/"+ x[i].fields.Cover_No_no );
         }
         else{
         $('#printd').attr("href", "" );

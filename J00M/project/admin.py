@@ -18,6 +18,7 @@ admin.site.register(Software_Permittion_Branch)
 admin.site.register(Inventory_Product_Entry)
 admin.site.register(Inventory_Supplier_Entry)
 admin.site.register(Product_PurchaseM)
+admin.site.register(covernover_banner)
 admin.site.register(Product_issueM)
 class BookAdmin(ImportExportModelAdmin):
     resource_class = CurrencyResource

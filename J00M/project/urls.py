@@ -153,7 +153,8 @@ urlpatterns = [
     path('uw/quotation/marine/bill/send/email/<int:id>', views.uw_q_marine_sendV, name="uw_q_marine_send"),
     path('uw/quotation/marine/cover/note/', views.uw_q_marine_covernoteV, name="uw_q_marine_covernote"),
     path('uw/quotation/marine/cover/note/save/', views.uw_q_marine_covernote_saveV, name="uw_q_marine_covernote_save"),
-    path('uw/quotation/marine/cover/pdf/', views.uw_q_marine_cover_pdfsV, name="uw_q_marine_cover_pdf"),
+    path('uw/quotation/marine/cover/pdf/demo/<int:id>', views.uw_q_marine_cover_demo_pdfsV, name="uw_q_marine_cover_demo_pdf"),
+    path('uw/quotation/marine/cover/pdf/<int:id>', views.uw_q_marine_cover_pdfsV, name="uw_q_marine_cover_pdf"),
 
 
 
