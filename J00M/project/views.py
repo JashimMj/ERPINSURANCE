@@ -24,6 +24,8 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
+from django.db import connection
+
 
 company = Company_Information.objects.filter(id=1)
 
@@ -388,7 +390,9 @@ def EditV(request):
     department_info = request.POST.get('depertment_info')
     designation_info = request.POST.get('designation_info')
     bank_info = request.POST.get('bank_info')
+    deposit_bank_info = request.POST.get('dbank_info')
     bank_branch_info = request.POST.get('bank_branch_info')
+    deposit_bank_branch_info = request.POST.get('dbank_branch_info')
     product_info = request.POST.get('product_info')
     suppler_info = request.POST.get('supplier_info')
     product_purchase_info = request.POST.get('product_purchase_info')
@@ -423,8 +427,18 @@ def EditV(request):
         return render(request, 'software_admin/forms/Edit_message.html',
                       {'bank_edit': bank_edit, 'company': company, 'user_current_branch': user_current_branch,
                        'user_branch': user_branch})
+    elif deposit_bank_info:
+        dbank_edit = Deposit_Bank_BranchM.objects.filter(id=deposit_bank_info)
+        return render(request, 'software_admin/forms/Edit_message.html',
+                      {'dbank_edit': dbank_edit, 'company': company, 'user_current_branch': user_current_branch,
+                       'user_branch': user_branch})
     elif bank_branch_info:
-        bank_branch_edit = Bank_BranchM.objects.filter(id=bank_branch_info)
+        dbank_branch_edit = Bank_BranchM.objects.filter(id=bank_branch_info)
+        return render(request, 'software_admin/forms/Edit_message.html',
+                      {'dbank_branch_edit': dbank_branch_edit, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    elif deposit_bank_branch_info:
+        bank_branch_edit = Deposit_Bank_BranchM.objects.filter(id=deposit_bank_branch_info)
         return render(request, 'software_admin/forms/Edit_message.html',
                       {'bank_branch_edit': bank_branch_edit, 'company': company,
                        'user_current_branch': user_current_branch, 'user_branch': user_branch})
@@ -505,8 +519,12 @@ def All_Edit_saveV(request):
     designation_edit = request.POST.get('Designation_edit')
     bank_id = request.POST.get('Bank_id')
     bank_edit = request.POST.get('Bank_edit')
+    dbank_id = request.POST.get('dBank_id')
+    dbank_edit = request.POST.get('dBank_edit')
     bank_branch_id = request.POST.get('Bank_branch_id')
     bank_branch_edit = request.POST.get('Bank_branch_edit')
+    dbank_branch_id = request.POST.get('dBank_branch_id')
+    dbank_branch_edit = request.POST.get('dBank_branch_edit')
     product_edit_id = request.POST.get('product_id')
     product_edit_edit = request.POST.get('product_edite')
     supplier_edit_id = request.POST.get('supplier_id')
@@ -555,9 +573,17 @@ def All_Edit_saveV(request):
         bank_edits = BankM.objects.get(id=bank_id)
         bank_edits.Edits = bank_edit
         bank_edits.save()
+    elif dbank_id:
+        bank_edits = Deposit_BankM.objects.get(id=dbank_id)
+        bank_edits.Edits = dbank_edit
+        bank_edits.save()
     elif bank_branch_id:
         bank_branch_edits = Bank_BranchM.objects.get(id=bank_branch_id)
         bank_branch_edits.Edits = bank_branch_edit
+        bank_branch_edits.save()
+    elif dbank_branch_id:
+        bank_branch_edits = Deposit_Bank_BranchM.objects.get(id=dbank_branch_id)
+        bank_branch_edits.Edits = dbank_branch_edit
         bank_branch_edits.save()
     elif product_edit_id:
         product_edits = Inventory_Product_Entry.objects.get(id=product_edit_id)
@@ -1143,6 +1169,222 @@ def hr_bank_branch_info_pdfV(request, id=0):
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
+
+
+
+
+def hr_deposit_bank_infoV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        datas = Deposit_BankM.objects.filter(id=search)
+        datasall = Deposit_BankM.objects.filter(id=search)
+        bill = Deposit_BankM.objects.all().count()
+        return render(request, 'hr/forms/deposit_bank_info.html',
+                      {'datas': datas, 'datasall': datasall, 'bill': bill, 'company': company,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    else:
+        bill = Deposit_BankM.objects.all().count()
+    return render(request, 'hr/forms/deposit_bank_info.html',
+                  {'company': company, 'bill': bill, 'user_current_branch': user_current_branch,
+                   'user_branch': user_branch})
+
+
+def hr_deposit_bank_info_saveV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        bnumber = request.POST.get('Bnumber')
+        counter = Deposit_BankM.objects.all().count()
+        id = counter + 1
+        user = request.user.id
+        createuser = User.objects.get(id=user)
+        bank_n = request.POST.get('Bank_n')
+
+        if bnumber is None:
+            date = Deposit_BankM(id=id, Name=bank_n, create_user=createuser)
+            date.save()
+            datas = Deposit_BankM.objects.filter(id=id)
+            messages.info(request, 'Data Save')
+            bill = Deposit_BankM.objects.all().count()
+            return render(request, 'hr/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+        else:
+            bill = Deposit_BankM.objects.all().count()
+            datas = Deposit_BankM.objects.filter(id=bnumber)
+            data = Deposit_BankM.objects.get(id=bnumber)
+            data.Name = bank_n
+            data.create_user = createuser
+            data.save()
+            messages.info(request, 'Data Update')
+            return render(request, 'hr/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+
+
+def hr_deposit_bank_info_demo_pdfV(request, id=0):
+    bank_info = Deposit_BankM.objects.filter(id=id)
+    template_path = 'hr/reports/deposit_bank_info_pdf_demo.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'bank_info': bank_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def hr_deposit_bank_info_pdfV(request, id=0):
+    bank_info = Deposit_BankM.objects.filter(id=id)
+    template_path = 'hr/reports/deposit_bank_info_pdf.html'
+    context = {'company': company, 'bank_info': bank_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    data = Deposit_BankM.objects.get(id=id)
+    data.Edits = 1
+    data.save()
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def hr_deposit_bank_branch_infoV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        datas = Deposit_Bank_BranchM.objects.filter(id=search)
+        datasall = Deposit_Bank_BranchM.objects.filter(id=search)
+        bill = Deposit_Bank_BranchM.objects.all().count()
+        bank_name = Deposit_BankM.objects.all()
+        return render(request, 'hr/forms/deposit_bank_branch_info.html',
+                      {'datas': datas, 'datasall': datasall, 'bill': bill, 'company': company, 'bank_name': bank_name,
+                       'user_current_branch': user_current_branch, 'user_branch': user_branch})
+    else:
+        bank_name = Deposit_BankM.objects.all()
+        bill = Deposit_Bank_BranchM.objects.all().count()
+    return render(request, 'hr/forms/deposit_bank_branch_info.html',
+                  {'company': company, 'bill': bill, 'bank_name': bank_name, 'user_current_branch': user_current_branch,
+                   'user_branch': user_branch})
+
+
+def hr_deposit_bank_branch_info_saveV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    if request.method == 'POST':
+        bnumber = request.POST.get('Bnumber')
+        counter = Deposit_Bank_BranchM.objects.all().count()
+        id = counter + 1
+        user = request.user.id
+        createuser = User.objects.get(id=user)
+        bank_n = request.POST.get('Bank_n')
+        bankname = Deposit_BankM.objects.get(id=bank_n)
+        bank_branch_n = request.POST.get('Bank_Branch_n')
+        bank_branch_a = request.POST.get('Bank_Branch_a')
+        bank_branch_p = request.POST.get('Bank_Branch_p')
+        bank_branch_m = request.POST.get('Bank_Branch_m')
+        bank_branch_e = request.POST.get('Bank_Branch_e')
+
+        if bnumber is None:
+            date = Deposit_Bank_BranchM(id=id, Bank_Name=bankname, Bank_Branch=bank_branch_n, Bank_Branch_Address=bank_branch_a,
+                                Bank_Branch_Phone=bank_branch_p, Bank_Branch_Mobile=bank_branch_m,
+                                Bank_Branch_Email=bank_branch_e, create_user=createuser)
+            date.save()
+            datas = Deposit_Bank_BranchM.objects.filter(id=id)
+            messages.info(request, 'Data Save')
+            bill = Deposit_Bank_BranchM.objects.all().count()
+            return render(request, 'hr/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+        else:
+            bill = Deposit_Bank_BranchM.objects.all().count()
+            datas = Deposit_Bank_BranchM.objects.filter(id=bnumber)
+            data = Deposit_Bank_BranchM.objects.get(id=bnumber)
+            data.Bank_Name = bankname
+            data.Bank_Branch = bank_branch_n
+            data.Bank_Branch_Address = bank_branch_a
+            data.Bank_Branch_Phone = bank_branch_p
+            data.Bank_Branch_Mobile = bank_branch_m
+            data.Bank_Branch_Email = bank_branch_e
+            data.create_user = createuser
+            data.save()
+            messages.info(request, 'Data Update')
+            return render(request, 'hr/forms/message.html',
+                          {'datas': datas, 'bill': bill, 'company': company, 'user_current_branch': user_current_branch,
+                           'user_branch': user_branch})
+
+
+def hr_deposit_bank_branch_info_demo_pdfV(request, id=0):
+    bank_branch_info = Deposit_Bank_BranchM.objects.filter(id=id)
+    template_path = 'hr/reports/deposit_bank_branch_info_pdf_demo.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'bank_branch_info': bank_branch_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+def hr_deposit_bank_branch_info_pdfV(request, id=0):
+    bank_branch_info = Deposit_Bank_BranchM.objects.filter(id=id)
+    template_path = 'hr/reports/deposit_bank_branch_info_pdf.html'
+    context = {'company': company, 'bank_branch_info': bank_branch_info}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    data = Deposit_Bank_BranchM.objects.get(id=id)
+    data.Edits = 1
+    data.save()
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
 
 
 def hr_client_infoV(request):
@@ -2945,6 +3187,13 @@ def uw_q_marine_bank_branch_selectV(request):
     good=list(abc)
     return JsonResponse({'bank':good}, status=200)
 
+def uw_q_marine_deposit_bank_branch_selectV(request):
+    dbank=request.GET.get('dbank_n')
+    bank_adds=Deposit_Bank_BranchM.objects.filter(Bank_Name=dbank)
+    abc=bank_adds.values()
+    good=list(abc)
+    return JsonResponse({'bank':good}, status=200)
+
 def uw_q_marine_transit_by_selectV(request):
     trys=request.GET.get('transits')
     bd=int(request.GET.get('bdamountds'))
@@ -3118,17 +3367,22 @@ def uw_q_marine_searchV(request):
     search_b=request.POST.get('search')
     # all=MarineQuatationM.objects.raw('select mar.id as id ,mar.Bill_date as Bill_date  ,mar.Bill_No as Bill_No, mar.Ac as Ac ,bb.Bank_Branch ||" "|| bb.Bank_Branch_Address as Bank_Branch_id ,ban.Name as Bank_Name_id, mar.Bdtamount as Bdtamount ,clb.Client_Branch ||" "|| clb.Client_Branch_Address as Client_AddressM_id,cl.Name as Client_NameM_id ,mar.Declaration as  Declaration,mar.Discount as Discount ,mar.Edate as Edate ,mar.Edits as Edits,mar.Excrate as Excrate  ,mar.Extra1 as Extra1 ,mar.Extra2 as Extra2,mar.Gross_Amount as Gross_Amount,insu.Name as insurancetype ,mar.Interest_covered as Interest_covered ,mar.Marine_Amount as Marine_Amount ,mar.Marine_Rate as Marine_Rate ,mar.Net_Amount as Net_Amount ,hr.Employees_Name as producer ,res.Name as riskcover ,mar.Sdate as Sdate ,mar.SpDiscount as SpDiscount ,mar.Stump_Amount as Stump_Amount,mar.Sum_insured as Sum_insured,trn.Name as transit_by ,mar.Vat_Amount as Vat_Amount ,vf.Name as voyage_form ,vt.Name as voyage_to,vv.Name as voyage_via,mar.Ware_Amount as Ware_Amount,mar.Ware_Rate as Ware_Rate ,mar.issu_date as issu_date ,mar.narration as narration ,mar.Currency as Currency from project_marinequatationm mar join project_bankm ban on mar.Bank_Name_id =ban.id join project_bank_branchm bb on mar.Bank_Branch_id =bb.id join project_clinetm cl on mar.Client_NameM_id =cl.id join project_client_branchm clb on mar.Client_AddressM_id =clb.id join project_insuracetype insu on mar.Insurance_Type_id =insu.id join project_hr_employees_infom hr on mar.Producer_id =hr.id join project_riskcovered res on mar.RiskCover_id =res.id join project_transitby trn on mar.Transit_By_id =trn.id join project_voyageform vf on mar.Voyage_From_id =vf.id join project_voyageto vt on mar.Voyage_To_id =vt.id join project_voyagevia vv on mar.Voyage_Via_id =vv.id where mar.Bill_No =%s',[14])
     all=MarineQuatationM.objects.filter(Bill_No=search_b)
+
     good=serializers.serialize('json',all)
     abc=json.loads(good)
     return JsonResponse({'all':abc},safe=False)
 
 def uw_q_marine_cover_searchV(request):
-    search_b=request.POST.get('searchcover')
-    # all=MarineQuatationM.objects.raw('select mar.id as id ,mar.Bill_date as Bill_date  ,mar.Bill_No as Bill_No, mar.Ac as Ac ,bb.Bank_Branch ||" "|| bb.Bank_Branch_Address as Bank_Branch_id ,ban.Name as Bank_Name_id, mar.Bdtamount as Bdtamount ,clb.Client_Branch ||" "|| clb.Client_Branch_Address as Client_AddressM_id,cl.Name as Client_NameM_id ,mar.Declaration as  Declaration,mar.Discount as Discount ,mar.Edate as Edate ,mar.Edits as Edits,mar.Excrate as Excrate  ,mar.Extra1 as Extra1 ,mar.Extra2 as Extra2,mar.Gross_Amount as Gross_Amount,insu.Name as insurancetype ,mar.Interest_covered as Interest_covered ,mar.Marine_Amount as Marine_Amount ,mar.Marine_Rate as Marine_Rate ,mar.Net_Amount as Net_Amount ,hr.Employees_Name as producer ,res.Name as riskcover ,mar.Sdate as Sdate ,mar.SpDiscount as SpDiscount ,mar.Stump_Amount as Stump_Amount,mar.Sum_insured as Sum_insured,trn.Name as transit_by ,mar.Vat_Amount as Vat_Amount ,vf.Name as voyage_form ,vt.Name as voyage_to,vv.Name as voyage_via,mar.Ware_Amount as Ware_Amount,mar.Ware_Rate as Ware_Rate ,mar.issu_date as issu_date ,mar.narration as narration ,mar.Currency as Currency from project_marinequatationm mar join project_bankm ban on mar.Bank_Name_id =ban.id join project_bank_branchm bb on mar.Bank_Branch_id =bb.id join project_clinetm cl on mar.Client_NameM_id =cl.id join project_client_branchm clb on mar.Client_AddressM_id =clb.id join project_insuracetype insu on mar.Insurance_Type_id =insu.id join project_hr_employees_infom hr on mar.Producer_id =hr.id join project_riskcovered res on mar.RiskCover_id =res.id join project_transitby trn on mar.Transit_By_id =trn.id join project_voyageform vf on mar.Voyage_From_id =vf.id join project_voyageto vt on mar.Voyage_To_id =vt.id join project_voyagevia vv on mar.Voyage_Via_id =vv.id where mar.Bill_No =%s',[14])
-    all=MarineCovernoteM.objects.filter(Cover_No_no=1)
-    good=serializers.serialize('json',all)
-    abc=json.loads(good)
-    return JsonResponse({'all':abc},safe=False)
+    search_b=request.POST.get('search')
+    alls=MarineCovernoteM.objects.filter(Cover_No_no=search_b)
+    for x in alls:
+        all = MRTable.objects.filter(id=x.MR_Number_id)
+        goods = serializers.serialize('json', all)
+        abcs = json.loads(goods)
+        good=serializers.serialize('json',alls)
+        abc=json.loads(good)
+    return JsonResponse({'all':abc,'mrcl':abcs},safe=False)
+
 
 def uw_q_marine_demo_pdfsV(request,id=0):
     marine_bill = MarineQuatationM.objects.filter(Bill_No=id)
@@ -3222,6 +3476,9 @@ def uw_q_marine_covernoteV(request):
     insurance = InsuraceType.objects.all()
     producer = Hr_Employees_infoM.objects.all()
     bankbranch = Bank_BranchM.objects.all()
+    modof=ModOfPayment.objects.all()
+    depositbank_n = Deposit_BankM.objects.all()
+    depositbank_branch_n = Deposit_Bank_BranchM.objects.all()
     return render(request, 'uw/forms/covernot/marinecovernote.html', {'company': company, 'user_branch': user_branch,
                                                                'user_current_branch': user_current_branch,
                                                                'client_n': client_n, 'client_add': client_add,
@@ -3230,7 +3487,8 @@ def uw_q_marine_covernoteV(request):
                                                                'voyagevia': voyagevia, 'currenct': currenct,
                                                                'risk': risk, 'insurance': insurance,
                                                                'producer': producer, 'bankbranch': bankbranch,
-                                                               'bill': bill})
+                                                               'bill': bill,'modof':modof,'depositbank_n':depositbank_n,
+                                                                      'depositbank_branch_n':depositbank_branch_n})
 
 
 def uw_q_marine_covernote_saveV(request):
@@ -3302,10 +3560,39 @@ def uw_q_marine_covernote_saveV(request):
         gross = request.POST.get('grosss')
         nara = request.POST.get('naras')
         tomail = request.POST.get('tomail')
+        prints = request.POST.get('Print')
+        Mr = request.POST.get('Mr')
+        Mrdate = request.POST.get('Mrdate')
+
+        mrd=datetime.datetime.strptime(Mrdate,'%d-%m-%Y')
+        cdate = request.POST.get('cdate')
+        caquedate=datetime.datetime.strptime(cdate,'%d-%m-%Y')
+
+        Numbers = request.POST.get('Numbers')
+        Mop = request.POST.get('Mop')
+        Dbnames = request.POST.get('Dbname')
+        Dbbranchs = request.POST.get('Dbbranch')
+        mrcount=MRTable.objects.all().count()
+        mrnum= mrcount + 1
 
 
         if cover == '':
-
+            if Dbnames =='':
+                mrdatass = MRTable(id=mrnum, Mrno=mrnum, Mrno_date=mrd, Mod=Mop, Cheque_no=Numbers,Net_Amount=netid,Vat_Amount=vataid,
+                                    Stump_Amount=samount,Gross_Amount=gross,class_insurance='Marine Cargo',User_Branch=branchs,Cdate=caquedate)
+                mrdatass.save()
+            elif Dbbranchs == '' :
+                deposit_b = Deposit_BankM.objects.get(id=Dbnames)
+                mrdatass = MRTable(id=mrnum, Mrno=mrnum, Mrno_date=mrd, Mod=Mop, Cheque_no=Numbers,Bank_name=deposit_b,Net_Amount=netid,Vat_Amount=vataid,
+                                    Stump_Amount=samount,Gross_Amount=gross,class_insurance='Marine Cargo',User_Branch=branchs,Cdate=caquedate)
+                mrdatass.save()
+            else:
+                deposit_b = Deposit_BankM.objects.get(id=Dbnames)
+                deposit_bankadd = Deposit_Bank_BranchM.objects.get(id=Dbbranchs)
+                mrdatass=MRTable(id=mrnum,Mrno=mrnum,Mrno_date=mrd,Mod=Mop,Cheque_no=Numbers,Bank_name=deposit_b,Bank_address=deposit_bankadd,Net_Amount=netid,Vat_Amount=vataid,
+                                    Stump_Amount=samount,Gross_Amount=gross,class_insurance='Marine Cargo',User_Branch=branchs,Cdate=caquedate)
+                mrdatass.save()
+            mrnusss=MRTable.objects.get(id=mrnum)
             date = MarineCovernoteM(id=id, Cover_Date=billdates,Bill_No=bnumber,Cover_No=coberno,Ac=ac,Insurance_Type=insurance_type,Client_NameM=client,
                                     Client_AddressM=c_address,Bank_Name=bank,Bank_Branch=b_branch,Interest_covered=interestcover,
                                     Voyage_From=voyagef,Voyage_To=voyaget,Voyage_Via=voyagevis,Transit_By=tarnsit_by,
@@ -3314,7 +3601,7 @@ def uw_q_marine_covernote_saveV(request):
                                     Discount=dis,SpDiscount=spdis,Marine_Rate=mrate,Marine_Amount=mamount,
                                     Ware_Rate=wrates,Ware_Amount=wamount,Net_Amount=netid,Vat_Amount=vataid,
                                     Stump_Amount=samount,Gross_Amount=gross,Producer=producer,RiskCover=risk,
-                                    narration=nara,userc=createuser,User_Branch=branchs,sendmail=tomail,Cover_No_no=id)
+                                    narration=nara,userc=createuser,User_Branch=branchs,sendmail=tomail,Cover_No_no=id, Printed_No=prints,MR_Number=mrnusss)
             date.save()
             # datas = MarineQuatationM.objects.filter(id=id)
             #
@@ -3322,12 +3609,53 @@ def uw_q_marine_covernote_saveV(request):
             # abc = datas.values()
             # good = list(abc)
             # good = messages.info(request, 'Data Save')
-            all = MarineCovernoteM.objects.filter(Cover_No_no=id)
+            all = MarineCovernoteM.objects.raw('select * from project_marinecovernotem mc, project_mrtable pm where mc.MR_Number_id = pm.id and mc.Cover_No_no = %s',[id])
             good = serializers.serialize('json', all)
             abcs = json.loads(good)
             abc = 'Data Save'
             return JsonResponse({'id':id,'messages':abc,'abcs':abcs},status=200)
         else:
+            mrnusss = MRTable.objects.get(id=Mr)
+            if Dbnames == '':
+                mrnusss.Mod=Mop
+                mrnusss.Cheque_no=Numbers
+                mrnusss.Net_Amount = netid
+                mrnusss.Vat_Amount = vataid
+                mrnusss.Stump_Amount = samount
+                mrnusss.Gross_Amount = gross
+                mrnusss.class_insurance='Marine Cargo'
+                mrnusss.User_Branch=branchs
+                mrnusss.Cdate=caquedate
+                mrnusss.save()
+            elif Dbbranchs == '':
+                deposit_b = Deposit_BankM.objects.get(id=Dbnames)
+                mrnusss.Bank_name=deposit_b
+                mrnusss.Mod = Mop
+                mrnusss.Cheque_no = Numbers
+                mrnusss.Net_Amount = netid
+                mrnusss.Vat_Amount = vataid
+                mrnusss.Stump_Amount = samount
+                mrnusss.Gross_Amount = gross
+                mrnusss.class_insurance='Marine Cargo'
+                mrnusss.User_Branch=branchs
+                mrnusss.Cdate=caquedate
+                mrnusss.save()
+            else:
+                deposit_b = Deposit_BankM.objects.get(id=Dbnames)
+                deposit_bankadd = Deposit_Bank_BranchM.objects.get(id=Dbbranchs)
+                mrnusss.Bank_name = deposit_b
+                mrnusss.Bank_address=deposit_bankadd
+                mrnusss.Mod = Mop
+                mrnusss.Cheque_no = Numbers
+                mrnusss.Net_Amount = netid
+                mrnusss.Vat_Amount = vataid
+                mrnusss.Stump_Amount = samount
+                mrnusss.Gross_Amount = gross
+                mrnusss.class_insurance='Marine Cargo'
+                mrnusss.User_Branch=branchs
+                mrnusss.Cdate=caquedate
+                mrnusss.save()
+
             id=cover
             bill = MarineCovernoteM.objects.all().count()
             datas = MarineCovernoteM.objects.filter(Cover_No=cover)
@@ -3368,6 +3696,8 @@ def uw_q_marine_covernote_saveV(request):
             data.narration=nara
             data.userc=createuser
             data.sendmail=tomail
+            data.Printed_No=prints
+            data.MR_Number=mrnusss
             data.save()
             all = MarineQuatationM.objects.filter(Bill_No=id)
             good = serializers.serialize('json', all)
@@ -3381,10 +3711,11 @@ def uw_q_marine_cover_pdfsV(request, id=0):
     marine_bill = MarineCovernoteM.objects.filter(Cover_No_no=id)
     for x in marine_bill:
         amount = num2words(x.Bdtamount, lang="en_IN")
+        mrcl = MRTable.objects.filter(id=x.MR_Number_id)
     template_path = 'uw/reports/marine_cover_note_f.html'
     BASE_DIR = Path(__file__).resolve().parent.parent
     path = os.path.join(BASE_DIR, 'project\static')
-    context = {'company': company, 'path': path, 'marine_bill': marine_bill,'amount':amount,'cv_banner':cv_banner}
+    context = {'company': company, 'path': path, 'marine_bill': marine_bill,'amount':amount,'cv_banner':cv_banner,'mrcl':mrcl}
     response = HttpResponse(content_type='application/pdf')
     # for downlode
     # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
@@ -3397,9 +3728,9 @@ def uw_q_marine_cover_pdfsV(request, id=0):
     pisa_status = pisa.CreatePDF(
         html, dest=response)
     # if error then show some funy view
-    # data = MarineQuatationM.objects.get(Bill_No=id)
-    # data.Edits = 1
-    # data.save()
+    data = MarineCovernoteM.objects.get(Cover_No_no=id)
+    data.Edits = 1
+    data.save()
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
@@ -3410,10 +3741,11 @@ def uw_q_marine_cover_demo_pdfsV(request, id=0):
     marine_bill = MarineCovernoteM.objects.filter(Cover_No_no=id)
     for x in marine_bill:
         amount = num2words(x.Bdtamount, lang="en_IN")
+        mrcl = MRTable.objects.filter(id=x.MR_Number_id)
     template_path = 'uw/reports/marine_cover_note_f_demo.html'
     BASE_DIR = Path(__file__).resolve().parent.parent
     path = os.path.join(BASE_DIR, 'project\static')
-    context = {'company': company, 'path': path, 'marine_bill': marine_bill,'amount':amount,'cv_banner':cv_banner}
+    context = {'company': company, 'path': path, 'marine_bill': marine_bill,'amount':amount,'cv_banner':cv_banner,'mrcl':mrcl}
     response = HttpResponse(content_type='application/pdf')
     # for downlode
     # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
@@ -3426,9 +3758,43 @@ def uw_q_marine_cover_demo_pdfsV(request, id=0):
     pisa_status = pisa.CreatePDF(
         html, dest=response)
     # if error then show some funy view
-    # data = MarineQuatationM.objects.get(Bill_No=id)
-    # data.Edits = 1
-    # data.save()
+
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+
+def uw_mr_marine_cover_demo_pdfsV(request, id=0):
+    marine_bill = MarineCovernoteM.objects.filter(Cover_No_no=id)
+    for x in marine_bill:
+        mrcl = MRTable.objects.filter(id=x.MR_Number_id)
+        for y in mrcl:
+            if y.Service_Charge is None:
+                amount = num2words(y.Gross_Amount, lang="en_IN")
+            else:
+                abc=y.Gross_Amount-y.Service_Charge
+                amount = num2words(abc, lang="en_IN")
+    template_path = 'uw/mrreport/mr.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'marine_bill': marine_bill,'amount':amount,'mrcl':mrcl}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    data = MarineCovernoteM.objects.get(Cover_No_no=id)
+    data.Edits = 1
+    data.save()
+
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response

@@ -8,6 +8,7 @@ from .resources import *
 # Register your models here.
 
 admin.site.register(Company_Information)
+admin.site.register(MRTable)
 admin.site.register(UserProfileM)
 admin.site.register(Branch_Infoamtion)
 admin.site.register(DepartmentM)
@@ -18,6 +19,7 @@ admin.site.register(Software_Permittion_Branch)
 admin.site.register(Inventory_Product_Entry)
 admin.site.register(Inventory_Supplier_Entry)
 admin.site.register(Product_PurchaseM)
+admin.site.register(ModOfPayment)
 admin.site.register(covernover_banner)
 admin.site.register(Product_issueM)
 class BookAdmin(ImportExportModelAdmin):

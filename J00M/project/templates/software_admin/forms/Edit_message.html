@@ -288,6 +288,64 @@
 
 </div>
 {%endfor%}
+{%for x in dbank_edit%}
+<div class="row">
+    <div class="col-12 col-md-12 col-lg-12">
+        {%csrf_token%}
+        <div class="card">
+            <div class="card-header">
+                <h4>Deposit Bank Edit Information</h4>
+
+
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Bill Number</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="dBank_id" value="{{x.id}}"
+                                       readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Deposit Bank Information Edit</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="dBank_edit"
+                                       value="{{x.Edits}}">
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-footer text-right">
+                    <button class="btn btn-primary mr-1" type="submit"><i
+                            class="fas fa-edit">
+                        Update</i>
+                    </button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{%endfor%}
 {%for x in bank_branch_edit%}
 <div class="row">
     <div class="col-12 col-md-12 col-lg-12">
@@ -310,7 +368,7 @@
                                         <i class="far fa-building"></i>
                                     </div>
                                 </div>
-                                <input type="text" class="form-control phone-number" name="Bank_branch_id" value="{{x.id}}"
+                                <input type="text" class="form-control phone-number" name="dBank_branch_id" value="{{x.id}}"
                                        readonly>
                             </div>
                         </div>
@@ -318,6 +376,64 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Bank Branch Information Edit</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="dBank_branch_edit"
+                                       value="{{x.Edits}}">
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="card-footer text-right">
+                    <button class="btn btn-primary mr-1" type="submit"><i
+                            class="fas fa-edit">
+                        Update</i>
+                    </button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{%endfor%}
+{%for x in dbank_branch_edit%}
+<div class="row">
+    <div class="col-12 col-md-12 col-lg-12">
+        {%csrf_token%}
+        <div class="card">
+            <div class="card-header">
+                <h4>Deposit Bank Branch Edit Information</h4>
+
+
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Bill Number</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="far fa-building"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control phone-number" name="Bank_branch_id" value="{{x.id}}"
+                                       readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Deposit Bank Branch Information Edit</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">

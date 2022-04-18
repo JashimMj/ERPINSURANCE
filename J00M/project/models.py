@@ -188,7 +188,6 @@ class BankM(models.Model):
     def __str__(self):
         return self.Name
 
-
 class Bank_BranchM(models.Model):
     id = models.AutoField(primary_key=True)
     Bank_Name = models.ForeignKey(BankM,on_delete=models.CASCADE,null=True,blank=True)
@@ -203,6 +202,32 @@ class Bank_BranchM(models.Model):
 
     def __str__(self):
         return self.Bank_Branch
+
+
+class Deposit_BankM(models.Model):
+    id = models.AutoField(primary_key=True)
+    Name = models.CharField(max_length=500, null=True, blank=True)
+    create_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    Edits = models.CharField(max_length=10, null=True, blank=True)
+
+    # def __str__(self):
+    #     return self.Name
+
+class Deposit_Bank_BranchM(models.Model):
+    id = models.AutoField(primary_key=True)
+    Bank_Name = models.ForeignKey(Deposit_BankM,on_delete=models.CASCADE,null=True,blank=True)
+    Bank_Branch=models.CharField(max_length=300,null=True,blank=True)
+    Bank_Branch_Address=models.CharField(max_length=800,null=True,blank=True)
+    Bank_Branch_Phone=models.CharField(max_length=20,null=True,blank=True)
+    Bank_Branch_Mobile=models.CharField(max_length=20,null=True,blank=True)
+    Bank_Branch_Email=models.EmailField(max_length=50,null=True,blank=True)
+    create_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    Edits = models.CharField(max_length=10, null=True, blank=True)
+
+    # def __str__(self):
+    #     return self.Bank_Branch
 
 class ClinetM(models.Model):
     id = models.AutoField(primary_key=True)
@@ -330,6 +355,34 @@ class Product_issueM(models.Model):
     Invoice_no=models.CharField(max_length=50,null=True,blank=True)
     objects = models.Manager()
 
+class ModOfPayment(models.Model):
+    id = models.AutoField(primary_key=True)
+    Name=models.CharField(max_length=255,null=True,blank=True)
+    objects = models.Manager()
+
+
+
+
+
+class MRTable(models.Model):
+    id = models.AutoField(primary_key=True)
+    Mrno = models.CharField(max_length=255,blank=True,null=True)
+    Mrno_date=models.DateField(blank=True,null=True)
+    Cdate = models.DateField(blank=True, null=True)
+    Mod=models.CharField(max_length=255,blank=True,null=True)
+    Cheque_no=models.CharField(max_length=255,blank=True,null=True)
+    Bank_name=models.ForeignKey(Deposit_BankM,on_delete=models.CASCADE,null=True,blank=True)
+    Bank_address=models.ForeignKey(Deposit_Bank_BranchM,on_delete=models.CASCADE,null=True,blank=True)
+    class_insurance=models.CharField(max_length=255,blank=True,null=True)
+    User_Branch = models.ForeignKey(Branch_Infoamtion, on_delete=models.CASCADE, null=True, blank=True)
+    Net_Amount = models.IntegerField(null=True, blank=True)
+    Vat_Amount = models.IntegerField(null=True, blank=True)
+    Stump_Amount = models.IntegerField(null=True, blank=True)
+    Gross_Amount = models.IntegerField(null=True, blank=True)
+    Service_Charge = models.IntegerField(null=True, blank=True)
+    objects = models.Manager()
+
+
 
 class MarineQuatationM(models.Model):
     id = models.AutoField(primary_key=True)
@@ -418,6 +471,8 @@ class MarineCovernoteM(models.Model):
     issu_date = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     Edits = models.CharField(max_length=10, null=True, blank=True)
     User_Branch = models.ForeignKey(Branch_Infoamtion, on_delete=models.CASCADE, null=True, blank=True)
+    MR_Number = models.ForeignKey(MRTable, on_delete=models.CASCADE, null=True, blank=True)
+    Printed_No = models.CharField(max_length=255,null=True,blank=True)
     userc = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
 

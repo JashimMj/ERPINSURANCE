@@ -81,7 +81,22 @@ urlpatterns = [
     path('hr/bank/Branch/info/save/', views.hr_bank_branch_info_saveV, name="hr_bank_branch_info_save"),
     path('hr/bank/Branch/info/demo/pdf/<int:id>', views.hr_bank_branch_info_demo_pdfV, name="hr_bank_branch_info_demo_pdf"),
     path('hr/bank/Branch/info/pdf/<int:id>', views.hr_bank_branch_info_pdfV, name="hr_bank_branch_info_pdf"),
-    # ----------------------HR Branch Information---------------------------
+
+
+    # ----------------------HR Bank Information---------------------------
+    path('hr/deposit/bank/info/', views.hr_deposit_bank_infoV, name="hr_deposit_bank_info"),
+    path('hr/deposit/bank/info/save/', views.hr_deposit_bank_info_saveV, name="hr_deposit_bank_info_save"),
+    path('hr/deposit/bank/info/demo/pdf/<int:id>', views.hr_deposit_bank_info_demo_pdfV, name="hr_deposit_bank_info_demo_pdf"),
+    path('hr/deposit/bank/info/pdf/<int:id>', views.hr_deposit_bank_info_pdfV, name="hr_deposit_bank_info_pdf"),
+    # ----------------------HR Bank Branch Information---------------------------
+    path('hr/deposit/bank/Branch/info/', views.hr_deposit_bank_branch_infoV, name="hr_deposit_bank_branch_info"),
+    path('hr/deposit/bank/Branch/info/save/', views.hr_deposit_bank_branch_info_saveV, name="hr_deposit_bank_branch_info_save"),
+    path('hr/deposit/bank/Branch/info/demo/pdf/<int:id>', views.hr_deposit_bank_branch_info_demo_pdfV, name="hr_deposit_bank_branch_info_demo_pdf"),
+    path('hr/deposit/bank/Branch/info/pdf/<int:id>', views.hr_deposit_bank_branch_info_pdfV, name="hr_deposit_bank_branch_info_pdf"),
+
+
+
+    # ----------------------HR employees Information---------------------------
     path('hr/employees/info/', views.hr_employees_infoV, name="hr_employees_info"),
     path('hr/employees/info/save/', views.hr_employees_info_saveV, name="hr_employees_info_save"),
     # ----------------------HR client Information---------------------------
@@ -143,6 +158,7 @@ urlpatterns = [
     path('uw/quotation/marine/', views.uw_q_marineV, name="uw_q_marine"),
     path('uw/quotation/marine/client/select/', views.uw_q_marine_client_selectV, name="uw_q_marine_client_select"),
     path('uw/quotation/marine/bank/branch/select/', views.uw_q_marine_bank_branch_selectV, name="uw_q_marine_bank_branch_select"),
+    path('uw/quotation/marine/deposit_bank/branch/select/', views.uw_q_marine_deposit_bank_branch_selectV, name="uw_q_marine_deposit_bank_branch_select"),
     path('uw/quotation/marine/transit/by/select/', views.uw_q_marine_transit_by_selectV, name="uw_q_marine_transitby_select"),
     path('uw/quotation/marine/date/select/', views.qmarinedateV, name="uw_q_marine_date_select"),
     path('uw/quotation/marine/save/', views.uw_q_marine_saveV, name="uw_q_marine_save"),
@@ -156,8 +172,8 @@ urlpatterns = [
     path('uw/quotation/marine/cover/pdf/demo/<int:id>', views.uw_q_marine_cover_demo_pdfsV, name="uw_q_marine_cover_demo_pdf"),
     path('uw/quotation/marine/cover/pdf/<int:id>', views.uw_q_marine_cover_pdfsV, name="uw_q_marine_cover_pdf"),
 
-
-
+# ----------------------MR REPORT---------------------------
+    path('uw/mr/marine/cover/pdf/<int:id>', views.uw_mr_marine_cover_demo_pdfsV, name="uw_mr_marine_cover_pdf"),
 
 
 

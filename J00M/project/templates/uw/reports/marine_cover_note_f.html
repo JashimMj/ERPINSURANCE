@@ -4,7 +4,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+     {%for x in company%}
+    <title>{{x.Company_Name}}</title>
+    <link rel='shortcut icon' type='image/x-icon' href="{{x.logo.path}}"/>
+    {%endfor%}
 
 </head>
 <style>
@@ -169,13 +172,22 @@ requesting shipments to be declared by the shippers as noted above.
 
     </tr>
     <tr>
-        <th colspan="4" style="text-align:left;"> MR. No . 1817 Date : 04-APR-22 </th>
+        {%for m in mrcl%}
+        <th colspan="4" style="text-align:left;"> MR. No . {{m.Mrno}} Date : {{m.Mrno_date}} </th>
+        {%endfor%}
         <th colspan="5" style="border:1px solid black; padding-top:2px;">Reinsured with Sadharan Bima Corporation</th>
         <th colspan="4"></th>
     </tr>
     <tr>
         <th colspan="4" style="text-align:left;">Checked By: {{y.userc}}</th>
-        <th colspan="5" style="padding-top:2px;">(Sl# 20881) (P.I.N# {{y.Producer.id}}) <br>Bank Gurantee No : BG No-PEBDAK106193, Start Date: 31-AUG-21, Extended Date :31-AUG-21</th>
+        <th colspan="5" style="padding-top:2px;">(Sl# {{y.Printed_No}}) (P.I.N# {{y.Producer.id}})
+
+            {%for m in mrcl%}
+            {%if m.Bank_name.Name == "Bank Guarantee No" %}
+            <br>Bank Guarantee No : BG No-{{m.Bank_address.Bank_Branch}}
+            {%endif%}
+             {%endfor%}
+        </th>
         <th colspan="4">For & on behalf of <br>Paramount Insurance Co. Ltd. <br>
         </th>
     </tr>
