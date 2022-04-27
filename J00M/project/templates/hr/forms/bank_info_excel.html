@@ -1,0 +1,78 @@
+{%extends 'index.html'%}
+{%load static%}
+{%block contant%}
+
+
+<section class="section">
+
+<!--    <div class="row ">-->
+<!--        <div class="col-md-12" style="margin-bottom:10px;">-->
+<!--            <form class="form-inline" action="{%url 'hr_bank_info'%}" method="POST">-->
+<!--                {%csrf_token%}-->
+<!--                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"-->
+<!--                       name="search">-->
+<!--                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"-->
+<!--                >Search Bill-->
+<!--                </button>-->
+<!--            </form>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+    <form method="POST">
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-8">
+                {%csrf_token%}
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Bank Information</h4>
+
+
+                    </div>
+                    <div><h4 style="text-align:right; padding-right:10px;">Last Entry:{{bill}}</h4></div>
+
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="search-results col-md-6">
+                                {%include 'software_admin/forms/message.html'%}
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Bank Name</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="file" class="form-control phone-number" name="Bank_n" required>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                        <div class="card-footer text-right">
+                            <button class="btn btn-primary mr-1" type="button" hx-encoding="multipart/form-data"
+                                    hx-post="{%url 'hr_bank_info_exclesave'%}" hx-target=".search-results"><i
+                                    class="far fa-save"> Save</i>
+                            </button>
+
+
+                            <a class="btn btn-danger mr-1" href="{%url 'hr_bank_info'%}"><i
+                                    class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+</section>
+{%endblock%}

@@ -12,7 +12,9 @@
                     {%csrf_token%}
                     <div class="search-element">
                         <select class="custom-select" name="brnchselect">
-                            <option selected>Select Branch</option>
+                            {%for x in user_current_branch%}
+                             <option value="{{x.Branch.id}}">{{x.Branch}} </option>
+                            {%endfor%}
                             {%for x in user_branch%}
                             <option value="{{x.Branch.id}}">{{x.Branch}} </option>
                             {%endfor%}

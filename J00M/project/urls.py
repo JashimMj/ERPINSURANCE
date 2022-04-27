@@ -76,6 +76,8 @@ urlpatterns = [
     path('hr/bank/info/save/', views.hr_bank_info_saveV, name="hr_bank_info_save"),
     path('hr/bank/info/demo/pdf/<int:id>', views.hr_bank_info_demo_pdfV, name="hr_bank_info_demo_pdf"),
     path('hr/bank/info/pdf/<int:id>', views.hr_bank_info_pdfV, name="hr_bank_info_pdf"),
+    path('hr/bank/info/excle', views.hr_bank_info_excleV, name="hr_bank_info_excle"),
+    path('hr/bank/info/excle/save', views.hr_bank_info_exclesavev, name="hr_bank_info_exclesave"),
     # ----------------------HR Bank Branch Information---------------------------
     path('hr/bank/Branch/info/', views.hr_bank_branch_infoV, name="hr_bank_branch_info"),
     path('hr/bank/Branch/info/save/', views.hr_bank_branch_info_saveV, name="hr_bank_branch_info_save"),
@@ -172,8 +174,14 @@ urlpatterns = [
     path('uw/quotation/marine/cover/pdf/demo/<int:id>', views.uw_q_marine_cover_demo_pdfsV, name="uw_q_marine_cover_demo_pdf"),
     path('uw/quotation/marine/cover/pdf/<int:id>', views.uw_q_marine_cover_pdfsV, name="uw_q_marine_cover_pdf"),
 
+
+        # ----------------------Marine Addendum---------------------------
+
+    path('uw/marine/addendum', views.uw_marine_addendumV, name="uw_marine_addendum"),
+
 # ----------------------MR REPORT---------------------------
     path('uw/mr/marine/cover/pdf/<int:id>', views.uw_mr_marine_cover_demo_pdfsV, name="uw_mr_marine_cover_pdf"),
+    path('uw/mr/leader/marine/cover/pdf/<int:id>', views.uw_mr_leader_marine_cover_demo_pdfsV, name="uw_mr_leader_marine_cover_pdf"),
 
 
 

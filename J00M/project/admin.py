@@ -13,7 +13,7 @@ admin.site.register(UserProfileM)
 admin.site.register(Branch_Infoamtion)
 admin.site.register(DepartmentM)
 admin.site.register(DesignationM)
-admin.site.register(BankM)
+
 admin.site.register(Bank_BranchM)
 admin.site.register(Software_Permittion_Branch)
 admin.site.register(Inventory_Product_Entry)
@@ -29,3 +29,9 @@ admin.site.register(Currency, BookAdmin)
 class RiskAdmin(ImportExportModelAdmin):
     resource_class = RiskResource
 admin.site.register(RiskCovered, RiskAdmin)
+
+admin.site.register(BankM)
+class Bank_entry(ImportExportModelAdmin):
+    list_display = ('Name')
+
+

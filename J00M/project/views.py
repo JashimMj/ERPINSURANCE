@@ -24,6 +24,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
+from .resources import *
+from tablib import Dataset
+
 from django.db import connection
 
 
@@ -3501,13 +3504,11 @@ def uw_q_marine_covernote_saveV(request):
         branchs = Branch_Infoamtion.objects.get(id=request.user.last_name)
         dates=datetime.date.today()
         moth_date=dates.month
-        print(moth_date)
         year_date=dates.year
-        print(year_date)
         for x in short:
             short=x.Company_Short_Name
             coberno = short + "/" + branchs.Branch_Short_Name + "/" + "MC" + "-" +str(id)+"/"+str(moth_date)+"/"+str(year_date)
-            print(coberno)
+
         user = request.user.id
         createuser = User.objects.get(id=user)
 
@@ -3566,7 +3567,10 @@ def uw_q_marine_covernote_saveV(request):
 
         mrd=datetime.datetime.strptime(Mrdate,'%d-%m-%Y')
         cdate = request.POST.get('cdate')
-        caquedate=datetime.datetime.strptime(cdate,'%d-%m-%Y')
+        if cdate =='':
+            caquedate= None
+        else:
+            caquedate=datetime.datetime.strptime(cdate,'%d-%m-%Y')
 
         Numbers = request.POST.get('Numbers')
         Mop = request.POST.get('Mop')
@@ -3574,12 +3578,18 @@ def uw_q_marine_covernote_saveV(request):
         Dbbranchs = request.POST.get('Dbbranch')
         mrcount=MRTable.objects.all().count()
         mrnum= mrcount + 1
+        coinsur=request.POST.get('coin')
+        nonlider=request.POST.get('Nonleader')
+        leaderpersent=request.POST.get('leaderpersents')
+        leadercom=request.POST.get('leadercom')
+        ldocu=request.POST.get('ldocu')
+
 
 
         if cover == '':
             if Dbnames =='':
                 mrdatass = MRTable(id=mrnum, Mrno=mrnum, Mrno_date=mrd, Mod=Mop, Cheque_no=Numbers,Net_Amount=netid,Vat_Amount=vataid,
-                                    Stump_Amount=samount,Gross_Amount=gross,class_insurance='Marine Cargo',User_Branch=branchs,Cdate=caquedate)
+                                    Stump_Amount=samount,Gross_Amount=gross,class_insurance='Marine Cargo',User_Branch=branchs,Cdate=caquedate )
                 mrdatass.save()
             elif Dbbranchs == '' :
                 deposit_b = Deposit_BankM.objects.get(id=Dbnames)
@@ -3601,7 +3611,8 @@ def uw_q_marine_covernote_saveV(request):
                                     Discount=dis,SpDiscount=spdis,Marine_Rate=mrate,Marine_Amount=mamount,
                                     Ware_Rate=wrates,Ware_Amount=wamount,Net_Amount=netid,Vat_Amount=vataid,
                                     Stump_Amount=samount,Gross_Amount=gross,Producer=producer,RiskCover=risk,
-                                    narration=nara,userc=createuser,User_Branch=branchs,sendmail=tomail,Cover_No_no=id, Printed_No=prints,MR_Number=mrnusss)
+                                    narration=nara,userc=createuser,User_Branch=branchs,sendmail=tomail,Cover_No_no=id, Printed_No=prints,MR_Number=mrnusss,
+                                    Coins_Leader=coinsur, Coins_None_Leader=nonlider, Coins_Leader_Persent=leaderpersent, Coins_Leader_Doc=ldocu, Coins_Leader_Name=leadercom)
             date.save()
             # datas = MarineQuatationM.objects.filter(id=id)
             #
@@ -3698,6 +3709,11 @@ def uw_q_marine_covernote_saveV(request):
             data.sendmail=tomail
             data.Printed_No=prints
             data.MR_Number=mrnusss
+            data.Coins_Leader=coinsur
+            data.Coins_None_Leader=nonlider
+            data.Coins_Leader_Persent=leaderpersent
+            data.Coins_Leader_Doc=ldocu
+            data.Coins_Leader_Name=leadercom
             data.save()
             all = MarineQuatationM.objects.filter(Bill_No=id)
             good = serializers.serialize('json', all)
@@ -3798,6 +3814,79 @@ def uw_mr_marine_cover_demo_pdfsV(request, id=0):
     if pisa_status.err:
         return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
+
+def uw_mr_leader_marine_cover_demo_pdfsV(request, id=0):
+    marine_bill = MarineCovernoteM.objects.filter(Cover_No_no=id)
+    for x in marine_bill:
+        mrcl = MRTable.objects.filter(id=x.MR_Number_id)
+        for y in mrcl:
+            if y.Service_Charge is None:
+                amount = num2words(y.Gross_Amount, lang="en_IN")
+            else:
+                abc=y.Gross_Amount-y.Service_Charge
+                amount = num2words(abc, lang="en_IN")
+    template_path = 'uw/mrreport/mr_leader.html'
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, 'project\static')
+    context = {'company': company, 'path': path, 'marine_bill': marine_bill,'amount':amount,'mrcl':mrcl}
+    response = HttpResponse(content_type='application/pdf')
+    # for downlode
+    # response['Content-Disposition'] = 'attachment; filename="reports.pdf"'
+    response['Content-Disposition'] = 'filename="reports.pdf"'
+    # find the template and render it.
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # create a pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=response)
+    # if error then show some funy view
+    data = MarineCovernoteM.objects.get(Cover_No_no=id)
+    data.Edits = 1
+    data.save()
+
+    if pisa_status.err:
+        return HttpResponse('We had some errors <pre>' + html + '</pre>')
+    return response
+
+
+
+def hr_bank_info_excleV(request):
+    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
+    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+    return render(request,'hr/forms/bank_info_excel.html',{'company':company,'user_current_branch':user_current_branch,'user_branch':user_branch})
+
+def hr_bank_info_exclesavev(request):
+    if request.method == 'POST':
+        person_resource = Bank_nameResource()
+        dataset = Dataset()
+        new_persons = request.FILES['Bank_n']
+        if not new_persons.name.endswith('xlsx'):
+            messages.info(request,'Format Does Not Match')
+        else:
+            imported_data = dataset.load(new_persons.read(), format='xlsx')
+            # print(imported_data)
+            for data in imported_data:
+                print(data[1])
+                value = BankM(
+                    data[0],
+                    data[1]
+
+                )
+                value.save()
+
+                messages.info(request,'Data saved')
+
+            # result = person_resource.import_data(dataset, dry_run=True)  # Test the data import
+
+        # if not result.has_errors():
+        #    person_resource.import_data(dataset, dry_run=False)  # Actually import now
+
+    return render(request, 'hr/forms/message.html')
+
+def uw_marine_addendumV(request):
+    return render(request,'uw/forms/addendum/marineaddendum.html')
 
 def TestV(request):
     marine_bill = MarineCovernoteM.objects.filter(Cover_No_no=1)

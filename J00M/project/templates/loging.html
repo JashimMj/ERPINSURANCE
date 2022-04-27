@@ -40,7 +40,9 @@
             <form class="login100-form validate-form" action="{%url 'otps'%}" method="POST">
                 {%csrf_token%}
                 <span class="login100-form-title">
-						API Member Login
+                      {%for x in company%}
+						{{x.Company_Name}} Member Login
+                    {%endfor%}
 					</span>
                 {% if messages %}
                 {% for message in messages %}

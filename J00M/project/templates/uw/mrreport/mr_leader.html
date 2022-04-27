@@ -46,15 +46,27 @@ th {
     </tr>
 
     <tr>
-        <th colspan="12" style="text-align:justify;padding-top:20px;">Received with thanks from {{x.Bank_Name.Name}},
-            {{x.Bank_Branch.Bank_Branch}}, {{x.Bank_Branch.Bank_Branch_Address}} {{x.Ac}}
+        <th colspan="12" style="text-align:justify;padding-top:20px;">Received with thanks from
+            {%if x.Coins_Leader_Name != None%}
+                {{x.Coins_Leader_Name}}
+            {%else%}
+                {{x.Bank_Name.Name}},
+                {{x.Bank_Branch.Bank_Branch}}, {{x.Bank_Branch.Bank_Branch_Address}}
+            {%endif%}
+            {{x.Ac}}
             {{x.Client_NameM.Name}} , {{x.Client_AddressM.Client_Branch}}, {{x.Client_AddressM.Client_Branch_Address}} Tk.
             <b>{{m.Gross_Amount|intcomma}}</b> ({{amount}} ) vide dated {{m.Cdate}} drawn on {{m.Mod}} against document #
              {%if x.Coins_Leader == '1' or x.Coins_None_Leader == '1' %}
             {{x.Cover_No}}/Co-Ins
             {%else%}
             {{x.Cover_No}}
-            {%endif%}</th>
+            {%endif%}
+            {%if x.Coins_Leader_Doc != None%}
+                and leader Document No {{x.Coins_Leader_Doc}}.
+            {%endif%}
+
+
+        </th>
     </tr>
     <tr></tr>
     <tr></tr>
@@ -143,14 +155,22 @@ th {
     </tr>
 
     <tr>
-        <th colspan="12" style="text-align:justify;padding-top:20px;">Received with thanks from {{x.Bank_Name.Name}},
-            {{x.Bank_Branch.Bank_Branch}}, {{x.Bank_Branch.Bank_Branch_Address}} {{x.Ac}}
+        <th colspan="12" style="text-align:justify;padding-top:20px;">Received with thanks from
+            {%if x.Coins_Leader_Name != None%}
+                {{x.Coins_Leader_Name}}
+            {%else%}
+                {{x.Bank_Name.Name}},
+                {{x.Bank_Branch.Bank_Branch}}, {{x.Bank_Branch.Bank_Branch_Address}}
+            {%endif%}{{x.Ac}}
             {{x.Client_NameM.Name}} , {{x.Client_AddressM.Client_Branch}}, {{x.Client_AddressM.Client_Branch_Address}} Tk.
             <b>{{m.Gross_Amount|intcomma}}</b> ({{amount}} ) vide dated {{m.Cdate}} drawn on {{m.Mod}} against document #
-           {%if x.Coins_Leader == '1' or x.Coins_None_Leader == '1' %}
+            {%if x.Coins_Leader == '1' or x.Coins_None_Leader == '1' %}
             {{x.Cover_No}}/Co-Ins
             {%else%}
             {{x.Cover_No}}
+            {%endif%}
+            {%if x.Coins_Leader_Doc != None%}
+                and leader Document No {{x.Coins_Leader_Doc}}.
             {%endif%}</th>
     </tr>
     <tr></tr>
@@ -239,14 +259,23 @@ th {
     </tr>
 
     <tr>
-        <th colspan="12" style="text-align:justify;padding-top:20px;">Received with thanks from {{x.Bank_Name.Name}},
-            {{x.Bank_Branch.Bank_Branch}}, {{x.Bank_Branch.Bank_Branch_Address}} {{x.Ac}}
+        <th colspan="12" style="text-align:justify;padding-top:20px;">Received with thanks from
+            {%if x.Coins_Leader_Name != None%}
+                {{x.Coins_Leader_Name}}
+            {%else%}
+                {{x.Bank_Name.Name}},
+                {{x.Bank_Branch.Bank_Branch}}, {{x.Bank_Branch.Bank_Branch_Address}}
+            {%endif%}
+            {{x.Ac}}
             {{x.Client_NameM.Name}} , {{x.Client_AddressM.Client_Branch}}, {{x.Client_AddressM.Client_Branch_Address}} Tk.
             <b>{{m.Gross_Amount|intcomma}}</b> ({{amount}} ) vide dated {{m.Cdate}} drawn on {{m.Mod}} against document #
-            {%if x.Coins_Leader == '1' or x.Coins_None_Leader == '1' %}
+          {%if x.Coins_Leader == '1' or x.Coins_None_Leader == '1' %}
             {{x.Cover_No}}/Co-Ins
             {%else%}
             {{x.Cover_No}}
+            {%endif%}
+            {%if x.Coins_Leader_Doc != None%}
+                and leader Document No {{x.Coins_Leader_Doc}}.
             {%endif%}</th>
     </tr>
     <tr></tr>
@@ -335,14 +364,23 @@ th {
     </tr>
 
     <tr>
-        <th colspan="12" style="text-align:justify;padding-top:20px;">Received with thanks from {{x.Bank_Name.Name}},
-            {{x.Bank_Branch.Bank_Branch}}, {{x.Bank_Branch.Bank_Branch_Address}} {{x.Ac}}
+        <th colspan="12" style="text-align:justify;padding-top:20px;">Received with thanks from
+            {%if x.Coins_Leader_Name != None%}
+                {{x.Coins_Leader_Name}}
+            {%else%}
+                {{x.Bank_Name.Name}},
+                {{x.Bank_Branch.Bank_Branch}}, {{x.Bank_Branch.Bank_Branch_Address}}
+            {%endif%}
+            {{x.Ac}}
             {{x.Client_NameM.Name}} , {{x.Client_AddressM.Client_Branch}}, {{x.Client_AddressM.Client_Branch_Address}} Tk.
             <b>{{m.Gross_Amount|intcomma}}</b> ({{amount}} ) vide dated {{m.Cdate}} drawn on {{m.Mod}} against document #
-            {%if x.Coins_Leader == '1' or x.Coins_None_Leader == '1' %}
+           {%if x.Coins_Leader == '1' or x.Coins_None_Leader == '1' %}
             {{x.Cover_No}}/Co-Ins
             {%else%}
             {{x.Cover_No}}
+            {%endif%}
+            {%if x.Coins_Leader_Doc != None%}
+                and leader Document No {{x.Coins_Leader_Doc}}.
             {%endif%}</th>
     </tr>
     <tr></tr>

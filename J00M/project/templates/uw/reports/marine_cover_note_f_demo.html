@@ -87,7 +87,13 @@ border-bottom:1px solid black;
     {%endfor%}
     <tr>
         <th colspan="9" style="font-size: 14px; text-align:left; padding-top:2px;"><b>MARINE COVER NOTE NO. :
-            {{y.Cover_No}}</b></th>
+
+            {%if y.Coins_Leader == '1' or y.Coins_None_Leader == '1' %}
+            {{y.Cover_No}}/Co-Ins
+            {%else%}
+            {{y.Cover_No}}
+            {%endif%}
+        </b></th>
         <th colspan="4" style="text-align:right;font-size: 14px;"><b>Date: {{y.Cover_Date|date:"d/m/Y"}}</b> </th>
     </tr>
     <tr>

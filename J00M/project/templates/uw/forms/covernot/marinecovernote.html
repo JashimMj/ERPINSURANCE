@@ -17,7 +17,8 @@
 
         <div class="col-md-6" style="margin-bottom:10px;">
             <h></h>
-            <form class="form-inline" action="{%url 'uw_q_marine_covernote_search'%}" method="POST" id="searc_form_cover">
+            <form class="form-inline" action="{%url 'uw_q_marine_covernote_search'%}" method="POST"
+                  id="searc_form_cover">
                 {%csrf_token%}
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
                        name="searchcover" id="searchcover">
@@ -30,7 +31,7 @@
 
 
     <form method="POST" id="formq">
-                   {%csrf_token%}
+        {%csrf_token%}
         <div class="row">
             <div class="col-12 col-md-8 col-lg-8">
 
@@ -40,7 +41,6 @@
 
 
                     </div>
-
                     <div><h4 style="text-align:right; padding-right:10px;">Last Entry:{{bill}}</h4></div>
 
                     <div class="card-body">
@@ -70,7 +70,8 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control phone-number" name="bdate" id="billdate" value='{% now "d-m-Y" %}' readonly>
+                                        <input type="text" class="form-control phone-number" name="bdate" id="billdate"
+                                               value='{% now "d-m-Y" %}' readonly>
                                     </div>
                                 </div>
                             </div>
@@ -83,7 +84,8 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control phone-number" name="bdate" id="coverno" value='' readonly>
+                                        <input type="text" class="form-control phone-number" name="bdate" id="coverno"
+                                               value='' readonly>
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +145,8 @@
                                         <select class="form-control select2" name="department" id="sums">
                                             <option value=""> Select Address</option>
                                             {%for x in client_add%}
-                                            <option value="{{x.id}}">{{x.Client_Branch}}, {{x.Client_Branch_Address}}</option>
+                                            <option value="{{x.id}}">{{x.Client_Branch}}, {{x.Client_Branch_Address}}
+                                            </option>
                                             {%endfor%}
 
                                         </select>
@@ -189,7 +192,8 @@
                                         <select class="form-control select2" name="bank_n" id="bbranch">
                                             <option value="">Select Bank Branch</option>
                                             {%for x in bankbranch%}
-                                            <option value="{{x.id}}">{{x.Bank_Branch}}, {{x.Bank_Branch_Address}}</option>
+                                            <option value="{{x.id}}">{{x.Bank_Branch}}, {{x.Bank_Branch_Address}}
+                                            </option>
                                             {%endfor%}
 
                                         </select>
@@ -206,7 +210,7 @@
                                             </div>
                                         </div>
                                         <input type="text" class="form-control phone-number" name="interestcover"
-                                        id="interestcover">
+                                               id="interestcover">
                                     </div>
                                 </div>
                             </div>
@@ -291,7 +295,8 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                         <input type="text" class="form-control phone-number" name="fromdate" id="fdate" value='{% now "d-m-Y" %}'
+                                        <input type="text" class="form-control phone-number" name="fromdate" id="fdate"
+                                               value='{% now "d-m-Y" %}'
                                         >
                                     </div>
                                 </div>
@@ -305,7 +310,7 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                         <input type="text" class="form-control phone-number" name="tdate" id="tdate"
+                                        <input type="text" class="form-control phone-number" name="tdate" id="tdate"
                                         >
                                     </div>
                                 </div>
@@ -398,6 +403,8 @@
                                     </div>
                                 </div>
                             </div>
+
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>Declaration</label>
@@ -408,7 +415,8 @@
                                             </div>
                                         </div>
                                         <input type="text" class="form-control phone-number" name="dec"
-                                               value="All other terms, conditions and warranties of the said Marine Cover note will remain unchanged." id="decs">
+                                               value="All other terms, conditions and warranties of the said Marine Cover note will remain unchanged."
+                                               id="decs">
                                     </div>
                                 </div>
                             </div>
@@ -422,7 +430,7 @@
                                             </div>
                                         </div>
                                         <input type="text" class="form-control phone-number" name="printg"
-                                                id="prints">
+                                               id="prints">
                                     </div>
                                 </div>
                             </div>
@@ -489,15 +497,22 @@
                                     class="far fa-save"> Save</i>
 
                             </button>
-                            <a class="btn btn-primary" id="printd" target="_blank" style="width: 65px;"><i class="fas fa-id-card-alt" > Print Demo</i> </a>
-                            <a href="" class="btn btn-info" id="finalp" target="_blank" style="width: 65px;"><i class="fas fa-print"> Final Print</i> </a>
-                            <a href="" class="btn btn-info" id="MRprint" target="_blank" style="width: 65px;"><i class="fas fa-print"> MR Print</i> </a>
-                            <a href="" class="btn btn-warning" id="sendq" target="_blank" style="width: 85px;"><i class="fa fa-envelope"> Send Quotation</i> </a>
+                            <a class="btn btn-primary" id="printd" target="_blank" style="width: 65px;"><i
+                                    class="fas fa-id-card-alt"> Print Demo</i> </a>
+                            <a href="" class="btn btn-info" id="finalp" target="_blank" style="width: 65px;"><i
+                                    class="fas fa-print"> Final Print</i> </a>
+                            <a href="" class="btn btn-info" id="MRprint" target="_blank" style="width: 65px;"><i
+                                    class="fas fa-print"> MR Print</i> </a>
+                            <a href="" class="btn btn-warning" id="sendq" target="_blank" style="width: 85px;"><i
+                                    class="fa fa-envelope"> Send Quotation</i> </a>
 
 
-                            <a class="btn btn-danger mr-1" href="{%url 'uw_q_marine_covernote'%}" style="width: 65px;"><i
+                            <a class="btn btn-danger mr-1" href="{%url 'uw_q_marine_covernote'%}"
+                               style="width: 65px;"><i
                                     class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
                             </a>
+                             <a class="btn btn-danger" id="back" href="{%url 'uw_dashboard'%}"  style="width: 65px;"><i
+                                    class="fa fa-times-circle"> Back</i> </a>
 
                         </div>
                     </div>
@@ -515,8 +530,66 @@
 
                     <div class="card-body">
                         <div class="row">
-                            <div class="search-results col-md-6">
+                            <div class="search-results col-md-12s">
                                 {%include 'software_admin/forms/message.html'%}
+                            </div>
+
+                            <div class="col-md-6" style="background-color:#C689B0">
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="coins">
+                                        <label class="custom-control-label" for="coins" style="color:fff;">Co-ins</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6" style="background-color:#C689B0" >
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-inputs" id="nonleader">
+                                        <label class="custom-control-labels" style="color:fff;">Non-Leader</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 leaders" style="background-color:#C689B0; display: none;"  >
+                                <div class="form-group">
+                                    <label>Leader %</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <input type="text" class="form-control phone-number" name="leaderpersent" id="leaderpersents"
+                                               >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 nolider" style="background-color:#C689B0; display: none"  >
+                                <div class="form-group">
+                                    <label>Leader Company Name</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <input type="text" class="form-control phone-number" name="leadercoms" id="leadercom"
+                                               >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 nolider" style="background-color:#C689B0; display: none;">
+                                <div class="form-group">
+                                    <label>Leader Company Document Number</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <input type="text" class="form-control phone-number" name="ldocuk" id="ldocu">
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -527,7 +600,8 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="discount" id="dis" value="0">
+                                        <input type="text" class="form-control phone-number" name="discount" id="dis"
+                                               value="0">
                                     </div>
                                 </div>
                             </div>
@@ -540,7 +614,8 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="sp-discount" id="spdis" value="0">
+                                        <input type="text" class="form-control phone-number" name="sp-discount"
+                                               id="spdis" value="0">
                                     </div>
                                 </div>
                             </div>
@@ -553,7 +628,8 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="mrate" id="mrate" value="0">
+                                        <input type="text" class="form-control phone-number" name="mrate" id="mrate"
+                                               value="0">
                                     </div>
                                 </div>
                             </div>
@@ -566,7 +642,8 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="mamount" id="mamount" value="0">
+                                        <input type="text" class="form-control phone-number" name="mamount" id="mamount"
+                                               value="0">
                                     </div>
                                 </div>
                             </div>
@@ -580,7 +657,8 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="wrate" id="wrates" value="0.05">
+                                        <input type="text" class="form-control phone-number" name="wrate" id="wrates"
+                                               value="0.05">
                                     </div>
                                 </div>
                             </div>
@@ -593,7 +671,8 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="wamount" id="wamount" value="0">
+                                        <input type="text" class="form-control phone-number" name="wamount" id="wamount"
+                                               value="0">
                                     </div>
                                 </div>
                             </div>
@@ -606,7 +685,8 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="netamount" id="netid" value="0">
+                                        <input type="text" class="form-control phone-number" name="netamount" id="netid"
+                                               value="0">
                                     </div>
                                 </div>
                             </div>
@@ -620,7 +700,8 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="vatrate" id="vatid" value="15" readonly>
+                                        <input type="text" class="form-control phone-number" name="vatrate" id="vatid"
+                                               value="15" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -633,7 +714,8 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="vatamount" id="vataid" value="0">
+                                        <input type="text" class="form-control phone-number" name="vatamount"
+                                               id="vataid" value="0">
                                     </div>
                                 </div>
                             </div>
@@ -646,7 +728,8 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="stamoamount" id="samount" value="0">
+                                        <input type="text" class="form-control phone-number" name="stamoamount"
+                                               id="samount" value="0">
                                     </div>
                                 </div>
                             </div>
@@ -659,7 +742,8 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="sp-discount" id="gross">
+                                        <input type="text" class="form-control phone-number" name="sp-discount"
+                                               id="gross">
                                     </div>
                                 </div>
                             </div>
@@ -672,7 +756,7 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-<!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
+                                        <!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
                                         <textarea name="narration" id="nara" cols="40" rows="6"></textarea>
                                     </div>
                                 </div>
@@ -686,7 +770,7 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-<!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
+                                        <!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
                                         <input type="text" name="tomail" id="tomail" class="form-control">
                                     </div>
                                 </div>
@@ -701,7 +785,7 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-<!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
+                                        <!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
                                         <input type="text" name="MR" id="mrs" class="form-control">
                                     </div>
                                 </div>
@@ -715,8 +799,9 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-<!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
-                                        <input type="text" class="form-control phone-number" name="MRdate" id="mrdate" value='{% now "d-m-Y" %}' readonly>
+                                        <!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
+                                        <input type="text" class="form-control phone-number" name="MRdate" id="mrdate"
+                                               value='{% now "d-m-Y" %}' readonly>
 
                                     </div>
                                 </div>
@@ -730,8 +815,9 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-<!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
-                                        <input type="text" class="form-control phone-number" name="cdate" id="crdate" placeholder="dd-mm-yyyy">
+                                        <!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
+                                        <input type="text" class="form-control phone-number" name="cdate" id="crdate"
+                                               placeholder="dd-mm-yyyy">
 
                                     </div>
                                 </div>
@@ -745,7 +831,7 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-<!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
+                                        <!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
                                         <input type="text" name="number" id="numbers" class="form-control">
                                     </div>
                                 </div>
@@ -759,8 +845,8 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-<!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
-                                      <select class="custom-select select2" name="mod" id="MOP">
+                                        <!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
+                                        <select class="custom-select select2" name="mod" id="MOP">
                                             <option value="">Open this select menu</option>
                                             {%for x in modof%}
                                             <option value="{{x.Name}}">{{x.Name}}</option>
@@ -769,7 +855,7 @@
                                     </div>
                                 </div>
                             </div>
-                             <div class="col-sm-10 col-md-8 "style="background-color:#E7D09C">
+                            <div class="col-sm-10 col-md-8 " style="background-color:#E7D09C">
                                 <div class="form-group">
                                     <label>Deposit Bank Name</label>
                                     <div class="input-group">
@@ -787,14 +873,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-10 col-md-4 "style="background-color:#E7D09C">
+                            <div class="col-sm-10 col-md-4 " style="background-color:#E7D09C">
                                 <div class="from-group">
                                     <label>Search</label>
                                     <button type="button" id="dbankb" class="btn btn-primary mr-1" type="button">Search
                                     </button>
                                 </div>
                             </div>
-                            <div class="col-md-12"style="background-color:#E7D09C">
+                            <div class="col-md-12" style="background-color:#E7D09C">
                                 <div class="form-group">
                                     <label>Deposit Bank Branch</label>
                                     <div class="input-group">
@@ -806,7 +892,8 @@
                                         <select class="form-control select2" name="dbank_n" id="dbbranch">
                                             <option value="">Select Bank Branch</option>
                                             {%for x in depositbank_branch_n%}
-                                            <option value="{{x.id}}">{{x.Bank_Branch}}, {{x.Bank_Branch_Address}}</option>
+                                            <option value="{{x.id}}">{{x.Bank_Branch}}, {{x.Bank_Branch_Address}}
+                                            </option>
                                             {%endfor%}
 
                                         </select>
@@ -833,6 +920,7 @@
     $(document).ready(function(){
     $('#message').hide();
     });
+
 </script>
 <script>
  $("#client").click(function(){
@@ -854,6 +942,7 @@
     },
     });
   });
+
 
 
 
@@ -897,6 +986,7 @@
     },
     });
   });
+
 
 
 
@@ -1016,6 +1106,7 @@
   });
 
 
+
 </script>
 <script>
      $("#formq").on('submit',function(e){
@@ -1071,6 +1162,11 @@
         Dbname:$('#dbname').val(),
         Dbbranch:$('#dbbranch').val(),
         cdate:$('#crdate').val(),
+        coin:$('#coins').val(),
+        Nonleader:$('#nonleader').val(),
+        leaderpersents:$('#leaderpersents').val(),
+        leadercom:$('#leadercom').val(),
+        ldocu:$('#ldocu').val(),
 
     },
     success: function(response){
@@ -1120,6 +1216,7 @@
 
 
   });
+
 
 </script>
 
@@ -1218,6 +1315,7 @@
 
 
   });
+
 </script>
 
 <script>
@@ -1281,6 +1379,7 @@
             $('#decs').val(x[i].fields.Declaration);
             $('#riskcoders').val(x[i].fields.RiskCover).trigger('change');
             $('#insurances').val(x[i].fields.Insurance_Type).trigger('change');
+
             $('#producers').val(x[i].fields.Producer).trigger('change');
             $('#dis').val(x[i].fields.Discount);
             $('#spdis').val(x[i].fields.SpDiscount);
@@ -1295,6 +1394,30 @@
             $('#nara').val(x[i].fields.narration);
             $('#tomail').val(x[i].fields.sendmail);
             $('#prints').val(x[i].fields.Printed_No);
+            if (x[i].fields.Coins_Leader==1){
+                 $('#coins').attr('checked', true);
+                 $('#coins').val(x[i].fields.Coins_Leader);
+                 $(".leaders").show();
+                 $("#leaderpersents").val(x[i].fields.Coins_Leader_Persent);
+            }
+            else{
+                $('#coins').attr('checked', false);
+                $(".leaders").hide();
+                $("#leaderpersents").val();
+            }
+            if (x[i].fields.Coins_None_Leader==1){
+                $('#nonleader').attr('checked', true);
+                $('#nonleader').val(x[i].fields.Coins_None_Leader);
+                $(".nolider").show();
+                $('#leadercom').val(x[i].fields.Coins_Leader_Name);
+                $('#ldocu').val(x[i].fields.Coins_Leader_Doc);
+            }else{
+                $('#nonleader').attr('checked', false);
+                $('#nonleader').val();
+                $(".nolider").hide();
+                $('#leadercom').val();
+                $('#ldocu').val();
+            }
 
             $("#save").html("Edit");
         var abc = x[i].fields.Cover_No_no;
@@ -1303,6 +1426,7 @@
             $('#finalp').attr("href", "/uw/quotation/marine/cover/pdf/"+ x[i].fields.Cover_No_no );
             $('#sendq').attr("href", "/uw/quotation/marine/bill/send/email/"+ x[i].fields.Cover_No_no );
             $('#MRprint').attr("href", "/uw/mr/marine/cover/pdf/"+ x[i].fields.Cover_No_no );
+
             }
         else{
             $('#printd').attr("href", "" );
@@ -1334,8 +1458,33 @@
 
 
   });
-</script>
 
+
+     $("#nonleader").click(function () {
+            if ($(this).is(":checked")) {
+                $(".nolider").show();
+                $("#nonleader").val('1');
+
+            } else {
+                $(".nolider").hide();
+                $("#nonleader").val();
+
+            }
+        });
+ $("#coins").click(function () {
+            if ($(this).is(":checked")) {
+                $(".leaders").show();
+                $("#coins").val('1');
+
+            } else {
+                $(".leaders").hide();
+                $("#coins").val();
+            }
+        });
+
+
+
+</script>
 
 
 {%endblock%}
