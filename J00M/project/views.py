@@ -3892,7 +3892,9 @@ def hr_bank_info_exclesavev(request):
 
 
 def uw_marine_addendumV(request):
-    return render(request, 'uw/forms/addendum/marineaddendum.html',marine(request))
+    bill = MarineAddendumM.objects.all().count()
+    context={'bill':bill}
+    return render(request, 'uw/forms/addendum/marineaddendum.html',marine(request)|context)
 
 
 

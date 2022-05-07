@@ -3,16 +3,16 @@
 {%block contant%}
 <section class="section">
     <div class="row ">
-<!--        <div class="col-md-6" style="margin-bottom:10px;">-->
-<!--            <form class="form-inline" action="{%url 'uw_q_marine_search'%}" method="POST" id="searc_form">-->
-<!--                {%csrf_token%}-->
-<!--                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"-->
-<!--                       name="search" id="searchs">-->
-<!--                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"-->
-<!--                >Search Bill-->
-<!--                </button>-->
-<!--            </form>-->
-<!--        </div>-->
+        <!--        <div class="col-md-6" style="margin-bottom:10px;">-->
+        <!--            <form class="form-inline" action="{%url 'uw_q_marine_search'%}" method="POST" id="searc_form">-->
+        <!--                {%csrf_token%}-->
+        <!--                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"-->
+        <!--                       name="search" id="searchs">-->
+        <!--                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"-->
+        <!--                >Search Bill-->
+        <!--                </button>-->
+        <!--            </form>-->
+        <!--        </div>-->
 
 
         <div class="col-md-6" style="margin-bottom:10px;">
@@ -62,7 +62,7 @@
                                     </div>
                                 </div>
                             </div>
-                             <div class="col-md-12">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Addemdum No.</label>
                                     <div class="input-group">
@@ -444,6 +444,31 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Narration</label>
+                                    <div class="input-group">
+                                        <button type="button" id="addbtn" class="btn btn-primary">Narration Process
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <label>Narration</label>
+                                    <div class="input-group">
+                                        <!--                                        <div class="input-group-prepend">-->
+                                        <!--                                            <div class="input-group-text">-->
+                                        <!--                                                <i class="far fa-building"></i>-->
+                                        <!--                                            </div>-->
+                                        <!--                                        </div>-->
+                                        <!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
+                                        <textarea name="adnaras" id="adnara" cols="85" rows="6"
+                                                  style="text-align:justify"></textarea>
+                                    </div>
+                                </div>
+                            </div>
 
 
                         </div>
@@ -492,11 +517,12 @@
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="coins">
-                                        <label class="custom-control-label" for="coins" style="color:fff;">Co-ins</label>
+                                        <label class="custom-control-label" for="coins"
+                                               style="color:fff;">Co-ins</label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6" style="background-color:#C689B0" >
+                            <div class="col-md-6" style="background-color:#C689B0">
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-inputs" id="nonleader">
@@ -504,7 +530,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12 leaders" style="background-color:#C689B0; display: none;"  >
+                            <div class="col-md-12 leaders" style="background-color:#C689B0; display: none;">
                                 <div class="form-group">
                                     <label>Leader %</label>
                                     <div class="input-group">
@@ -513,12 +539,13 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="leaderpersent" id="leaderpersents"
-                                               >
+                                        <input type="text" class="form-control phone-number" name="leaderpersent"
+                                               id="leaderpersents"
+                                        >
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12 nolider" style="background-color:#C689B0; display: none"  >
+                            <div class="col-md-12 nolider" style="background-color:#C689B0; display: none">
                                 <div class="form-group">
                                     <label>Leader Company Name</label>
                                     <div class="input-group">
@@ -527,8 +554,9 @@
                                         <!--                                                <i class="far fa-building"></i>-->
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
-                                        <input type="text" class="form-control phone-number" name="leadercoms" id="leadercom"
-                                               >
+                                        <input type="text" class="form-control phone-number" name="leadercoms"
+                                               id="leadercom"
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -873,7 +901,9 @@
 <script>
     $(document).ready(function(){
     $('#message').hide();
+    $('#insurances').val(1).trigger('change');
     });
+
 
 </script>
 <script>
@@ -896,6 +926,7 @@
     },
     });
   });
+
 
 
 
@@ -940,6 +971,7 @@
     },
     });
   });
+
 
 
 
@@ -1061,6 +1093,7 @@
 
 
 
+
 </script>
 <script>
      $("#formq").on('submit',function(e){
@@ -1172,6 +1205,7 @@
   });
 
 
+
 </script>
 
 <script>
@@ -1269,6 +1303,7 @@
 
 
   });
+
 
 </script>
 
@@ -1436,6 +1471,57 @@
         });
 
 
+
+
+</script>
+<script>
+    $('#addbtn').on('click',function(e){
+    e.preventDefault();
+    alert("The paragraph was clicked.");
+    var suminsured=$('#sinsured').val();
+    var extr1=$('#extra1').val();
+    var extr2=$('#extra2').val();
+    var curren=$('#current').val();
+    var bdamou=$('#bdamount').val();
+    var rate=$('#rate').val();
+
+$.ajax({
+    url:"{%url 'uw_q_marine_covernote_search'%}",
+    type:'POST',
+    dataType:'json',
+    data:{
+         csrfmiddlewaretoken: '{{ csrf_token }}',
+         search:$('#searchcover').val(),
+         },
+    success: function(response){
+xadd=response.all
+        yadd=response.mrcl
+        for (i=0;i<x.length;i++){
+        if (parseInt(extr1)>0){
+        var positive='+'
+        }
+        else{
+        var positive=''
+        }
+        if (parseInt(extr1) == xadd[i].fields.Extra1)
+        {var extrasum = extr1}
+        else{
+        var extrasum = (parseInt(extr1)+xadd[i].fields.Extra1)
+        }
+            if (suminsured > 0){
+        $('#adnara').val('Notwithstanding anything contained herein to the contrary , it is hereby declared and agreed that the insured amount under the within mentioned Marine Cover Note has been increased by Tk.'+ (parseInt(bdamou) + xadd[i].fields.Bdtamount) +'.00 ( '+curren+' ' + (parseInt(suminsured)+ xadd[i].fields.Sum_insured) +
+        positive + extrasum +
+        '% +'+ extr2+'% Ex.@ '+rate+') From Tk.'+ xadd[i].fields.Bdtamount+'.00 ('+xadd[i].fields.Currency+' '+xadd[i].fields.Sum_insured+'+'+xadd[i].fields.Extra1+'%+'+xadd[i].fields.Extra2+'% Ex.@ '+xadd[i].fields.Excrate+')To Tk.'+bdamou+'.00 ( '+curren+' ' + suminsured +'+'+ extr1 +'% +'+ extr2+'% Ex.@ '+rate+') and not as stated previously.')
+        }
+    else{
+            $('#adnara').val('Notwithstanding anything contained herein to the contrary , it is hereby declared and agreed that the insured amount under the within mentioned Marine Cover Note has been decreased by Tk.2,460.00 ( US$ ' + suminsured +'+10% Ex.@ 84.7)From Tk.6,14,922.00 ( US$6,600.00+10% Ex.@ 84.7)To Tk.6,17,382.00 ( US$6,626.40+10% Ex.@ 84.7) and not as stated previously.')
+        }
+            }
+
+            }
+            });
+
+});
 
 </script>
 
