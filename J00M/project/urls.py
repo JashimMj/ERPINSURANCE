@@ -175,7 +175,7 @@ urlpatterns = [
     path('uw/quotation/marine/cover/pdf/<int:id>', views.uw_q_marine_cover_pdfsV, name="uw_q_marine_cover_pdf"),
 
 
-        # ----------------------Marine Addendum---------------------------
+    # ----------------------Marine Addendum---------------------------
 
     path('uw/marine/addendum', views.uw_marine_addendumV, name="uw_marine_addendum"),
 

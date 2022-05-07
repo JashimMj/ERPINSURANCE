@@ -45,6 +45,8 @@ class Company_Information(models.Model):
     Company_Short_Name=models.CharField(max_length=50,null=True,blank=True)
     Authorization=models.ImageField(upload_to='authorization',null=True,blank=True)
     create_user=models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
+    Authlink=models.CharField(max_length=255,null=True,blank=True)
+    Logolink=models.CharField(max_length=255,null=True,blank=True)
     logo=models.ImageField(upload_to='logo',null=True,blank=True)
     issu_date=models.DateTimeField(auto_now_add=True,null=True,blank=True)
     Edits=models.CharField(max_length=10,null=True,blank=True)

@@ -281,6 +281,8 @@ def software_admin_company_info_saveV(request):
         cemail = request.POST.get('Cemail')
         cweb = request.POST.get('Cweb')
         cshort = request.POST.get('Cshort')
+        authlink = request.POST.get('authreslink')
+        logolink = request.POST.get('logolink')
 
         if bnumber is None:
             image = request.FILES['logo']
@@ -292,7 +294,7 @@ def software_admin_company_info_saveV(request):
             filenames = store.save(ddsa.name, ddsa)
             profiles_pic_url = store.url(filenames)
             date = Company_Information(id=id, Company_Name=cname, Company_Address=caddress, Company_Email=cemail,
-                                       Company_Phone=cphone,
+                                       Company_Phone=cphone,Authlink=authlink,Logolink=logolink,
                                        Company_Fax=cfax, create_user=createuser, Company_Web_site=cweb,
                                        Company_Short_Name=cshort, logo=image,Authorization=ddsa)
             date.save()
@@ -314,6 +316,8 @@ def software_admin_company_info_saveV(request):
             data.create_user = createuser
             data.Company_Web_site = cweb
             data.Company_Short_Name = cshort
+            data.Authlink=authlink
+            data.Logolink=logolink
             if request.method == 'POST' and request.FILES:
                 image = request.FILES['logo']
                 store = FileSystemStorage()
@@ -3141,32 +3145,52 @@ def uw_dashboardV(request):
     user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
     return render(request,'uw/uw_dashboard.html',{'company':company,'user_branch':user_branch,'user_current_branch':user_current_branch})
 
-
-def uw_q_marineV(request):
+def marine(request):
     user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
     user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
-    bill = MarineQuatationM.objects.all().count()
-    client_n=ClinetM.objects.all()
-    bank_n=BankM.objects.all()
+    client_n = ClinetM.objects.all()
+    bank_n = BankM.objects.all()
     client_add = Client_BranchM.objects.all()
-    voyagefrom=VoyageForm.objects.all()
-    voyageto=VoyageTo.objects.all()
-    transitby=TransitBy.objects.all()
-    voyagevia=VoyageVia.objects.all()
-    currenct=Currency.objects.all()
-    risk=RiskCovered.objects.all()
-    insurance=InsuraceType.objects.all()
-    producer=Hr_Employees_infoM.objects.all()
-    bankbranch=Bank_BranchM.objects.all()
+    voyagefrom = VoyageForm.objects.all()
+    voyageto = VoyageTo.objects.all()
+    transitby = TransitBy.objects.all()
+    voyagevia = VoyageVia.objects.all()
+    currenct = Currency.objects.all()
+    risk = RiskCovered.objects.all()
+    insurance = InsuraceType.objects.all()
+    producer = Hr_Employees_infoM.objects.all()
+    bankbranch = Bank_BranchM.objects.all()
+    modof = ModOfPayment.objects.all()
+    depositbank_n = Deposit_BankM.objects.all()
+    depositbank_branch_n = Deposit_Bank_BranchM.objects.all()
+    context = {
+        'company': company,
+        'user_current_branch': user_current_branch,
+        'user_branch': user_branch,
+        'client_n': client_n,
+        'bank_n': bank_n,
+        'client_add': client_add,
+        'voyagefrom': voyagefrom,
+        'voyageto': voyageto,
+        'transitby': transitby,
+        'voyagevia': voyagevia,
+        'currenct': currenct,
+        'risk': risk,
+        'insurance': insurance,
+        'producer': producer,
+        'bankbranch': bankbranch,
+        'modof': modof,
+        'depositbank_n': depositbank_n,
+        'depositbank_branch_n': depositbank_branch_n,
+        }
+    return context
 
-    return render(request,'uw/forms/quotation/marineq.html',{'company':company,'user_branch':user_branch,
-                                                             'user_current_branch':user_current_branch,
-                                                             'client_n':client_n,'client_add':client_add,
-                                                             'bank_n':bank_n,'voyagefrom':voyagefrom,
-                                                             'voyageto':voyageto,'transitby':transitby,
-                                                             'voyagevia':voyagevia,'currenct':currenct,
-                                                             'risk':risk,'insurance':insurance,
-                                                             'producer':producer,'bankbranch':bankbranch,'bill':bill})
+def uw_q_marineV(request):
+    bill = MarineQuatationM.objects.all().count()
+    context={
+        'bill':bill
+    }
+    return render(request,'uw/forms/quotation/marineq.html',marine(request)|context)
 
 
 
@@ -3450,7 +3474,7 @@ def uw_q_marine_sendV(request,id=0):
         text_contant=strip_tags(html_contant)
         email=EmailMultiAlternatives(
             #subject
-            'test',
+            'Marine Quotation',
             text_contant,
             settings.EMAIL_HOST_USER,
             my_list,
@@ -3464,34 +3488,12 @@ def uw_q_marine_sendV(request,id=0):
 
 
 def uw_q_marine_covernoteV(request):
-    user_branch = Software_Permittion_Branch.objects.filter(user=request.user.id)
-    user_current_branch = Software_Permittion_Branch.objects.filter(Branch=request.user.last_name, user=request.user.id)
+
     bill = MarineCovernoteM.objects.all().count()
-    client_n = ClinetM.objects.all()
-    bank_n = BankM.objects.all()
-    client_add = Client_BranchM.objects.all()
-    voyagefrom = VoyageForm.objects.all()
-    voyageto = VoyageTo.objects.all()
-    transitby = TransitBy.objects.all()
-    voyagevia = VoyageVia.objects.all()
-    currenct = Currency.objects.all()
-    risk = RiskCovered.objects.all()
-    insurance = InsuraceType.objects.all()
-    producer = Hr_Employees_infoM.objects.all()
-    bankbranch = Bank_BranchM.objects.all()
-    modof=ModOfPayment.objects.all()
-    depositbank_n = Deposit_BankM.objects.all()
-    depositbank_branch_n = Deposit_Bank_BranchM.objects.all()
-    return render(request, 'uw/forms/covernot/marinecovernote.html', {'company': company, 'user_branch': user_branch,
-                                                               'user_current_branch': user_current_branch,
-                                                               'client_n': client_n, 'client_add': client_add,
-                                                               'bank_n': bank_n, 'voyagefrom': voyagefrom,
-                                                               'voyageto': voyageto, 'transitby': transitby,
-                                                               'voyagevia': voyagevia, 'currenct': currenct,
-                                                               'risk': risk, 'insurance': insurance,
-                                                               'producer': producer, 'bankbranch': bankbranch,
-                                                               'bill': bill,'modof':modof,'depositbank_n':depositbank_n,
-                                                                      'depositbank_branch_n':depositbank_branch_n})
+    context={
+        'bill':bill
+    }
+    return render(request, 'uw/forms/covernot/marinecovernote.html',marine(request)|context)
 
 
 def uw_q_marine_covernote_saveV(request):
@@ -3885,13 +3887,21 @@ def hr_bank_info_exclesavev(request):
 
     return render(request, 'hr/forms/message.html')
 
+
+
+
+
 def uw_marine_addendumV(request):
-    return render(request,'uw/forms/addendum/marineaddendum.html')
+    return render(request, 'uw/forms/addendum/marineaddendum.html',marine(request))
+
+
 
 def TestV(request):
     marine_bill = MarineCovernoteM.objects.filter(Cover_No_no=1)
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    path = os.path.join(BASE_DIR, '\static\media')
     for x in marine_bill:
         amount = num2words(x.Gross_Amount, lang="en_IN")
-    return render(request, 'uw/reports/marine_cover_note_f.html',{'company':company,'marine_bill':marine_bill,'amount':amount})
+    return render(request, 'uw/reports/marine_bill_email.html',{'company':company,'marine_bill':marine_bill,'amount':amount,'path':path})
 
 

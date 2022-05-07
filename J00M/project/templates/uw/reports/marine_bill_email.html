@@ -32,8 +32,9 @@ th {
     {%for x in company%}
     <tr style="background-color:#1340AD; ">
         <th colspan="10">
-            <img src="{{x.image}}" alt="" style="width:60px;">
-            <p style="color:#fff"><span style="font-size:18px;">{{x.Company_Name}}</span><br>{{x.Company_Address}}, <br>{{x.Company_Email}}, {{x.Company_Phone}}, {{x.Company_Fax}}, {{x.Company_Web_site}} </p>
+
+            <img src='http://drive.google.com/uc?export=view&id={{x.Logolink}}' alt="" style="width:60px;">
+            <p style="color:#fff; text-decoration:None;"><span style="font-size:18px;">{{x.Company_Name}}</span><br>{{x.Company_Address}}, <br>{{x.Company_Email}}, {{x.Company_Phone}}, {{x.Company_Fax}}, {{x.Company_Web_site}} </p>
         </th>
     </tr>
     {%endfor%}
@@ -164,7 +165,7 @@ th {
  {%for u in company%}
     <tr>
         <td colspan="5" style="text-align:left;"></td>
-        <th colspan="5" style="text-align:right;"><b><img src="{{u.authusers}}" alt="" style="width:100px;"></b> </th>
+        <th colspan="5" style="text-align:right;"><b><img src="http://drive.google.com/uc?export=view&id={{u.Authlink}}" alt="" style="width:100px;"></b> </th>
 
     </tr>
     {%endfor%}
@@ -174,9 +175,11 @@ th {
     </tr>
 
 
-    <!--  <img style="width:80px; padding:0;margin:0" align="right" src="{{path}}\demo.png" alt="">-->
 
 </table>
+
+
+
 {%endfor%}
 </body>
 </html>

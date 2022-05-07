@@ -160,6 +160,34 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Authorization Google Drive Link</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="authreslink"
+                                               value="{{a.Authlink}}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Logo Google Drive Link</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="logolink"
+                                               value="{{a.Logolink}}">
+                                    </div>
+                                </div>
+                            </div>
 
 
                         </div>
@@ -167,11 +195,12 @@
 
                             {%if a.Edits == '1'%}
                             <button class="btn btn-primary mr-1" type="button">
-                                    <i class="fas fa-lock"> Data Lock</i>
+                                <i class="fas fa-lock"> Data Lock</i>
                             </button>
                             {%else%}
                             <button class="btn btn-primary mr-1" type="button" hx-encoding="multipart/form-data"
-                                    hx-post="{%url 'software_admin_company_info_save'%}" hx-target=".search-results"><i class="fas fa-edit">
+                                    hx-post="{%url 'software_admin_company_info_save'%}" hx-target=".search-results"><i
+                                    class="fas fa-edit">
                                 Edit</i>
                             </button>
                             {%endif%}
@@ -347,6 +376,32 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Authorization Google Drive Link</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="authreslink">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Logo Google Drive Link</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">
+                                                <i class="far fa-building"></i>
+                                            </div>
+                                        </div>
+                                        <input type="text" class="form-control phone-number" name="logolink">
+                                    </div>
+                                </div>
+                            </div>
 
 
                         </div>
@@ -370,6 +425,19 @@
     </form>
 
 
+</section>
+<section>
+    <div class="row">
+        <div class="card" style="padding:20px;">
+            <h1>Google Drive Upload Image Extension " .png  " </h1>
+            <div style="text-align:center;">
+                <video width="400" controls>
+                    <source src="{%static 'link.mp4'%}" type="video/mp4">
+                    <source src="{%static 'link.mp4'%}" type="video/ogg">
+                </video>
+            </div>
+        </div>
+    </div>
 </section>
 {%endif%}
 {%endblock%}
