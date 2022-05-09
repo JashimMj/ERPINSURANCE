@@ -3,16 +3,7 @@
 {%block contant%}
 <section class="section">
     <div class="row ">
-        <!--        <div class="col-md-6" style="margin-bottom:10px;">-->
-        <!--            <form class="form-inline" action="{%url 'uw_q_marine_search'%}" method="POST" id="searc_form">-->
-        <!--                {%csrf_token%}-->
-        <!--                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"-->
-        <!--                       name="search" id="searchs">-->
-        <!--                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"-->
-        <!--                >Search Bill-->
-        <!--                </button>-->
-        <!--            </form>-->
-        <!--        </div>-->
+
 
 
         <div class="col-md-6" style="margin-bottom:10px;">
@@ -979,16 +970,60 @@
 
 </script>
 <script>
- $("#rate, #extra1, #extra2").blur(function(){
+    $("#rate, #extra1, #extra2").blur(function(){
 
-       suminsured=$('#sinsured').val()
-     var extra =$('#extra1').val()
-    var extra2=$('#extra2').val()
-    var rate=$('#rate').val()
-    var sumex1=parseInt(parseInt(suminsured) + (parseInt(suminsured)*parseInt(extra))/100 );
-    var sumex2=sumex1 * (parseInt(extra2)/100);
-    var sum=Math.round((sumex1 + sumex2) * rate);
-    $('#bdamount').val(sum);
+    $.ajax({
+    url:"{%url 'uw_q_marine_covernote_search'%}",
+    type:'POST',
+    dataType:'json',
+    data:{
+         csrfmiddlewaretoken: '{{ csrf_token }}',
+         search:$('#searchcover').val(),
+         },
+    success: function(response){
+        xadds=response.all
+        yadds=response.mrcl
+        for (i=0;i<xadds.length;i++){
+
+        var suminsured = xadds[i].fields.Sum_insured + parseInt($('#sinsured').val());
+        if (suminsured == 0){
+
+            var suminsured = parseInt($('#sinsured').val())
+            var extra = $('#extra1').val()
+            var extra2 = $('#extra2').val()
+            var rate=$('#rate').val()
+            var sumex1=parseInt(parseInt(suminsured) + (parseInt(suminsured)*parseInt(extra))/100 );
+            var sumex2=sumex1 * (parseInt(extra2)/100);
+            var sum=Math.round((sumex1 + sumex2) * rate);
+            $('#bdamount').val(sum);
+
+        }else if(suminsured <0){
+        var suminsured = 0
+            var extra = $('#extra1').val()
+            var extra2 = $('#extra2').val()
+            var rate=$('#rate').val()
+            var sumex1=parseInt(parseInt(suminsured) + (parseInt(suminsured)*parseInt(extra))/100 );
+            var sumex2=sumex1 * (parseInt(extra2)/100);
+            var sum=Math.round((sumex1 + sumex2) * rate);
+            $('#bdamount').val(sum);
+
+
+        }else{
+        var extra = $('#extra1').val()
+            var extra2 = $('#extra2').val()
+            var rate=$('#rate').val()
+            var sumex1 = parseInt(parseInt(suminsured) + (parseInt(suminsured)*parseInt(extra))/100 );
+            var sumex2 = (sumex1 * (parseInt(extra2)/100));
+            var sum = Math.round((sumex1 + sumex2) * rate);
+            var total = (parseInt(sum) - xadds[i].fields.Bdtamount);
+            $('#bdamount').val(total);
+        }
+
+            }
+
+}
+});
+
 
   });
 
@@ -1494,9 +1529,12 @@ $.ajax({
          search:$('#searchcover').val(),
          },
     success: function(response){
-xadd=response.all
+        xadd=response.all
         yadd=response.mrcl
-        for (i=0;i<x.length;i++){
+
+        for (i=0;i<xadd.length;i++){
+
+
         if (parseInt(extr1)>0){
         var positive='+'
         }
@@ -1504,7 +1542,8 @@ xadd=response.all
         var positive=''
         }
         if (parseInt(extr1) == xadd[i].fields.Extra1)
-        {var extrasum = extr1}
+        {var extrasum = extr1
+        }
         else{
         var extrasum = (parseInt(extr1)+xadd[i].fields.Extra1)
         }
@@ -1516,10 +1555,12 @@ xadd=response.all
     else{
             $('#adnara').val('Notwithstanding anything contained herein to the contrary , it is hereby declared and agreed that the insured amount under the within mentioned Marine Cover Note has been decreased by Tk.2,460.00 ( US$ ' + suminsured +'+10% Ex.@ 84.7)From Tk.6,14,922.00 ( US$6,600.00+10% Ex.@ 84.7)To Tk.6,17,382.00 ( US$6,626.40+10% Ex.@ 84.7) and not as stated previously.')
         }
+
+
             }
 
             }
-            });
+   });
 
 });
 
