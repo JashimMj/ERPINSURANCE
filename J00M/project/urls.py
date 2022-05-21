@@ -176,8 +176,11 @@ urlpatterns = [
 
 
     # ----------------------Marine Addendum---------------------------
-
+    path('uw/marine/cover/search/', views.uw_marine_cover_searchV,name="uw_marine_covernote_search"),
     path('uw/marine/addendum', views.uw_marine_addendumV, name="uw_marine_addendum"),
+    path('uw/marine/addendum/save/', views.uw_marine_addendum_saveV, name="uwmarineaddendum_save"),
+    path('uw/marine/add/search/cal', views.uw_marine_add_search_calV,name="uw_marine_add_search_cal"),
+
 
 # ----------------------MR REPORT---------------------------
     path('uw/mr/marine/cover/pdf/<int:id>', views.uw_mr_marine_cover_demo_pdfsV, name="uw_mr_marine_cover_pdf"),

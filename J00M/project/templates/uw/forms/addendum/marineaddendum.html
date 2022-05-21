@@ -5,7 +5,6 @@
     <div class="row ">
 
 
-
         <div class="col-md-6" style="margin-bottom:10px;">
 
             <form class="form-inline" action="{%url 'uw_q_marine_covernote_search'%}" method="POST"
@@ -21,7 +20,7 @@
     </div>
 
 
-    <form method="POST" id="formq">
+    <form method="POST" id="formad">
         {%csrf_token%}
         <div class="row">
             <div class="col-12 col-md-8 col-lg-8">
@@ -48,7 +47,7 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control phone-number" name="bdate" id="billdate"
+                                        <input type="text" class="form-control phone-number" name="bdate" id="adddate"
                                                value='{% now "d-m-Y" %}' readonly>
                                     </div>
                                 </div>
@@ -62,7 +61,8 @@
                                                 <i class="far fa-building"></i>
                                             </div>
                                         </div>
-                                        <input type="text" class="form-control phone-number" name="adno" id="addno">
+                                        <input type="text" class="form-control phone-number" name="adno" id="addno"
+                                               readonly>
                                     </div>
                                 </div>
                             </div>
@@ -595,7 +595,7 @@
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
                                         <input type="text" class="form-control phone-number" name="mamount" id="mamount"
-                                               value="0">
+                                               value="0" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -624,7 +624,7 @@
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
                                         <input type="text" class="form-control phone-number" name="wamount" id="wamount"
-                                               value="0">
+                                               value="0" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -638,7 +638,7 @@
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
                                         <input type="text" class="form-control phone-number" name="netamount" id="netid"
-                                               value="0">
+                                               value="0" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -695,7 +695,7 @@
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
                                         <input type="text" class="form-control phone-number" name="sp-discount"
-                                               id="gross">
+                                               id="gross" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -738,7 +738,7 @@
                                         <!--                                            </div>-->
                                         <!--                                        </div>-->
                                         <!--                                        <input type="text" class="form-control phone-number" name="sp-discount">-->
-                                        <input type="text" name="MR" id="mrs" class="form-control">
+                                        <input type="text" name="MR" id="mrs" class="form-control" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -861,30 +861,30 @@
                 </div>
             </div>
 
-            <div class="col-12 col-md-12 col-lg-12" >
-                 <div class="card-header" >
-                 <div class="alert alert-warning" role="alert" id="message"></div>
-                        <div class="card-footer text-center">
-                            <button class="btn btn-success mr-1" id="save" type="submit" ><i
-                                    class="far fa-save"> Save</i>
+            <div class="col-12 col-md-12 col-lg-12">
+                <div class="card-header">
+                    <div class="alert alert-warning" role="alert" id="message"></div>
+                    <div class="card-footer text-center">
+                        <button class="btn btn-success mr-1" id="save" type="submit"><i
+                                class="far fa-save"> Save</i>
 
-                            </button>
-                            <a class="btn btn-primary" id="printd" target="_blank" ><i
-                                    class="fas fa-id-card-alt" style="text-decoration:none;"> Print Demo</i> </a>
-                            <a href="" class="btn btn-info" id="finalp" target="_blank" ><i
-                                    class="fas fa-print" style="text-decoration:none;"> Final Print</i> </a>
-                            <a href="" class="btn btn-info" id="MRprint" target="_blank" ><i
-                                    class="fas fa-print" style="text-decoration:none;"> MR Print</i> </a>
-                            <a href="" class="btn btn-warning" id="sendq" target="_blank"><i
-                                    class="fa fa-envelope" style="text-decoration:none;"> Send Quotation</i> </a>
+                        </button>
+                        <a class="btn btn-primary" id="printd" target="_blank"><i
+                                class="fas fa-id-card-alt" style="text-decoration:none;"> Print Demo</i> </a>
+                        <a href="" class="btn btn-info" id="finalp" target="_blank"><i
+                                class="fas fa-print" style="text-decoration:none;"> Final Print</i> </a>
+                        <a href="" class="btn btn-info" id="MRprint" target="_blank"><i
+                                class="fas fa-print" style="text-decoration:none;"> MR Print</i> </a>
+                        <a href="" class="btn btn-warning" id="sendq" target="_blank"><i
+                                class="fa fa-envelope" style="text-decoration:none;"> Send Quotation</i> </a>
 
 
-                            <a class="btn btn-danger mr-1" href="{%url 'uw_q_marine_covernote'%}"><i
-                                    class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
-                            </a>
+                        <a class="btn btn-danger mr-1" href="{%url 'uw_q_marine_covernote'%}"><i
+                                class="fas fa-sync-alt" style="text-decoration:none;"> Add New</i>
+                        </a>
 
-                        </div>
-                 </div>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -900,6 +900,7 @@
     $('#message').hide();
     $('#insurances').val(1).trigger('change');
     });
+
 
 
 </script>
@@ -923,6 +924,7 @@
     },
     });
   });
+
 
 
 
@@ -974,14 +976,15 @@
 
 
 
+
 </script>
 <script>
 
 
-    $("#rate, #extra1, #extra2").blur(function(){
+    $("#rate, #extra1, #extra2,#sinsured").blur(function(){
 
     $.ajax({
-    url:"{%url 'uw_q_marine_covernote_search'%}",
+    url:"{%url 'uw_marine_add_search_cal'%}",
     type:'POST',
     dataType:'json',
     data:{
@@ -991,51 +994,51 @@
     success: function(response){
         xadds=response.all
         yadds=response.mrcl
+        sumadd=response.addvarsum
+
+        for (i=0;i<sumadd.length;i++){
+        var addsuminsured=sumadd[i].fields.Sum_insured;
+        if (addsuminsured != null){addsuminsured=parseInt(addsuminsured);} else{addsuminsured=parseInt(0);}
+        var addsumbdt=sumadd[i].fields.Bdtamount;
+        if (addsumbdt != null){addsumbdt=parseInt(addsumbdt);} else{addsumbdt=parseInt(0);}
+        }
+
         for (i=0;i<xadds.length;i++){
-        var newsum= parseInt($('#sinsured').val())
-        var suminsured = (xadds[i].fields.Sum_insured + newsum);
-        if (newsum != 0 && suminsured == 0){
-
-            var suminsured = parseInt($('#sinsured').val())
-            var extra = $('#extra1').val()
-            var extra2 = $('#extra2').val()
-            var rate=$('#rate').val()
-            var sumex1=parseInt(parseInt(suminsured) + (parseInt(suminsured)*parseInt(extra))/100 );
-            var sumex2=sumex1 * (parseInt(extra2)/100);
-            var sum=Math.round((sumex1 + sumex2) * rate);
-            $('#bdamount').val(-xadds[i].fields.Bdtamount);
-
-        }else if(newsum != 0 && suminsured < 0){
-        var suminsured = 0
-            var extra = $('#extra1').val()
-            var extra2 = $('#extra2').val()
-            var rate=$('#rate').val()
-            var sumex1=parseInt(parseInt(suminsured) + (parseInt(suminsured)*parseInt(extra))/100 );
-            var sumex2=sumex1 * (parseInt(extra2)/100);
-            var sum=Math.round((sumex1 + sumex2) * rate);
+        var extra = $('#extra1').val();
+        var newsum= parseInt($('#sinsured').val());
+        var suminsured = (xadds[i].fields.Sum_insured+ parseInt(addsuminsured) + newsum);
+        var bdtsamount=(xadds[i].fields.Bdtamount+ parseInt(addsumbdt));
+        if (newsum != 0 && suminsured > 0 && extra == xadds[i].fields.Extra1){
+            var instantsum=parseFloat(suminsured) - (xadds[i].fields.Sum_insured+addsuminsured);
+            var extra = $('#extra1').val();
+            var extra2 = $('#extra2').val();
+            var rate=$('#rate').val();
+            var sumex1=parseFloat(parseFloat(instantsum) + (parseFloat(instantsum)*parseFloat(extra))/100 );
+            var sumex2=sumex1 * (parseFloat(extra2)/100);
+            var sum=Math.round((sumex1 + sumex2) * parseFloat(rate));
             $('#bdamount').val(sum);
 
+        }else if (newsum != 0 && suminsured == 0 && extra == xadds[i].fields.Extra1){
+            var extra = $('#extra1').val();
+            var extra2 = $('#extra2').val();
+            var rate=$('#rate').val();
+            var sumex1=parseFloat(parseFloat(newsum) + (parseFloat(newsum)*parseFloat(extra))/100 );
+            var sumex2=sumex1 * (parseFloat(extra2)/100);
+            var sum=Math.round((sumex1 + sumex2) * parseFloat(rate));
+            $('#bdamount').val(sum);
+        }else if (extra != xadds[i].fields.Extra1){
+            var extra = $('#extra1').val();
+            var extra2 = $('#extra2').val();
+            var rate=$('#rate').val();
 
-        }else if(newsum == 0){
-            var suminsured = xadds[i].fields.Sum_insured
-            var extra = $('#extra1').val()
-            var extra2 = $('#extra2').val()
-            var rate=$('#rate').val()
-            var sumex1=parseInt(parseInt(suminsured) + (parseInt(suminsured)*parseInt(extra))/100 );
-            var sumex2=sumex1 * (parseInt(extra2)/100);
-            var sum=Math.round((sumex1 + sumex2) * rate);
-            var total =sum - xadds[i].fields.Bdtamount
-            $('#bdamount').val(total);
+            var sumex1total=parseFloat(parseFloat(suminsured) + (parseFloat(suminsured)*parseFloat(extra))/100 );
+            var sumex2total=sumex1total * (parseFloat(extra2)/100);
+            var sumtotal=Math.round(((sumex1total + sumex2total) * parseFloat(rate)));
+            var bdamounts=Math.round(sumtotal- bdtsamount );
+            $('#bdamount').val(bdamounts);
         }
         else{
-            var extra = $('#extra1').val()
-            var extra2 = $('#extra2').val()
-            var rate=$('#rate').val()
-            var sumex1 = parseInt(parseInt(suminsured) + (parseInt(suminsured)*parseInt(extra))/100 );
-            var sumex2 = (sumex1 * (parseInt(extra2)/100));
-            var sum = Math.round((sumex1 + sumex2) * rate);
-            var total = (parseInt(sum) - xadds[i].fields.Bdtamount);
-            $('#bdamount').val(total);
+        $('#bdamount').val(0);
         }
 
             }
@@ -1066,7 +1069,7 @@
 
   });
 
- $("#wrates, #mrate, #vatid, #samount, #rate, #samount, #extra1, #extra2 ").blur(function(){
+ $("#wrates, #mrate, #vatid, #samount, #rate, #extra1, #extra2 ").blur(function(){
     var warenet=$('#wamount').val();
     var marinenet=$('#mamount').val();
     var vateas=$('#vataid').val();
@@ -1107,6 +1110,7 @@
      warenet:$('#wamount').val(),
      marinenet:$('#mamount').val(),
      vateas:$('#vataid').val(),
+     stump:$('#samount').val(),
 
 
     },
@@ -1148,18 +1152,22 @@
 
 
 
+
 </script>
 <script>
-     $("#formq").on('submit',function(e){
+     $("#formad").on('submit',function(e){
       e.preventDefault();
-<!--    alert("The paragraph was clicked.");-->
-    $.ajax({
-    url:"{%url 'uw_q_marine_covernote_save'%}",
+    alert("The paragraph was clicked.");
+ $.ajax({
+    url:"{%url 'uwmarineaddendum_save'%}",
     type:'POST',
     data:{
      csrfmiddlewaretoken: '{{ csrf_token }}',
-        billnos:$('#billno').val(),
-        billdates:$('#billdate').val(),
+        adddates:$('#adddate').val(),
+        addnos:$('#addno').val(),
+        coverno:$('#coverno').val(),
+        narations :$('#adnara').val(),
+
         acs:$('#ac').val(),
         client_ns:$('#ccl').val(),
         client_address:$('#sums').val(),
@@ -1170,15 +1178,12 @@
         vToss:$('#vTos').val(),
         transits:$('#transit').val(),
         vviass:$('#vvias').val(),
-        fdates:$('#fdate').val(),
-        tdates:$('#tdate').val(),
         sinsureds:$('#sinsured').val(),
         extra1s:$('#extra1').val(),
         extra2s:$('#extra2').val(),
         currents:$('#current').val(),
         rates:$('#rate').val(),
         bdamounts:$('#bdamount').val(),
-        decss:$('#decs').val(),
         riskcoderss:$('#riskcoders').val(),
         insurancess:$('#insurances').val(),
         producerss:$('#producers').val(),
@@ -1215,12 +1220,12 @@
         y=response.messages
         u=response.abcs
         $('#billno').val(x)
-        $("#save").html("Edit");
+         $("#save").html("Edit");
        $('#message').html(y).show();
 
         for (i=0;i<u.length;i++){
-       var abct = u[i].fields.Cover_No_no;
-       $("#coverno").val(u[i].fields.Cover_No);
+       var abct = u[i].fields.Addendum_number;
+       $("#addno").val(u[i].fields.Addendum_no);
        $("#mrs").val(u[i].fields.MR_Number);
        $("#crdate").val(u[i].fields.Cdate);
 
@@ -1236,27 +1241,15 @@
         $('#sendq').attr("href", "");
         $('#MRprint').attr("href", "");
         }
-
-        var edits=u[i].fields.Edits;
-        if (edits >0){
-        $('#save').hide();
-
         }
-        else{
-        $('#save').show();
-
-        }
-        }
-
 
 
 
     },
     });
 
-
-
   });
+
 
 
 
@@ -1339,14 +1332,7 @@
         $('#sendq').attr("href", "" );
         }
         var edits=x[i].fields.Edits;
-<!--        if (edits >0){-->
-<!--        $('#save').hide();-->
 
-<!--        }-->
-<!--        else{-->
-<!--        $('#save').show();-->
-
-<!--        }-->
 
 
 
@@ -1359,6 +1345,7 @@
   });
 
 
+
 </script>
 
 <script>
@@ -1367,7 +1354,7 @@
 
 
     $.ajax({
-    url:"{%url 'uw_q_marine_covernote_search'%}",
+    url:"{%url 'uw_marine_covernote_search'%}",
     type:'POST',
     dataType:'json',
     data:{
@@ -1377,13 +1364,12 @@
     success: function(response){
         x=response.all
         y=response.mrcl
+        covers=response.cover
+         for (i=0;i<covers.length;i++){
+            $('#coverno').val(covers[i].fields.Cover_No);
+            }
         for (i=0;i<x.length;i++){
-            if (x[i].fields.Edits>0){
-             $('#save').hide();
-            }
-            else{
-               $('#save').show();
-            }
+
             $('#billno').val(x[i].fields.Bill_No);
             var dr = new Date(x[i].fields.Cover_Date);
             var curr_day = String(dr.getDate()).padStart(2, '0');
@@ -1392,7 +1378,6 @@
 
             $('#billdate').val(curr_day + "-" + curr_month + "-" + curr_year);
             $('#ac').val(x[i].fields.Ac);
-            $('#coverno').val(x[i].fields.Cover_No);
             $("#ccl").val(x[i].fields.Client_NameM).trigger('change');
             $('#sums').val(x[i].fields.Client_AddressM).trigger('change');
             $('#bname').val(x[i].fields.Bank_Name).trigger('change');
@@ -1413,12 +1398,12 @@
         var e_month = String(c.getMonth()+1).padStart(2, '0');
         var e_year = c.getFullYear();
             $('#tdate').val(e_date + "-" + e_month + "-" + e_year);
-            $('#sinsured').val(x[i].fields.Sum_insured);
+
             $('#extra1 ').val(x[i].fields.Extra1);
             $('#extra2 ').val(x[i].fields.Extra2);
             $('#current ').val(x[i].fields.Currency).trigger('change');
             $('#rate ').val(x[i].fields.Excrate);
-            $('#bdamount').val(x[i].fields.Bdtamount);
+            $('#bdamount').val(0);
             $('#decs').val(x[i].fields.Declaration);
             $('#riskcoders').val(x[i].fields.RiskCover).trigger('change');
             $('#insurances').val(x[i].fields.Insurance_Type).trigger('change');
@@ -1427,16 +1412,9 @@
             $('#dis').val(x[i].fields.Discount);
             $('#spdis').val(x[i].fields.SpDiscount);
             $('#mrate').val(x[i].fields.Marine_Rate);
-            $('#mamount').val(x[i].fields.Marine_Amount);
+
             $('#wrates').val(x[i].fields.Ware_Rate);
-            $('#wamount').val(x[i].fields.Ware_Amount);
-            $('#netid').val(x[i].fields.Net_Amount);
-            $('#vataid').val(x[i].fields.Vat_Amount);
-            $('#samount').val(x[i].fields.Stump_Amount);
-            $('#gross').val(x[i].fields.Gross_Amount);
-            $('#nara').val(x[i].fields.narration);
-            $('#tomail').val(x[i].fields.sendmail);
-            $('#prints').val(x[i].fields.Printed_No);
+
             if (x[i].fields.Coins_Leader==1){
                  $('#coins').attr('checked', true);
                  $('#coins').val(x[i].fields.Coins_Leader);
@@ -1462,7 +1440,7 @@
                 $('#ldocu').val();
             }
 
-            $("#save").html("Edit");
+
         var abc = x[i].fields.Cover_No_no;
         if (abc > 0){
             $('#printd').attr("href", "/uw/quotation/marine/cover/pdf/demo/"+ x[i].fields.Cover_No_no );
@@ -1477,13 +1455,12 @@
             $('#MRprint').attr("href", "" );
             }
         for (i=0;i<y.length;i++){
-            $('#mrs').val(y[i].fields.Mrno);
+<!--            $('#mrs').val(y[i].fields.Mrno);-->
         var mdr = new Date(y[i].fields.Mrno_date);
         var mcurr_day = String(mdr.getDate()).padStart(2, '0');
         var mcurr_month = String(mdr.getMonth()+1).padStart(2, '0');
         var mcurr_year = mdr.getFullYear();
 
-            $('#mrdate').val(mcurr_day + "-" + mcurr_month + "-" + mcurr_year);
             $('#numbers').val(y[i].fields.Cheque_no);
             $('#MOP').val(y[i].fields.Mod).trigger('change');
             $('#dbname').val(y[i].fields.Bank_name).trigger('change');
@@ -1527,6 +1504,7 @@
 
 
 
+
 </script>
 <script>
     $('#addbtn').on('click',function(e){
@@ -1540,7 +1518,7 @@
     var rate=$('#rate').val();
 
 $.ajax({
-    url:"{%url 'uw_q_marine_covernote_search'%}",
+    url:"{%url 'uw_marine_add_search_cal'%}",
     type:'POST',
     dataType:'json',
     data:{
@@ -1550,6 +1528,18 @@ $.ajax({
     success: function(response){
         xadd=response.all
         yadd=response.mrcl
+        sumadd=response.addvarsum
+
+        for (i=0;i<sumadd.length;i++){
+        var addsuminsured=sumadd[i].fields.Sum_insured;
+        if (addsuminsured != null){addsuminsured=addsuminsured;} else{addsuminsured=0;}
+        var addsumbdt=sumadd[i].fields.Bdtamount;
+        if (addsumbdt != null){addsumbdt=addsumbdt;} else{addsumbdt=0;}
+
+        }
+
+
+
 
         for (i=0;i<xadd.length;i++){
 
@@ -1567,8 +1557,8 @@ $.ajax({
         var extrasum = (parseInt(extr1)+xadd[i].fields.Extra1)
         }
             if (suminsured > 0){
-        $('#adnara').val('Notwithstanding anything contained herein to the contrary , it is hereby declared and agreed that the insured amount under the within mentioned Marine Cover Note has been increased by Tk.'+ (parseInt(bdamou) + xadd[i].fields.Bdtamount) +'.00 ( '+curren+' ' + (parseInt(suminsured)+ xadd[i].fields.Sum_insured) +
-        positive + extrasum +
+        $('#adnara').val('Notwithstanding anything contained herein to the contrary , it is hereby declared and agreed that the insured amount under the within mentioned Marine Cover Note has been increased by Tk.'+ (parseInt(bdamou) + xadd[i].fields.Bdtamount+parseInt(addsumbdt)) +'.00 ( ' +curren+' ' + ((parseInt(suminsured)+ parseInt(xadd[i].fields.Sum_insured)) + parseInt(addsuminsured))  +'%'
+        +positive + extrasum +
         '% +'+ extr2+'% Ex.@ '+rate+') From Tk.'+ xadd[i].fields.Bdtamount+'.00 ('+xadd[i].fields.Currency+' '+xadd[i].fields.Sum_insured+'+'+xadd[i].fields.Extra1+'%+'+xadd[i].fields.Extra2+'% Ex.@ '+xadd[i].fields.Excrate+')To Tk.'+bdamou+'.00 ( '+curren+' ' + suminsured +'+'+ extr1 +'% +'+ extr2+'% Ex.@ '+rate+') and not as stated previously.')
         }
     else{
@@ -1582,6 +1572,7 @@ $.ajax({
    });
 
 });
+
 
 </script>
 

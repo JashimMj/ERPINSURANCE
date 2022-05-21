@@ -24,6 +24,8 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
+from django.db.models import Max
+
 from .resources import *
 from tablib import Dataset
 
@@ -3227,21 +3229,31 @@ def uw_q_marine_transit_by_selectV(request):
     warenet=int(request.GET.get('warenet'))
     marinenet=int(request.GET.get('marinenet'))
     vateas=int(request.GET.get('vateas'))
+    stumpva=int(request.GET.get('stump'))
     transit=TransitBy.objects.filter(id=trys)
-    for x in transit:
-        if x.Stump_Rate == 50:
-            sdam = x.Stump_Rate
-            sumg=warenet+marinenet+vateas+sdam
-            # abc = sdam.values()
-            # print(abc)
-            # good = list(sdam)
-            return JsonResponse({'trans': sdam,'sumg':sumg}, status=200)
-        else:
-            sdam = round(bd/1500)
-            sumg = warenet + marinenet + vateas + sdam
-            # abc = sdam.values()
-            # good = list(abc)
-            return JsonResponse({'trans': sdam,'sumg':sumg}, status=200)
+    if stumpva <0:
+        sdam = stumpva
+        sumg = warenet + marinenet + vateas + sdam
+        # abc = sdam.values()
+        # print(abc)
+        # good = list(sdam)
+        return JsonResponse({'trans': sdam, 'sumg': sumg}, status=200)
+    else:
+        for x in transit:
+            if x.Stump_Rate == 50:
+                sdam = x.Stump_Rate
+                sumg=warenet+marinenet+vateas+sdam
+                # abc = sdam.values()
+                # print(abc)
+                # good = list(sdam)
+                return JsonResponse({'trans': sdam,'sumg':sumg}, status=200)
+            else:
+                sdam = round(bd / x.Stump_Rate)
+                sumg = warenet + marinenet + vateas + sdam
+                # abc = sdam.values()
+                # good = list(abc)
+                return JsonResponse({'trans': sdam, 'sumg': sumg}, status=200)
+
     abc = transit.values()
     good = list(abc)
     return JsonResponse({'trans': good},status=200)
@@ -3408,7 +3420,28 @@ def uw_q_marine_cover_searchV(request):
         abcs = json.loads(goods)
         good=serializers.serialize('json',alls)
         abc=json.loads(good)
+
     return JsonResponse({'all':abc,'mrcl':abcs},safe=False)
+
+def uw_marine_add_search_calV(request):
+    search_b=request.POST.get('search')
+    alls=MarineCovernoteM.objects.filter(Cover_No_no=search_b)
+    for x in alls:
+        all = MRTable.objects.filter(id=x.MR_Number_id)
+        goods = serializers.serialize('json', all)
+        abcs = json.loads(goods)
+        good=serializers.serialize('json',alls)
+        abc=json.loads(good)
+        addsum=MarineAddendumM.objects.raw('select id, sum(Sum_insured) as Sum_insured,sum(Bdtamount) as Bdtamount from project_marineaddendumm where Cover_No_id=%s',[x.id])
+        ad=serializers.serialize('json',addsum,fields = ("Sum_insured", "Bdtamount"))
+        addvarsum = json.loads(ad)
+        return JsonResponse({'all': abc, 'mrcl': abcs, 'addvarsum': addvarsum}, safe=False)
+
+
+
+
+
+
 
 
 def uw_q_marine_demo_pdfsV(request,id=0):
@@ -3504,9 +3537,11 @@ def uw_q_marine_covernote_saveV(request):
         cover = request.POST.get('coverno')
         short=Company_Information.objects.all()
         branchs = Branch_Infoamtion.objects.get(id=request.user.last_name)
-        dates=datetime.date.today()
-        moth_date=dates.month
-        year_date=dates.year
+        # dates=datetime.date.today()
+        billdate = request.POST.get('billdates')
+        billdates = datetime.datetime.strptime(billdate, '%d-%m-%Y')
+        moth_date=billdates.month
+        year_date=billdates.year
         for x in short:
             short=x.Company_Short_Name
             coberno = short + "/" + branchs.Branch_Short_Name + "/" + "MC" + "-" +str(id)+"/"+str(moth_date)+"/"+str(year_date)
@@ -3889,12 +3924,255 @@ def hr_bank_info_exclesavev(request):
 
 
 
+def uw_marine_cover_searchV(request):
+    search_b=request.POST.get('search')
+    alls=MarineCovernoteM.objects.filter(Cover_No_no=search_b)
+    for x in alls:
+        all = MRTable.objects.filter(id=x.MR_Number_id)
+        goods = serializers.serialize('json', all)
+        abcs = json.loads(goods)
+        good=serializers.serialize('json',alls)
+        abc=json.loads(good)
+        addinfo=MarineAddendumM.objects.filter(Cover_No=x.id).order_by('-id')[:1]
+        addre = serializers.serialize('json', addinfo)
+        addin = json.loads(addre)
+        if addinfo:
+            context={'all':addin,'mrcl':abcs,'cover':abc}
+        else:
+            context = {'all': abc,'mrcl':abcs,'cover':abc}
+
+    return JsonResponse(context,safe=False)
 
 
 def uw_marine_addendumV(request):
     bill = MarineAddendumM.objects.all().count()
     context={'bill':bill}
     return render(request, 'uw/forms/addendum/marineaddendum.html',marine(request)|context)
+
+
+
+def uw_marine_addendum_saveV(request):
+    if request.method == 'POST':
+        counter = MarineAddendumM.objects.all().count()
+        Addno=request.POST.get('addnos')
+        print(Addno)
+        coverfor = request.POST.get('coverno')
+        cover=MarineCovernoteM.objects.get(Cover_No=coverfor)
+        id = counter + 1
+        short=Company_Information.objects.all()
+        branchs = Branch_Infoamtion.objects.get(id=request.user.last_name)
+        billdate = request.POST.get('adddates')
+        billdates = datetime.datetime.strptime(billdate, '%d-%m-%Y')
+        moth_date=billdates.month
+        year_date=billdates.year
+        for x in short:
+            short=x.Company_Short_Name
+            addnoss = short + "/" + branchs.Branch_Short_Name + "/" + "MC" +"/ADDN"+ "-" +str(id)+"/"+str(moth_date)+"/"+str(year_date)
+
+        user = request.user.id
+        createuser = User.objects.get(id=user)
+
+        ac = request.POST.get('acs')
+        naratioad = request.POST.get('narations')
+        client_n = request.POST.get('client_ns')
+        client=ClinetM.objects.get(id=client_n)
+        client_addres = request.POST.get('client_address')
+        c_address=Client_BranchM.objects.get(id=client_addres)
+        bank_names = request.POST.get('bank_namess')
+        bank=BankM.objects.get(id=bank_names)
+        bank_address = request.POST.get('bank_addressss')
+        b_branch=Bank_BranchM.objects.get(id=bank_address)
+        transit = request.POST.get('transits')
+        tarnsit_by=TransitBy.objects.get(id=transit)
+        vforms = request.POST.get('vformss')
+        voyagef=VoyageForm.objects.get(id=vforms)
+        vTos = request.POST.get('vToss')
+        voyaget=VoyageTo.objects.get(id=vTos)
+        interestcover = request.POST.get('interestcovers')
+        vvias = request.POST.get('vviass')
+        voyagevis=VoyageVia.objects.get(id=vvias)
+        sinsured = request.POST.get('sinsureds')
+        extra1 = request.POST.get('extra1s')
+        extra2 = request.POST.get('extra2s')
+        currency = request.POST.get('currents')
+        rate = request.POST.get('rates')
+        bdamounts = request.POST.get('bdamounts')
+        riskcoder = request.POST.get('riskcoderss')
+        risk=RiskCovered.objects.get(id=riskcoder)
+        insurances = request.POST.get('insurancess')
+        insurance_type=InsuraceType.objects.get(id=insurances)
+        producers = request.POST.get('producerss')
+        producer=Hr_Employees_infoM.objects.get(id=producers)
+        dis = request.POST.get('diss')
+        spdis = request.POST.get('spdiss')
+        mrate = request.POST.get('mrates')
+        mamount = request.POST.get('mamounts')
+        wrates = request.POST.get('wratess')
+        wamount = request.POST.get('wamounts')
+        netid = request.POST.get('netids')
+        vataid = request.POST.get('vataids')
+        samount = request.POST.get('samounts')
+        gross = request.POST.get('grosss')
+        nara = request.POST.get('naras')
+        tomail = request.POST.get('tomail')
+        prints = request.POST.get('Print')
+        Mr = request.POST.get('Mr')
+        Mrdate = request.POST.get('Mrdate')
+
+        mrd=datetime.datetime.strptime(Mrdate,'%d-%m-%Y')
+        cdate = request.POST.get('cdate')
+        if cdate =='':
+            caquedate= None
+        else:
+            caquedate=datetime.datetime.strptime(cdate,'%d-%m-%Y')
+
+        Numbers = request.POST.get('Numbers')
+        Mop = request.POST.get('Mop')
+        Dbnames = request.POST.get('Dbname')
+        Dbbranchs = request.POST.get('Dbbranch')
+        mrcount=MRTable.objects.all().count()
+        mrnum= mrcount + 1
+        coinsur=request.POST.get('coin')
+        nonlider=request.POST.get('Nonleader')
+        leaderpersent=request.POST.get('leaderpersents')
+        leadercom=request.POST.get('leadercom')
+        ldocu=request.POST.get('ldocu')
+
+
+
+        if Addno =='':
+            if Dbnames =='':
+                mrdatass = MRTable(id=mrnum, Mrno=mrnum, Mrno_date=mrd, Mod=Mop, Cheque_no=Numbers,Net_Amount=netid,Vat_Amount=vataid,
+                                    Stump_Amount=samount,Gross_Amount=gross,class_insurance='Marine Cargo',User_Branch=branchs,Cdate=caquedate )
+                mrdatass.save()
+            elif Dbbranchs == '':
+                deposit_b = Deposit_BankM.objects.get(id=Dbnames)
+                mrdatass = MRTable(id=mrnum, Mrno=mrnum, Mrno_date=mrd, Mod=Mop, Cheque_no=Numbers,Bank_name=deposit_b,Net_Amount=netid,Vat_Amount=vataid,
+                                    Stump_Amount=samount,Gross_Amount=gross,class_insurance='Marine Cargo',User_Branch=branchs,Cdate=caquedate)
+                mrdatass.save()
+            else:
+                deposit_b = Deposit_BankM.objects.get(id=Dbnames)
+                deposit_bankadd = Deposit_Bank_BranchM.objects.get(id=Dbbranchs)
+                mrdatass=MRTable(id=mrnum,Mrno=mrnum,Mrno_date=mrd,Mod=Mop,Cheque_no=Numbers,Bank_name=deposit_b,Bank_address=deposit_bankadd,Net_Amount=netid,Vat_Amount=vataid,
+                                    Stump_Amount=samount,Gross_Amount=gross,class_insurance='Marine Cargo',User_Branch=branchs,Cdate=caquedate)
+                mrdatass.save()
+            mrnusss=MRTable.objects.get(id=mrnum)
+            date = MarineAddendumM(id=id,Addendum_no=addnoss,Addendum_number=id,Addendum_Date=billdates,Cover_No=cover,Ac=ac,Insurance_Type=insurance_type,Client_NameM=client,
+                                    Client_AddressM=c_address,Bank_Name=bank,Bank_Branch=b_branch,Interest_covered=interestcover,
+                                    Voyage_From=voyagef,Voyage_To=voyaget,Voyage_Via=voyagevis,Transit_By=tarnsit_by,
+                                    Sum_insured=sinsured,Extra1=extra1,Extra2=extra2,
+                                    Currency=currency,Excrate=rate,Bdtamount=bdamounts,
+                                    Discount=dis,SpDiscount=spdis,Marine_Rate=mrate,Marine_Amount=mamount,
+                                    Ware_Rate=wrates,Ware_Amount=wamount,Net_Amount=netid,Vat_Amount=vataid,
+                                    Stump_Amount=samount,Gross_Amount=gross,Producer=producer,RiskCover=risk,
+                                    narration=nara,userc=createuser,User_Branch=branchs,sendmail=tomail, Printed_No=prints,MR_Number=mrnusss,
+                                    Coins_Leader=coinsur, Coins_None_Leader=nonlider, Coins_Leader_Persent=leaderpersent, Coins_Leader_Doc=ldocu, Coins_Leader_Name=leadercom,narration_on=naratioad)
+            date.save()
+            # datas = MarineQuatationM.objects.filter(id=id)
+            #
+            # # bill = MarineQuatationM.objects.all().count()
+            # abc = datas.values()
+            # good = list(abc)
+            # good = messages.info(request, 'Data Save')
+            all = MarineAddendumM.objects.raw('select * from project_marineaddendumm mc, project_mrtable pm where mc.MR_Number_id = pm.id and mc.Addendum_number= %s',[id])
+            good = serializers.serialize('json', all)
+            abcs = json.loads(good)
+            abc = 'Data Save'
+            return JsonResponse({'id':id,'messages':abc,'abcs':abcs},status=200)
+        else:
+            mrnusss = MRTable.objects.get(id=Mr)
+            if Dbnames == '':
+                mrnusss.Mod=Mop
+                mrnusss.Cheque_no=Numbers
+                mrnusss.Net_Amount = netid
+                mrnusss.Vat_Amount = vataid
+                mrnusss.Stump_Amount = samount
+                mrnusss.Gross_Amount = gross
+                mrnusss.class_insurance='Marine Cargo'
+                mrnusss.User_Branch=branchs
+                mrnusss.Cdate=caquedate
+                mrnusss.save()
+            elif Dbbranchs == '':
+                deposit_b = Deposit_BankM.objects.get(id=Dbnames)
+                mrnusss.Bank_name=deposit_b
+                mrnusss.Mod = Mop
+                mrnusss.Cheque_no = Numbers
+                mrnusss.Net_Amount = netid
+                mrnusss.Vat_Amount = vataid
+                mrnusss.Stump_Amount = samount
+                mrnusss.Gross_Amount = gross
+                mrnusss.class_insurance='Marine Cargo'
+                mrnusss.User_Branch=branchs
+                mrnusss.Cdate=caquedate
+                mrnusss.save()
+            else:
+                deposit_b = Deposit_BankM.objects.get(id=Dbnames)
+                deposit_bankadd = Deposit_Bank_BranchM.objects.get(id=Dbbranchs)
+                mrnusss.Bank_name = deposit_b
+                mrnusss.Bank_address=deposit_bankadd
+                mrnusss.Mod = Mop
+                mrnusss.Cheque_no = Numbers
+                mrnusss.Net_Amount = netid
+                mrnusss.Vat_Amount = vataid
+                mrnusss.Stump_Amount = samount
+                mrnusss.Gross_Amount = gross
+                mrnusss.class_insurance='Marine Cargo'
+                mrnusss.User_Branch=branchs
+                mrnusss.Cdate=caquedate
+                mrnusss.save()
+
+            id = Addno
+            bill = MarineAddendumM.objects.all().count()
+            datas = MarineAddendumM.objects.filter(Addendum_no=Addno)
+            data = MarineAddendumM.objects.get(Addendum_no=Addno)
+            # data.Bill_date=billdates
+            data.Ac=ac
+            data.Insurance_Type=insurance_type
+            data.Client_NameM=client
+            data.Client_AddressM=c_address
+            data.Bank_Name=bank
+            data.Bank_Branch=b_branch
+            data.Interest_covered=interestcover
+            data.Voyage_From=voyagef
+            data.Voyage_To=voyaget
+            data.Voyage_Via=voyagevis
+            data.Transit_By=tarnsit_by
+            data.Sum_insured=sinsured
+            data.Extra1=extra1
+            data.Extra2=extra2
+            data.Currency=currency
+            data.Excrate=rate
+            data.Bdtamount=bdamounts
+            data.Discount=dis
+            data.SpDiscount=spdis
+            data.Marine_Rate=mrate
+            data.Marine_Amount=mamount
+            data.Ware_Rate=wrates
+            data.Ware_Amount=wamount
+            data.Net_Amount=netid
+            data.Vat_Amount=vataid
+            data.Stump_Amount=samount
+            data.Gross_Amount=gross
+            data.Producer=producer
+            data.RiskCover=risk
+            data.narration=nara
+            data.userc=createuser
+            data.sendmail=tomail
+            data.Printed_No=prints
+            data.MR_Number=mrnusss
+            data.Coins_Leader=coinsur
+            data.Coins_None_Leader=nonlider
+            data.Coins_Leader_Persent=leaderpersent
+            data.Coins_Leader_Doc=ldocu
+            data.Coins_Leader_Name=leadercom
+            data.narration_on=naratioad
+            data.save()
+            all = MarineQuatationM.objects.filter(Bill_No=id)
+            good = serializers.serialize('json', all)
+            abcs = json.loads(good)
+            abc = 'Data Update'
+            return JsonResponse({'id':id,'messages':abc,'abcs':abcs},status=200,safe=False)
+
 
 
 

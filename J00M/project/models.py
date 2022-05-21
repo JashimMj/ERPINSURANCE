@@ -430,6 +430,8 @@ class MarineQuatationM(models.Model):
     userc = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
 
+
+
 class MarineCovernoteM(models.Model):
     id = models.AutoField(primary_key=True)
     Bill_No=models.CharField(max_length=255,null=True,blank=True)
@@ -483,11 +485,12 @@ class MarineCovernoteM(models.Model):
     Coins_Leader_Name = models.CharField(max_length=20, null=True, blank=True)
 
 
+
+
+
 class MarineAddendumM(models.Model):
     id = models.AutoField(primary_key=True)
-    Bill_No=models.CharField(max_length=255,null=True,blank=True)
-    Cover_No=models.CharField(max_length=255,null=True,blank=True)
-    Cover_No_no=models.CharField(max_length=255,null=True,blank=True)
+    Cover_No=models.ForeignKey(MarineCovernoteM,on_delete=models.CASCADE,null=True,blank=True)
     Ac=models.CharField(max_length=255,null=True,blank=True)
     Insurance_Type=models.ForeignKey(InsuraceType,on_delete=models.CASCADE,null=True,blank=True)
     Client_NameM=models.ForeignKey(ClinetM,on_delete=models.CASCADE,null=True,blank=True)
@@ -534,6 +537,10 @@ class MarineAddendumM(models.Model):
     Addendum_Date = models.DateField(null=True, blank=True)
     narration = models.TextField(max_length=1000, null=True, blank=True)
     narration_on = models.TextField(max_length=1000, null=True, blank=True)
+
+
+
+
 
 
 
