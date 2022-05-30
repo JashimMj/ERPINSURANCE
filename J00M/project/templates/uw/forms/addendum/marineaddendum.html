@@ -1054,10 +1054,40 @@
     var spdis = $('#spdis').val();
     var mrate = $('#mrate').val();
     var bdamounts=$('#bdamount').val();
-    var disc=(parseInt(bdamounts) - (parseInt(bdamounts) * (parseInt(dis)/100))) ;
+     $.ajax({
+    url:"{%url 'uw_marine_add_search_cal'%}",
+    type:'POST',
+    dataType:'json',
+    data:{
+         csrfmiddlewaretoken: '{{ csrf_token }}',
+         search:$('#searchcover').val(),
+         },
+    success: function(response){
+        xadds=response.all
+        yadds=response.mrcl
+        sumadd=response.addvarsum
+        for (i=0;i<sumadd.length;i++){
+        sumbdamount=parseFloat(sumadd[i].fields.Bdtamount);
+        marineamount=parseFloat(sumadd[i].fields.Marine_Amount);
+        }
+
+        for (i=0;i<xadds.length;i++){
+        if (xadds[i].fields.Marine_Rate !=mrate){
+            totalsum=parseFloat(xadds[i].fields.Bdtamount)+sumbdamount+parseFloat(bdamounts);
+                var disc=(parseInt(totalsum) - (parseInt(totalsum) * (parseInt(dis)/100))) ;
+                var marinem1 = (disc * parseFloat(mrate))/100;
+                var marinem2 =marinem1-((marinem1 * parseFloat(spdis))/100);
+                var totalcurrent=Math.round(marinem2)-(parseFloat(xadds[i].fields.Marine_Amount)+parseFloat(sumadd[i].fields.Marine_Amount));
+                $('#mamount').val(Math.round(totalcurrent));
+
+        }else{var disc=(parseInt(bdamounts) - (parseInt(bdamounts) * (parseInt(dis)/100))) ;
     var marinem1 = (disc * parseFloat(mrate))/100;
-    var marinem2 =marinem1-((marinem1 * parseInt(spdis))/100);
-    $('#mamount').val(Math.round(marinem2));
+    var marinem2 =marinem1-((marinem1 * parseFloat(spdis))/100);
+    $('#mamount').val(Math.round(marinem2));}
+        }
+
+    }
+});
 
   });
 
@@ -1366,7 +1396,55 @@
         y=response.mrcl
         covers=response.cover
          for (i=0;i<covers.length;i++){
+          $('#ac').val(covers[i].fields.Ac);
+            $("#ccl").val(covers[i].fields.Client_NameM).trigger('change');
+            $('#sums').val(covers[i].fields.Client_AddressM).trigger('change');
+            $('#bname').val(covers[i].fields.Bank_Name).trigger('change');
+            $('#bbranch').val(covers[i].fields.Bank_Branch).trigger('change');
+            $('#interestcover').val(covers[i].fields.Interest_covered);
+            $('#vforms').val(covers[i].fields.Voyage_From).trigger('change');
+            $('#vTos').val(covers[i].fields.Voyage_To).trigger('change');
+            $('#transit').val(covers[i].fields.Transit_By).trigger('change');
+            $('#vvias').val(covers[i].fields.Voyage_Via).trigger('change');
             $('#coverno').val(covers[i].fields.Cover_No);
+            $('#extra1 ').val(covers[i].fields.Extra1);
+            $('#extra2 ').val(covers[i].fields.Extra2);
+            $('#current ').val(covers[i].fields.Currency).trigger('change');
+            $('#rate ').val(covers[i].fields.Excrate);
+            $('#riskcoders').val(covers[i].fields.RiskCover).trigger('change');
+            $('#insurances').val(covers[i].fields.Insurance_Type).trigger('change');
+            $('#producers').val(covers[i].fields.Producer).trigger('change');
+            $('#dis').val(covers[i].fields.Discount);
+            $('#spdis').val(covers[i].fields.SpDiscount);
+            $('#mrate').val(covers[i].fields.Marine_Rate);
+            $('#wrates').val(covers[i].fields.Ware_Rate);
+
+            if (covers[i].fields.Coins_Leader==1){
+                 $('#coins').attr('checked', true);
+                 $('#coins').val(covers[i].fields.Coins_Leader);
+                 $(".leaders").show();
+                 $("#leaderpersents").val(covers[i].fields.Coins_Leader_Persent);
+            }
+            else{
+                $('#coins').attr('checked', false);
+                $(".leaders").hide();
+                $("#leaderpersents").val();
+            }
+            if (covers[i].fields.Coins_None_Leader==1){
+                $('#nonleader').attr('checked', true);
+                $('#nonleader').val(covers[i].fields.Coins_None_Leader);
+                $(".nolider").show();
+                $('#leadercom').val(covers[i].fields.Coins_Leader_Name);
+                $('#ldocu').val(covers[i].fields.Coins_Leader_Doc);
+            }else{
+                $('#nonleader').attr('checked', false);
+                $('#nonleader').val();
+                $(".nolider").hide();
+                $('#leadercom').val();
+                $('#ldocu').val();
+            }
+
+
             }
         for (i=0;i<x.length;i++){
 

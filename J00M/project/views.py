@@ -3432,8 +3432,8 @@ def uw_marine_add_search_calV(request):
         abcs = json.loads(goods)
         good=serializers.serialize('json',alls)
         abc=json.loads(good)
-        addsum=MarineAddendumM.objects.raw('select id, sum(Sum_insured) as Sum_insured,sum(Bdtamount) as Bdtamount from project_marineaddendumm where Cover_No_id=%s',[x.id])
-        ad=serializers.serialize('json',addsum,fields = ("Sum_insured", "Bdtamount"))
+        addsum=MarineAddendumM.objects.raw('select id, sum(Sum_insured) as Sum_insured,sum(Bdtamount) as Bdtamount,sum(Marine_Amount) as Marine_Amount from project_marineaddendumm where Cover_No_id=%s',[x.id])
+        ad=serializers.serialize('json',addsum,fields = ("Sum_insured", "Bdtamount","Marine_Amount"))
         addvarsum = json.loads(ad)
         return JsonResponse({'all': abc, 'mrcl': abcs, 'addvarsum': addvarsum}, safe=False)
 
@@ -3933,15 +3933,18 @@ def uw_marine_cover_searchV(request):
         abcs = json.loads(goods)
         good=serializers.serialize('json',alls)
         abc=json.loads(good)
-        addinfo=MarineAddendumM.objects.filter(Cover_No=x.id).order_by('-id')[:1]
-        addre = serializers.serialize('json', addinfo)
-        addin = json.loads(addre)
-        if addinfo:
-            context={'all':addin,'mrcl':abcs,'cover':abc}
-        else:
-            context = {'all': abc,'mrcl':abcs,'cover':abc}
 
-    return JsonResponse(context,safe=False)
+        if MarineAddendumM.objects.filter(Cover_No=x.id).order_by('-id')[:1].exists():
+            addinfo = MarineAddendumM.objects.filter(Cover_No=x.id).order_by('-id')[:1]
+            addre = serializers.serialize('json', addinfo)
+            addin = json.loads(addre)
+            context = {'all': addin, 'mrcl': abcs, 'cover': abc}
+            return JsonResponse(context, safe=False)
+        else:
+            context = { 'mrcl': abcs, 'cover': abc}
+            return JsonResponse(context, safe=False)
+
+
 
 
 def uw_marine_addendumV(request):
@@ -4041,33 +4044,55 @@ def uw_marine_addendum_saveV(request):
 
 
         if Addno =='':
-            if Dbnames =='':
-                mrdatass = MRTable(id=mrnum, Mrno=mrnum, Mrno_date=mrd, Mod=Mop, Cheque_no=Numbers,Net_Amount=netid,Vat_Amount=vataid,
-                                    Stump_Amount=samount,Gross_Amount=gross,class_insurance='Marine Cargo',User_Branch=branchs,Cdate=caquedate )
-                mrdatass.save()
-            elif Dbbranchs == '':
-                deposit_b = Deposit_BankM.objects.get(id=Dbnames)
-                mrdatass = MRTable(id=mrnum, Mrno=mrnum, Mrno_date=mrd, Mod=Mop, Cheque_no=Numbers,Bank_name=deposit_b,Net_Amount=netid,Vat_Amount=vataid,
-                                    Stump_Amount=samount,Gross_Amount=gross,class_insurance='Marine Cargo',User_Branch=branchs,Cdate=caquedate)
-                mrdatass.save()
+            if int(gross) > 0:
+                if Dbnames =='':
+                    mrdatass = MRTable(id=mrnum, Mrno=mrnum, Mrno_date=mrd, Mod=Mop, Cheque_no=Numbers,Net_Amount=netid,Vat_Amount=vataid,
+                                        Stump_Amount=samount,Gross_Amount=gross,class_insurance='Marine Cargo',User_Branch=branchs,Cdate=caquedate )
+                    mrdatass.save()
+                elif Dbbranchs == '':
+                    deposit_b = Deposit_BankM.objects.get(id=Dbnames)
+                    mrdatass = MRTable(id=mrnum, Mrno=mrnum, Mrno_date=mrd, Mod=Mop, Cheque_no=Numbers,Bank_name=deposit_b,Net_Amount=netid,Vat_Amount=vataid,
+                                        Stump_Amount=samount,Gross_Amount=gross,class_insurance='Marine Cargo',User_Branch=branchs,Cdate=caquedate)
+                    mrdatass.save()
+                else:
+                    deposit_b = Deposit_BankM.objects.get(id=Dbnames)
+                    deposit_bankadd = Deposit_Bank_BranchM.objects.get(id=Dbbranchs)
+                    mrdatass=MRTable(id=mrnum,Mrno=mrnum,Mrno_date=mrd,Mod=Mop,Cheque_no=Numbers,Bank_name=deposit_b,Bank_address=deposit_bankadd,Net_Amount=netid,Vat_Amount=vataid,
+                                        Stump_Amount=samount,Gross_Amount=gross,class_insurance='Marine Cargo',User_Branch=branchs,Cdate=caquedate)
+                    mrdatass.save()
+                mrnusss=MRTable.objects.get(id=mrnum)
             else:
-                deposit_b = Deposit_BankM.objects.get(id=Dbnames)
-                deposit_bankadd = Deposit_Bank_BranchM.objects.get(id=Dbbranchs)
-                mrdatass=MRTable(id=mrnum,Mrno=mrnum,Mrno_date=mrd,Mod=Mop,Cheque_no=Numbers,Bank_name=deposit_b,Bank_address=deposit_bankadd,Net_Amount=netid,Vat_Amount=vataid,
-                                    Stump_Amount=samount,Gross_Amount=gross,class_insurance='Marine Cargo',User_Branch=branchs,Cdate=caquedate)
-                mrdatass.save()
-            mrnusss=MRTable.objects.get(id=mrnum)
-            date = MarineAddendumM(id=id,Addendum_no=addnoss,Addendum_number=id,Addendum_Date=billdates,Cover_No=cover,Ac=ac,Insurance_Type=insurance_type,Client_NameM=client,
-                                    Client_AddressM=c_address,Bank_Name=bank,Bank_Branch=b_branch,Interest_covered=interestcover,
-                                    Voyage_From=voyagef,Voyage_To=voyaget,Voyage_Via=voyagevis,Transit_By=tarnsit_by,
-                                    Sum_insured=sinsured,Extra1=extra1,Extra2=extra2,
-                                    Currency=currency,Excrate=rate,Bdtamount=bdamounts,
-                                    Discount=dis,SpDiscount=spdis,Marine_Rate=mrate,Marine_Amount=mamount,
-                                    Ware_Rate=wrates,Ware_Amount=wamount,Net_Amount=netid,Vat_Amount=vataid,
-                                    Stump_Amount=samount,Gross_Amount=gross,Producer=producer,RiskCover=risk,
-                                    narration=nara,userc=createuser,User_Branch=branchs,sendmail=tomail, Printed_No=prints,MR_Number=mrnusss,
-                                    Coins_Leader=coinsur, Coins_None_Leader=nonlider, Coins_Leader_Persent=leaderpersent, Coins_Leader_Doc=ldocu, Coins_Leader_Name=leadercom,narration_on=naratioad)
-            date.save()
+                mrnusss = ''
+            if mrnusss == '':
+                date = MarineAddendumM(id=id,Addendum_no=addnoss,Addendum_number=id,Addendum_Date=billdates,Cover_No=cover,Ac=ac,Insurance_Type=insurance_type,Client_NameM=client,
+                                        Client_AddressM=c_address,Bank_Name=bank,Bank_Branch=b_branch,Interest_covered=interestcover,
+                                        Voyage_From=voyagef,Voyage_To=voyaget,Voyage_Via=voyagevis,Transit_By=tarnsit_by,
+                                        Sum_insured=sinsured,Extra1=extra1,Extra2=extra2,
+                                        Currency=currency,Excrate=rate,Bdtamount=bdamounts,
+                                        Discount=dis,SpDiscount=spdis,Marine_Rate=mrate,Marine_Amount=mamount,
+                                        Ware_Rate=wrates,Ware_Amount=wamount,Net_Amount=netid,Vat_Amount=vataid,
+                                        Stump_Amount=samount,Gross_Amount=gross,Producer=producer,RiskCover=risk,
+                                        narration=nara,userc=createuser,User_Branch=branchs,sendmail=tomail, Printed_No=prints,
+                                        Coins_Leader=coinsur, Coins_None_Leader=nonlider, Coins_Leader_Persent=leaderpersent, Coins_Leader_Doc=ldocu, Coins_Leader_Name=leadercom,narration_on=naratioad)
+                date.save()
+            else:
+                date = MarineAddendumM(id=id, Addendum_no=addnoss, Addendum_number=id, Addendum_Date=billdates,
+                                       Cover_No=cover, Ac=ac, Insurance_Type=insurance_type, Client_NameM=client,
+                                       Client_AddressM=c_address, Bank_Name=bank, Bank_Branch=b_branch,
+                                       Interest_covered=interestcover,
+                                       Voyage_From=voyagef, Voyage_To=voyaget, Voyage_Via=voyagevis,
+                                       Transit_By=tarnsit_by,
+                                       Sum_insured=sinsured, Extra1=extra1, Extra2=extra2,
+                                       Currency=currency, Excrate=rate, Bdtamount=bdamounts,
+                                       Discount=dis, SpDiscount=spdis, Marine_Rate=mrate, Marine_Amount=mamount,
+                                       Ware_Rate=wrates, Ware_Amount=wamount, Net_Amount=netid, Vat_Amount=vataid,
+                                       Stump_Amount=samount, Gross_Amount=gross, Producer=producer, RiskCover=risk,
+                                       narration=nara, userc=createuser, User_Branch=branchs, sendmail=tomail,
+                                       Printed_No=prints, MR_Number=mrnusss,
+                                       Coins_Leader=coinsur, Coins_None_Leader=nonlider,
+                                       Coins_Leader_Persent=leaderpersent, Coins_Leader_Doc=ldocu,
+                                       Coins_Leader_Name=leadercom, narration_on=naratioad)
+                date.save()
             # datas = MarineQuatationM.objects.filter(id=id)
             #
             # # bill = MarineQuatationM.objects.all().count()

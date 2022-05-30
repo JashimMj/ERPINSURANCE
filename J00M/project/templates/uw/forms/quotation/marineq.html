@@ -732,8 +732,8 @@
      var extra =$('#extra1').val()
     var extra2=$('#extra2').val()
     var rate=$('#rate').val()
-    var sumex1=parseInt(parseInt(suminsured) + (parseInt(suminsured)*parseInt(extra))/100 );
-    var sumex2=sumex1 * (parseInt(extra2)/100);
+    var sumex1=parseInt(parseFloat(suminsured) + (parseFloat(suminsured)*parseFloat(extra))/100 );
+    var sumex2=sumex1 * (parseFloat(extra2)/100);
     var sum=Math.round((sumex1 + sumex2) * rate);
     $('#bdamount').val(sum);
 
